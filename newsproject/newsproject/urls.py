@@ -13,9 +13,27 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+
 from django.conf.urls import url
 from django.contrib import admin
+from django.conf.urls import include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-]
+
+#    url(r'^$', mainapp.main, name='main'),
+#    url(r'^products/', mainapp.products, name='products'),
+#    url(r'^contacts/', mainapp.contacts, name='contacts'),
+#    url(r'^item/([0-9]{1,})/', mainapp.item, name='item'),
+
+    url(r'^author/', include('authorapp.urls', namespace='author')),
+    url(r'^category/', include('categoryapp.urls', namespace='category')),
+    url(r'^news/', include('newsapp.urls', namespace='news')),
+    url(r'^pages/', include('pagesapp.urls', namespace='pages')),
+
+    #url(r'^$', RedirectView.as_view(url='/newsapp/', permanent=True)),
+
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
