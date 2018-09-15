@@ -19,19 +19,22 @@ from django.contrib import admin
 from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
+import pagesapp.views as pagesapp
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^contacts/', pagesapp.contacts, name='contacts'),
 
 #    url(r'^$', mainapp.main, name='main'),
 #    url(r'^products/', mainapp.products, name='products'),
-#    url(r'^contacts/', mainapp.contacts, name='contacts'),
+
 #    url(r'^item/([0-9]{1,})/', mainapp.item, name='item'),
 
-    url(r'^author/', include('authorapp.urls', namespace='author')),
-    url(r'^category/', include('categoryapp.urls', namespace='category')),
-    url(r'^news/', include('newsapp.urls', namespace='news')),
-    url(r'^pages/', include('pagesapp.urls', namespace='pages')),
+    #url(r'^author/', include('authorapp.urls', namespace='author')),
+    #url(r'^category/', include('categoryapp.urls', namespace='category')),
+    #url(r'^news/', include('newsapp.urls', namespace='news')),
+    #url(r'^pages/', include('pagesapp.urls', namespace='pages')),
 
     #url(r'^$', RedirectView.as_view(url='/newsapp/', permanent=True)),
 
