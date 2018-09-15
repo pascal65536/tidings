@@ -10,6 +10,7 @@ def author(request):
     context = {
         'title': 'Авторы | {}'.format(site.sitename),
         'menu_links': 'menu_links',
-        'author_list': author_list
+        'author_list': author_list,
+        'lnk': 'https://www.facebook.com/gornovosti.ru/',
     }
     return render(request, 'authorapp/author.html', context)

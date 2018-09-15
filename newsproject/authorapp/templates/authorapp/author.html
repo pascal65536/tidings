@@ -1,10 +1,14 @@
 {% extends 'authorapp/base.html' %}
 {% load staticfiles %}
+{% load font_awesome %}
 {% block content %}
 
 		<div class="container">
 			<div class="page-breadcrumbs">
 				<h1 class="section-title">Author List</h1>
+                <div>
+                <a href="{{ lnk }}"><i class="{{ lnk|font_awesome }}"></i></a>
+                </div>
 			</div>
 			<div class="section">
 				<div class="row">
