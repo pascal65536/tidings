@@ -37,14 +37,14 @@
     <link rel="apple-touch-icon-precomposed" href="/static/images/ico/apple-touch-icon-57-precomposed.png">
 </head><!--/head-->
 <body>
-    <div id="main-wrapper" class="page">
-        {% include 'pagesapp/includes/inc_menu.html' %}
+	<div id="main-wrapper" class="page">
+        {% include 'contactapp/includes/inc_menu.html' %}
 
         {% block content %}
         {% endblock %}
     </div>
 
-    {% include 'pagesapp/includes/inc_footer.html' %}
+    {% include 'contactapp/includes/inc_footer.html' %}
 
     {% block style %}
 	<!--/Preset Style Chooser-->
@@ -79,8 +79,6 @@
     <script type="text/javascript" src="/static/js/main.js"></script>
     <script type="text/javascript" src="/static/js/switcher.js"></script>
     {% endblock %}
-
-    {% include 'pagesapp/includes/inc_map.html' %}
 
 </body>
 </html>

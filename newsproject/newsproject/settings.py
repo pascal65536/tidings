@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'authorapp.apps.AuthorappConfig',
     'categoryapp.apps.CategoryappConfig',
     'newsapp.apps.NewsappConfig',
-    'pagesapp.apps.PagesappConfig',
+    'contactapp.apps.ContactappConfig',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +130,6 @@ else:
         os.path.join(BASE_DIR, "static"),
         '/home/pascal65536/git/tidings/newsproject/static',
     ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")

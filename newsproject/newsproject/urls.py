@@ -18,12 +18,14 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-import pagesapp.views as pagesapp
+import contactapp.views as contactapp
+import authorapp.views as authorapp
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^contacts/', pagesapp.contacts, name='contacts'),
+    url(r'^contact/', contactapp.contact, name='contact'),
+    url(r'^author/', authorapp.author, name='author'),
 
 #    url(r'^$', mainapp.main, name='main'),
 #    url(r'^products/', mainapp.products, name='products'),
@@ -33,7 +35,7 @@ urlpatterns = [
     #url(r'^author/', include('authorapp.urls', namespace='author')),
     #url(r'^category/', include('categoryapp.urls', namespace='category')),
     #url(r'^news/', include('newsapp.urls', namespace='news')),
-    #url(r'^pages/', include('pagesapp.urls', namespace='pages')),
+    #url(r'^pages/', include('contactapp.urls', namespace='pages')),
 
     #url(r'^$', RedirectView.as_view(url='/newsapp/', permanent=True)),
 

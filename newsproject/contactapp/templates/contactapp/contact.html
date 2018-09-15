@@ -1,4 +1,4 @@
-{% extends 'pagesapp/base.html' %}
+{% extends 'contactapp/base.html' %}
 {% load staticfiles %}
 {% block content %}
 
@@ -15,7 +15,7 @@
 						<div class="contact-info">
 							<h1 class="section-title title">Contact Information</h1>
 							<ul class="list-inline">
-                            {% for contact in contacts_list %}
+                            {% for contact in contact_list %}
                                 <li>
                                     <h2>{{ contact.name }}</h2>
                                     <address>
@@ -66,11 +66,12 @@
 				<div class="col-md-3 col-sm-4">
 					<div id="sitebar">
 						<div class="widget follow-us">
-                            {% include 'pagesapp/includes/widget_follow.html' %}
+                            {% include 'contactapp/includes/widget_follow.html' %}
 						</div><!--/#widget-->
 
 						<div class="widget">
-                            {% include 'pagesapp/includes/widget_recent_post.html' %}
+                            <h1 class="section-title title">Recent Post</h1>
+                            {% include 'contactapp/includes/widget_recent_post.html' %}
 						</div><!--/#widget-->
 
 					</div><!--/#sitebar-->
