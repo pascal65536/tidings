@@ -1463,6 +1463,13 @@ img.mfp-img {
 	transition: all 0.3s ease-in-out;
 }
 
+.social-icons a .fa-vk{
+	background-color:#8fadc8;
+}
+
+.social-icons a .fa-odnoklassniki{
+	background-color:#e27e35;
+}
 
 .social-icons a .fa-facebook{
 	background-color:#4968a9;
@@ -1484,6 +1491,17 @@ img.mfp-img {
 	background-color:#ed1c24;
 }
 
+.social-icons a:hover .fa-vk,
+.author-listing .single-author .social-icons a:hover .fa-vk,
+.author-social .social-icons a:hover .fa-vk{
+	background-color:#42648b;
+}
+
+.social-icons a:hover .fa-odnoklassniki,
+.author-listing .single-author .social-icons a:hover .fa-odnoklassniki,
+.author-social .social-icons a:hover .fa-odnoklassniki{
+	background-color:#fb882d;
+}
 
 .social-icons a:hover .fa-facebook, 
 .author-listing .single-author .social-icons a:hover .fa-facebook, 

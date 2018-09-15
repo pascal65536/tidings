@@ -7,13 +7,13 @@ register = template.Library()
 
 font_awesome_dict = {
     'vk.com': 'fa fa-vk',
+    'ok.ru': 'fa fa-odnoklassniki',
     'facebook.com': 'fa fa-facebook',
     'twitter.com': 'fa fa-twitter',
     'plus.google.com': 'fa fa-google-plus',
     'linkedin.com': 'fa fa-linkedin',
     'youtube.com': 'fa fa-youtube',
-    'pinterest.ru': 'fa fa-pinterest',
-    'ok.ru': 'fa fa-odnoklassniki'
+    'pinterest.ru': 'fa fa-pinterest'
 }
 
 
