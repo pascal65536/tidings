@@ -15,30 +15,16 @@
 						<div class="contact-info">
 							<h1 class="section-title title">Contact Information</h1>
 							<ul class="list-inline">
-								<li>
-									<h2>Head Office</h2>
-									<address>
-										23-45A, Silictown <br>Great Country
-										<p class="contact-mail"><strong>Email:</strong> <a href="#">hello@newspress.com</a></p>
-										<p><strong>Call:</strong> +123 123 456 789</p>
-									</address>
-								</li>
-								<li>
-								   <h2>USA Office</h2>
-									<address>
-										245 North Street, <br>New York, NY
-										<p class="contact-mail"><strong>Email:</strong> <a href="#">info@usa-newspress.com</a></p>
-										<p><strong>Call:</strong> +123 123 456 789</p>
-									</address>
-								</li>
-								<li>
-								   <h2>UK Office</h2>
-									<address>
-										123, Pall Mall,<br> London England
-										<p class="contact-mail"><strong>Email:</strong> <a href="#">info@uk-newspress.com</a></p>
-										<p><strong>Call:</strong> +123 123 456 789</p>
-									</address>
-								</li>
+                            {% for contact in contacts_list %}
+                                <li>
+                                    <h2>{{ contact.name }}</h2>
+                                    <address>
+                                        {{ contact.address_city }}<br>{{ contact.address_street }}
+                                        <p class="contact-mail"><strong>Email:</strong> <a href="#">{{ contact.mail }}</a></p>
+                                        <p><strong>Call:</strong> {{ contact.phone }}</p>
+                                    </address>
+                                </li>
+                            {% endfor %}
 							</ul>
 						</div>
 						<div class="message-box">

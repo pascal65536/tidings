@@ -3,7 +3,7 @@ from pagesapp.models import Contacts
 
 
 class ContactsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone')
+    pass
 
 
 admin.site.register(Contacts)

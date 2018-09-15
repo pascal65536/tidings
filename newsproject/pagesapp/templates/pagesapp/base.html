@@ -77,88 +77,10 @@
   	<script type="text/javascript" src="/static/js/jquery.easy-ticker.min.js"></script>
   	<script type="text/javascript" src="/static/js/jquery.subscribe-better.min.js"></script>
     <script type="text/javascript" src="/static/js/main.js"></script>
-	  <script type="text/javascript" src="/static/js/switcher.js"></script>
-    <script type="text/javascript">
-		(function(){
-
-			var map;
-
-			map = new GMaps({
-				el: '#gmap',
-				lat: 42.8206606,
-				lng: -75.554387,
-				scrollwheel:false,
-				zoom: 6,
-				zoomControl : true,
-				panControl : false,
-				streetViewControl : false,
-				mapTypeControl: false,
-				overviewMapControl: false,
-				clickable: false
-			});
-
-			var image = '';
-			map.addMarker({
-				lat: 42.8206606,
-				lng: -75.554387,
-				icon: image,
-				animation: google.maps.Animation.DROP,
-				verticalAlign: 'bottom',
-				horizontalAlign: 'center',
-				backgroundColor: '#d3cfcf',
-				 infoWindow: {
-					content: '<div class="map-info"><address>ThemeRegion<br />234 West 25th Street <br />New York</address></div>',
-					borderColor: 'red',
-				}
-			});
-
-			var styles = [
-
-				{
-				  "featureType": "road",
-				  "stylers": [
-					{ "color": "#c1c1c1" }
-				  ]
-				  },{
-				  "featureType": "water",
-				  "stylers": [
-					{ "color": "#f1f1f1" }
-				  ]
-				  },{
-				  "featureType": "landscape",
-				  "stylers": [
-					{ "color": "#e3e3e3" }
-				  ]
-				  },{
-				  "elementType": "labels.text.fill",
-				  "stylers": [
-					{ "color": "#808080" }
-				  ]
-				  },{
-				  "featureType": "poi",
-				  "stylers": [
-					{ "color": "#dddddd" }
-				  ]
-				  },{
-				  "elementType": "labels.text",
-				  "stylers": [
-					{ "saturation": 1 },
-					{ "weight": 0.1 },
-					{ "color": "#7f8080" }
-				  ]
-				}
-
-			];
-
-		map.addStyle({
-				styledMapName:"Styled Map",
-				styles: styles,
-				mapTypeId: "map_style"
-			});
-
-			map.setStyle("map_style");
-		}());
-	</script>
+    <script type="text/javascript" src="/static/js/switcher.js"></script>
     {% endblock %}
+
+    {% include 'pagesapp/includes/inc_map.html' %}
+
 </body>
 </html>

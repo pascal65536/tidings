@@ -10,7 +10,9 @@ class Contacts(models.Model):
 
     class Meta:
         db_table = 'contacts'
-        verbose_name = 'Контактная информация'
-        verbose_name_plural = 'Контактная информация'
+        verbose_name = 'Контакт'
+        verbose_name_plural = 'Контакты'
+        ordering = ['name']
 
-
+    def __str__(self):
+        return self.name
