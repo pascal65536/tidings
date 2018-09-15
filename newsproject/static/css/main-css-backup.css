@@ -1,4 +1,5 @@
 /*
+/*
   Theme Name: News Press
   Theme URL: http://demo.themeregion.com/newspress
   Author: ThemeRegion
@@ -1309,7 +1310,7 @@ img.mfp-img {
 } 
 
 .football-result .featured-result {
-	background-image:url(../images/others/league-bg.jpg);
+	background-image:url(/static/images/others/league-bg.jpg);
 	background-size:cover;
 	background-repeat:no-repeat;
 	background-color:#2f5088;
@@ -1400,7 +1401,7 @@ img.mfp-img {
 }
 
 .stock-exchange-zone {
-	background-image:url(../images/others/stock-bg.jpg);
+	background-image:url(/static/images/others/stock-bg.jpg);
 	background-size:cover;
 	background-repeat:no-repeat;
 	background-color:#00aeef;
@@ -1588,14 +1589,14 @@ img.mfp-img {
 
 .weather-widget .weather-humidity {
 	float:left;
-	background:url(../images/others/weather2.png)left center no-repeat;
+	background:url(/static/images/others/weather2.png)left center no-repeat;
 	padding-left:25px;
 }
 
 .weather-widget .weather-wind {
 	float:right;
 	padding-left:30px;
-	background:url(../images/others/weather1.png)left center no-repeat;
+	background:url(/static/images/others/weather1.png)left center no-repeat;
 }
 
 .widget .nav-tabs {
@@ -2410,7 +2411,7 @@ img.mfp-img {
 }
 
 .author-details .author-heading {
-	background-image:url(../images/others/author-bg.jpg);
+	background-image:url(/static/images/others/author-bg.jpg);
 	background-repeat:no-repeat;
 	background-size:cover;
 	background-color:#004981;
