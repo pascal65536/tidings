@@ -7,4 +7,3 @@ class ContactAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Contact)
-

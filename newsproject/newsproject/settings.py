@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'categoryapp.apps.CategoryappConfig',
     'newsapp.apps.NewsappConfig',
     'contactapp.apps.ContactappConfig',
+    'ckeditor',
+    'autoslug',
 ]
 
 MIDDLEWARE = [
