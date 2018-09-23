@@ -2397,16 +2397,6 @@ img.mfp-img {
 	overflow:hidden;
 }
 
-.author-details .author-heading {
-	background-image:url(../images/others/author-bg.jpg);
-	background-repeat:no-repeat;
-	background-size:cover;
-	background-color:#004981;
-	color:#fff;
-	position:relative;
-	min-height:200px;
-	border-radius:4px 4px 0 0;
-}
 
 .author-details .author-profile {
 	position:absolute;

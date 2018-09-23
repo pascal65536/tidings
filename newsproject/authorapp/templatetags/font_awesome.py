@@ -13,14 +13,15 @@ font_awesome_dict = {
     'plus.google.com': 'fa fa-google-plus',
     'linkedin.com': 'fa fa-linkedin',
     'youtube.com': 'fa fa-youtube',
-    'pinterest.ru': 'fa fa-pinterest'
+    'pinterest.ru': 'fa fa-pinterest',
+    'github.com': 'fa fa-github-square'
 }
 
 
 @register.filter()
 def font_awesome(value):
     pp = urllib.parse.urlsplit(value).netloc
-    ret = ''
+    ret = 'fa fa-adn'
     for lnk, fnt in font_awesome_dict.items():
         if pp.find(lnk) >= 0:
             ret = fnt

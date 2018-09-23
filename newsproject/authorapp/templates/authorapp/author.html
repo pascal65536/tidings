@@ -5,7 +5,7 @@
 
 		<div class="container">
 			<div class="page-breadcrumbs">
-				<h1 class="section-title">Author List</h1>
+				<h1 class="section-title">{{ author_list }}</h1>
 			</div>
 			<div class="section">
 				<div class="row">
@@ -13,17 +13,17 @@
 						<div class="author-listing">
 							<div class="authors">
 								<ul class="row">
-                                    {% for author in author_list %}
+                                    {% for author in author_set %}
 									<li class="col-sm-6 col-md-4">
 										<div class="single-author">
 											<div class="author-bg">
 												<img class="img-responsive" src="/media/{{ author.background }}" width="270" height="115" alt="" />
 											</div>
 											<div class="author-image">
-												<a href="author-details.html"><img class="img-responsive" src="/media/{{ author.avatar }}" width="90" height="90" alt="" /></a>
+												<a href="{{ author.nickname }}/"><img class="img-responsive" src="/media/{{ author.avatar }}" width="90" height="90" alt="" /></a>
 											</div>
 											<div class="author-info">
-												<h2><a href="author-details.html">{{ author.name }}</a></h2>
+												<h2><a href="{{ author.nickname }}/">{{ author.name }}</a></h2>
 												<p>{{ author.city }}</p>
 											</div>
 											<div class="author-social">
@@ -56,22 +56,7 @@
 							</div>
 						</div><!-- author-listing -->
 
-						<div class="pagination-wrapper">
-							<ul class="pagination">
-								<li><a href="#" aria-label="Previous"><span aria-hidden="true"><i class="fa fa-long-arrow-left"></i> Previous Page</span></a></li>
-								<li><a href="#">1</a></li>
-								<li><a href="#">2</a></li>
-								<li class="active"><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#">5</a></li>
-								<li><a href="#">6</a></li>
-								<li><a href="#">7</a></li>
-								<li><a href="#">8</a></li>
-								<li><a href="#">9</a></li>
-								<li><a href="#">10</a></li>
-								<li><a href="#" aria-label="Next"><span aria-hidden="true">Next Page <i class="fa fa-long-arrow-right"></i></span></a></li>
-							</ul>
-						</div>
+ 						{% include 'contactapp/includes/pagination.html' %}
 					</div><!--/.col-sm-9 -->
 
 					<div class="col-sm-4 col-md-3">
