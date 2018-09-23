@@ -424,7 +424,9 @@ img.mfp-img {
 		right:0;
 		min-width:200px;
 	}
-	
+	.post {
+		height: 400px;
+	}
 }
 
 

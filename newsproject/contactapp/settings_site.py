@@ -8,5 +8,5 @@ author_list = 'Список авторов'
 author_title = 'Авторы'
 find_me = 'Найдите меня'
 about_me = 'Обо мне'
-
+my_news_press = 'Мои материалы'
 

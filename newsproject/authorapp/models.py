@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 
 
 class Author(models.Model):
@@ -10,7 +11,7 @@ class Author(models.Model):
     avatar = models.ImageField(verbose_name='Аватар 95x95', upload_to='author_avatar', blank=True)
     background = models.ImageField(verbose_name='Фон 270x115', upload_to='author_background', blank=True)
     background_page = models.ImageField(verbose_name='Фон страницы 1000x226', upload_to='author_background_page', blank=True)
-    about = models.TextField(verbose_name='Об авторе', blank='True', null=True)
+    about = RichTextField(null=True)
 
     social_network_1 = models.CharField(verbose_name='Социальная сеть 1', max_length=200, null=False, blank=True)
     social_network_2 = models.CharField(verbose_name='Социальная сеть 2', max_length=200, null=False, blank=True)
