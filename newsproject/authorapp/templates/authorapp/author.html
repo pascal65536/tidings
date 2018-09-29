@@ -17,17 +17,18 @@
 									<li class="col-sm-6 col-md-4">
 										<div class="single-author">
 											<div class="author-bg">
-												<img class="img-responsive" src="/media/{{ author.background }}" width="270" height="115" alt="" />
+												<img class="img-responsive" src="/media/{{ author.background|default:'default/270x115.png' }}" width="270" height="115" alt="" />
 											</div>
 											<div class="author-image">
-												<a href="{{ author.nickname }}/"><img class="img-responsive" src="/media/{{ author.avatar }}" width="90" height="90" alt="" /></a>
+												<a href="{{ author.slug }}/"><img class="img-responsive" src="/media/{{ author.avatar|default:'default/90x90.png' }}" width="90" height="90" alt="" /></a>
 											</div>
 											<div class="author-info">
-												<h2><a href="{{ author.nickname }}/">{{ author.name }}</a></h2>
+												<h2><a href="{{ author.slug }}/">{{ author.name }}</a></h2>
 												<p>{{ author.city }}</p>
 											</div>
 											<div class="author-social">
 												<ul class="list-inline social-icons">
+                                                    <li>&nbsp;</li>
                                                     {% if author.social_network_1 not in '' %}
 													<li><a href="{{ author.social_network_1 }}" target="_blank"><i class="{{ author.social_network_1|font_awesome }}"></i></a></li>
                                                     {% endif %}

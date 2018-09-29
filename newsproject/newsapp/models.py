@@ -23,9 +23,9 @@ class News(models.Model):
     date_change = models.DateTimeField(verbose_name='Дата последней правки', default=datetime.datetime.now(), blank=True, null=True)
     date_finish = models.DateTimeField(verbose_name='Снять с публикации', blank=True, null=True)
     slug = AutoSlugField(populate_from='title')
-
-    reporter = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='reporter', verbose_name='Репортер')
-    photographer = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='photographer', blank=True, null=True, verbose_name='Фотограф')
+    user_id = models.IntegerField(verbose_name='Порядковый номер пользователя', blank=True, null=True)
+    reporter = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='Репортер')
+    photographer = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='Фотограф', blank=True, null=True, verbose_name='Фотограф')
 
     picture = models.ImageField(verbose_name='Картинка к новости 450x258', upload_to=latin_filename, blank=True)
 

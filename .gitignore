@@ -1,5 +1,11 @@
-__pycache__/
+media/
 migrations/
-.idea/
 venv/
+__pycache__/
+.idea/
+.comments/
+my.cnf
 *.pyc
+*.xml
+
+

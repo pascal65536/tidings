@@ -5,7 +5,7 @@
 
 <style>
 .author-details .author-heading {
-	background-image:url(/media/{{ author_page.background_page }});
+	background-image:url(/media/{{ author_page.background_page|default:'default/1000x226.png' }});
 	background-repeat:no-repeat;
 	background-size:cover;
 	background-color:#bbbbbb;
@@ -28,7 +28,7 @@
 								<div class="author-heading">
 									<div class="author-profile">
 										<div class="author-gravatar">
-											<img class="img-responsive" src="/media/{{ author_page.avatar }}" width="90" height="90" alt="" />
+											<img class="img-responsive" src="/media/{{ author_page.avatar|default:'default/90x90.png' }}" width="90" height="90" alt="" />
 										</div>
 										<div class="author-name">
 											<h1>{{ author_page.name }}</h1>

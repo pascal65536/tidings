@@ -4,7 +4,7 @@ import authorapp.views as authorapp
 
 urlpatterns = [
     url(r'^$', authorapp.author, name='author'),
-    url(r'(?P<nickname>\w+)', authorapp.person, name='person'),
+    url(r'(?P<slug>[\w-]+)', authorapp.person, name='person'),
 ]
 
 
