@@ -5,6 +5,7 @@ __pycache__/
 .idea/
 .comments/
 my.cnf
+db.sqlite3
 *.pyc
 *.xml
 
