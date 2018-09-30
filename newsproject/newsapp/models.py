@@ -39,6 +39,7 @@ class News(models.Model):
     is_main = models.BooleanField(verbose_name='Закреплена на главной', default=False)
     is_blog = models.BooleanField(verbose_name='Запись в блог', default=False)
     is_advert = models.BooleanField(verbose_name='Не показывать рекламу', default=False)
+    is_delete = models.BooleanField(verbose_name='Удалено', default=False)
 
     class Meta:
         db_table = 'news'
