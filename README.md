@@ -7,7 +7,7 @@ sudo apt install git
 
 pip3 install django
 pip3 install Unidecode
-#pip3 install mysql-python
+_pip3 install mysql-python_
 pip3 install mysqlclient
 pip3 install virtualenv
 pip3 install pymysql
@@ -17,21 +17,14 @@ pip3 install Pillow
 
 git clone https://github.com/pascal65536/tidings.git 
 
-
-cd ~/git/tidings/newsproject/
-python3 manage.py runserver
-
-
-
 sudo apt install virtualenv
 
 virtualenv venv --hello
 source ~/hello/bin/activate
 deactivate
 
-
 sh pycharm-community-2018.3.4/bin/pycharm.sh 
 
-
+source ~/hello/bin/activate
 cd ~/git/tidings/newsproject/
 python3 manage.py runserver
