@@ -1,4 +1,5 @@
 media/
+!media/default/450x258.jpg
 migrations/
 venv/
 __pycache__/
