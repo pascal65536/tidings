@@ -25,6 +25,9 @@ deactivate
 
 sh pycharm-community-2018.3.4/bin/pycharm.sh 
 
-source ~/hello/bin/activate
+
+source venv/bin/activate
 cd ~/git/tidings/newsproject/
 python3 manage.py runserver
+
+
