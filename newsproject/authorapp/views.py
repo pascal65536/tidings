@@ -33,5 +33,6 @@ def person(request, slug):
         'news_author': news_author,
         'my_news_press': site.my_news_press,
     }
+    # return
     return render(request, 'authorapp/details.html', context)
 
