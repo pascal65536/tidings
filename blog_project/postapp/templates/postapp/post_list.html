@@ -1,0 +1,21 @@
+{% extends 'postapp/base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+		<div class="container">
+			<div class="page-breadcrumbs">
+				<div class="contact-info">
+							<h1 class="section-title title">Post list</h1>
+							<ul>
+                            {% for post in post_list %}
+                                <li>
+                                    <h2>{{ post.title }}</h2>
+                                </li>
+                            {% endfor %}
+							</ul>
+				</div>
+			</div>
+		</div><!--/.container-->
+	</div><!--/#main-wrapper-->
+
+{% endblock %}

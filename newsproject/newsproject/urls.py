@@ -34,7 +34,7 @@ urlpatterns = [
 
     #url(r'^category/', include('categoryapp.urls', namespace='category')),
     #url(r'^news/', include('newsapp.urls', namespace='news')),
-    #url(r'^pages/', include('contactapp.urls', namespace='pages')),
+    #url(r'^pages/', include('postapp.urls', namespace='pages')),
 
     #url(r'^$', RedirectView.as_view(url='/newsapp/', permanent=True)),
 

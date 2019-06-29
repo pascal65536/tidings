@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'authorapp.apps.AuthorappConfig',
     'categoryapp.apps.CategoryappConfig',
     'newsapp.apps.NewsappConfig',
-    'contactapp.apps.ContactappConfig',
+    'postapp.apps.ContactappConfig',
     'ckeditor',
     'autoslug',
 ]

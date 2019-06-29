@@ -43,7 +43,6 @@ class Person(models.Model):
     person_foto = models.CharField(max_length=200, blank=True, null=False)
     person_clean_url = models.CharField(max_length=200)
 
-
     class Meta:
         db_table = 'person'
         verbose_name = 'person_status'
