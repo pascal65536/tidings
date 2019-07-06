@@ -2,20 +2,32 @@
 {% load staticfiles %}
 {% block content %}
 
-		<div class="container">
-			<div class="page-breadcrumbs">
-				<div class="contact-info">
-							<h1 class="section-title title">Post list</h1>
-							<ul>
-                            {% for post in post_list %}
-                                <li>
-                                    <h2>{{ post.title }}</h2>
-                                </li>
-                            {% endfor %}
-							</ul>
-				</div>
+<div class="container">
+	<div class="container">
+		<h1 class="display-3">Post list</h1>
+		<span style="font-size: 48px; color: Dodgerblue;">
+			<i class="fas fa-plane"></i>
+			<i class="fas fa-suitcase"></i>
+			<i class="fas fa-coffee"></i>
+			<i class="far fa-lightbulb"></i>
+		</span>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			{% for post in post_list %}
+			<div class="col-md-4">
+				<h2>{{ post.title }}</h2>
+				<span>{{ post.lead|safe|escape }}</span>
+				<p>
+					<a title="{{ post.title }}" class="btn btn-secondary" href="{% url 'post_detail' post.id %}" role="button">
+						<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Читать далее</font></font>
+					</a>
+				</p>
 			</div>
-		</div><!--/.container-->
-	</div><!--/#main-wrapper-->
+			{% endfor %}
+		</div>
+	</div>
+</div>
 
 {% endblock %}

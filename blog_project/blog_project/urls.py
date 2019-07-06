@@ -20,8 +20,9 @@ from postapp import views as postapp_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('post_list/', postapp_views.post_list),
-    path('post_detail/<int:pk>/', postapp_views.post_detail),
+    path('post_list/', postapp_views.post_list, name='post_list'),
+    path('post_detail/', postapp_views.post_detail, name='post_detail'),
+    path('post_detail/<int:pk>/', postapp_views.post_detail, name='post_detail'),
 ]
 
 # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

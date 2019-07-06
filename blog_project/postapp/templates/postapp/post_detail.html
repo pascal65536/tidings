@@ -1,0 +1,12 @@
+{% extends 'postapp/base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+		<div class="container">
+			<h1 class="display-3">{{ post.title }}</h1>
+			<span>{{ post.text|safe|escape }}</span>
+			<span>{{ post.date_post|safe|escape }}</span>
+		</div>
+
+
+{% endblock %}
