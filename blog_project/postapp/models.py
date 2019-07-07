@@ -5,26 +5,30 @@ from django.db import models
 from django.db.models.functions import datetime
 from blog_project import utils
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
+import textwrap
+import uuid
 
 
 def latin_filename(instance, filename):
-    f_folder = os.path.join(MEDIA_URL, '{:%Y/%m/%d}'.format(instance.date_post))
+    f_folder = os.path.join('{:%Y/%m/%d}'.format(instance.date_post))
+
+    print(MEDIA_URL)
+
     salt = '{:%M%S}'.format(instance.date_post)
     part_of_name = filename.split(".")
-    # f_name = utils.cyr_lat('_'.join(part_of_name[0:-1]))
     f_name = utils.cyr_lat(instance.title)
     f_ext = utils.cyr_lat(part_of_name[-1])
-    return format('{}/{}/{}-{}.{}'.format('blog_picture', f_folder, f_name, salt, f_ext))
+    return format('{}/{}/{}_{}.{}'.format('blog_picture', f_folder, f_name, salt, f_ext))
 
 
 def opengraph(instance):
-    # configuration
     font_size = 36
     height = 480
     width = 640
     background_color = (255, 255, 255)
     font_color = (0, 0, 0)
-    unicode_text = instance.title
+    text = instance.title
+    unicode_text = "\n".join(textwrap.wrap(text, width=30))
     image = Image.new("RGB", (width, height), background_color)
     draw = ImageDraw.Draw(image)
     unicode_font = ImageFont.truetype("DejaVuSans.ttf", font_size)
@@ -38,16 +42,18 @@ def opengraph(instance):
     # Создадим путь и имя файла
     f_folder = os.path.join(MEDIA_ROOT, 'opengraph', 'post')
     salt = '{:%M%S}'.format(instance.date_post)
-    f_name = str(instance.id)
+    # f_name = str(instance.id)
+    # f_name = utils.cyr_lat(instance.title)
+    f_name = uuid.uuid4()
     f_ext = 'png'
-    filename = '{}-{}.{}'.format(f_name, salt, f_ext)
+    filename = '{}.{}'.format(f_name, f_ext)
     image.save('{}/{}'.format(f_folder, filename))
     return filename
 
 
 class Post(models.Model):
     title = models.CharField(verbose_name='Заголовок поста', max_length=255)
-    lead = RichTextField(verbose_name='Лиер-абзац',)
+    lead = RichTextField(verbose_name='Лидер-абзац',)
     text = RichTextField(verbose_name='Тело поста',)
     date_post = models.DateTimeField(verbose_name='Дата публикации',
                                      default=datetime.datetime.now())
