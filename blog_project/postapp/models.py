@@ -55,8 +55,7 @@ class Post(models.Model):
     title = models.CharField(verbose_name='Заголовок поста', max_length=255)
     lead = RichTextField(verbose_name='Лидер-абзац',)
     text = RichTextField(verbose_name='Тело поста',)
-    date_post = models.DateTimeField(verbose_name='Дата публикации',
-                                     default=datetime.datetime.now())
+    date_post = models.DateTimeField(verbose_name='Дата публикации', default=datetime.datetime.now())
     picture = models.ImageField(verbose_name='Картинка для привлечения внимания', upload_to=latin_filename, blank=True)
     og_picture = models.CharField(verbose_name='Картинка для соцсетей', max_length=255, blank=True)
 
@@ -64,9 +63,10 @@ class Post(models.Model):
     # txt_node_id = models.IntegerField()
     # author = models.CharField(max_length=255, blank=True, null=False)
     # url = models.CharField(max_length=255, blank=True, null=False)
-    # created = models.DateTimeField(blank=True, null=False)
-    # changed = models.DateTimeField(blank=True, null=False)
-    # deleted = models.DateTimeField(blank=True, null=False)
+
+    created = models.DateTimeField(verbose_name=u'Создан', auto_now_add=True)
+    changed = models.DateTimeField(verbose_name=u'Изменен', auto_now=True)
+    deleted = models.DateTimeField(verbose_name=u'Удален', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.og_picture = opengraph(self)
@@ -79,4 +79,4 @@ class Post(models.Model):
         ordering = ['-date_post']
 
     def __str__(self):
-        return self.title
+        return u'Публикация №%d: %s ' % (self.id, self.title)
