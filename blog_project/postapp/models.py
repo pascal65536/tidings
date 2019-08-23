@@ -7,6 +7,7 @@ from blog_project import utils
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import textwrap
 import uuid
+from taggit.managers import TaggableManager
 
 
 def latin_filename(instance, filename):
@@ -58,22 +59,22 @@ class Post(models.Model):
     date_post = models.DateTimeField(verbose_name='Дата публикации', default=datetime.datetime.now())
     picture = models.ImageField(verbose_name='Картинка для привлечения внимания', upload_to=latin_filename, blank=True)
     og_picture = models.CharField(verbose_name='Картинка для соцсетей', max_length=255, blank=True)
+    tags = TaggableManager(verbose_name=u'Список тегов')
+    created = models.DateTimeField(verbose_name=u'Создан', auto_now_add=True)
+    changed = models.DateTimeField(verbose_name=u'Изменен', auto_now=True)
+    deleted = models.DateTimeField(verbose_name=u'Удален', blank=True, null=True)
 
     # txt_doc_id = models.IntegerField()
     # txt_node_id = models.IntegerField()
     # author = models.CharField(max_length=255, blank=True, null=False)
     # url = models.CharField(max_length=255, blank=True, null=False)
-
-    created = models.DateTimeField(verbose_name=u'Создан', auto_now_add=True)
-    changed = models.DateTimeField(verbose_name=u'Изменен', auto_now=True)
-    deleted = models.DateTimeField(verbose_name=u'Удален', blank=True, null=True)
+    # tags = TagField(verbose_name=u'Список тегов', blank=True)
 
     def save(self, *args, **kwargs):
         self.og_picture = opengraph(self)
         super(Post, self).save(*args, **kwargs)
 
     class Meta:
-        # db_table = 'post'
         verbose_name = 'Запись в блог'
         verbose_name_plural = 'Записи в блог'
         ordering = ['-date_post']

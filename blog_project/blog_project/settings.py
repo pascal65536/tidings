@@ -15,6 +15,8 @@ INSTALLED_APPS = [
     'postapp',
     'ckeditor',
     'autoslug',
+    'taggit',
+    'tagging',
     # 'authorapp.apps.AuthorappConfig',
     # 'categoryapp.apps.CategoryappConfig',
     # 'newsapp.apps.NewsappConfig',

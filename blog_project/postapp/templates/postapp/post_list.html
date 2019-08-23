@@ -1,18 +1,15 @@
 {% extends 'postapp/base.html' %}
 {% load staticfiles %}
 {% block content %}
+{% load tagging_tags %}
+
 
 <div class="container">
 	<div class="container">
-
-		<span style="font-size: 48px; color: Dodgerblue;">
-			<h1 class="display-3">Post list</h1>
-			<i class="fas fa-plane"></i>
-			<i class="fas fa-suitcase"></i>
-			<i class="fas fa-coffee"></i>
-			<i class="far fa-lightbulb"></i>
+		<span>
+			<a href="{% url 'post_list' %}">Main page</a> |
+			<a href="{% url 'post_list' %}?tag={{ tag.slug }}"> {{ tag.name }}</a> |
 		</span>
-		
 	</div>
 
 	<div class="container">
@@ -22,7 +19,7 @@
 				<h2>{{ post.title }}</h2>
 				<span>{{ post.lead|safe|escape }}</span>
 				<p>
-					<a title="{{ post.title }}" class="btn btn-secondary" href="{% url 'post_detail' post.id %}" role="button">
+					<a title="{{ post.title }}" class="btn btn-secondary" href="{% url 'post_detail' %}?post={{ post.id }}" role="button">
 						<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Читать далее</font></font>
 					</a>
 				</p>
