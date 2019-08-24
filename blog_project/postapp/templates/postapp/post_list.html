@@ -7,8 +7,8 @@
 <div class="container">
 	<div class="container">
 		<span>
-			<a href="{% url 'post_list' %}">Main page</a> |
-			<a href="{% url 'post_list' %}?tag={{ tag.slug }}"> {{ tag.name }}</a> |
+			<b><a href="{% url 'post_list' %}">Main page</a></b> |
+			<a href="{% url 'post_list' %}?tag={{ tag.slug }}"> {{ tag.name }}</a>
 		</span>
 	</div>
 

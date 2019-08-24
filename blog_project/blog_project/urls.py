@@ -1,28 +1,15 @@
-"""blog_project URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
 from postapp import views as postapp_views
 from django.conf.urls import url
+from blog_project import settings
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^post_list/', postapp_views.post_list, name='post_list'),
     url(r'^post_detail/', postapp_views.post_detail, name='post_detail'),
-    # url(r'^post_detail/<int:pk>/', postapp_views.post_detail, name='post_detail'),
-    # url(r'^post_tagged/(?P<slug>[-\w]+)/$', postapp_views.post_tagged, name='post_tagged'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

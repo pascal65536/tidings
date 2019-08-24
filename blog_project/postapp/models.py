@@ -4,7 +4,7 @@ from ckeditor.fields import RichTextField
 from django.db import models
 from django.db.models.functions import datetime
 from blog_project import utils
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont
 import textwrap
 import uuid
 from taggit.managers import TaggableManager
@@ -59,10 +59,10 @@ class Post(models.Model):
     date_post = models.DateTimeField(verbose_name='Дата публикации', default=datetime.datetime.now())
     picture = models.ImageField(verbose_name='Картинка для привлечения внимания', upload_to=latin_filename, blank=True)
     og_picture = models.CharField(verbose_name='Картинка для соцсетей', max_length=255, blank=True)
-    tags = TaggableManager(verbose_name=u'Список тегов')
-    created = models.DateTimeField(verbose_name=u'Создан', auto_now_add=True)
+    tags = TaggableManager(verbose_name=u'Список тегов', blank=True)
+    created = models.DateTimeField(verbose_name=u'Начало публикации', auto_now_add=True)
     changed = models.DateTimeField(verbose_name=u'Изменен', auto_now=True)
-    deleted = models.DateTimeField(verbose_name=u'Удален', blank=True, null=True)
+    deleted = models.DateTimeField(verbose_name=u'Конец публикации', blank=True, null=True)
 
     # txt_doc_id = models.IntegerField()
     # txt_node_id = models.IntegerField()
