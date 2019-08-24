@@ -16,16 +16,23 @@
     <link href="/static/css/all.css" rel="stylesheet"> <!--load all styles -->
     <script defer src="/static/js/all.js"></script> <!--load all styles -->
 
-	<!--title-->
     <title>
         {% block title %}
             {{ title }}
         {% endblock %}
     </title>
 <body>
-    <div id="main-wrapper" class="page">
-        {% block content %}
-        {% endblock %}
+    <div class="container">
+        <div id="head-wrapper" class="page">
+            {% include 'postapp/includes/inc_header.html' %}
+        </div>
+        <div id="main-wrapper" class="page">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div id="footer-wrapper" class="page">
+            {% include 'postapp/includes/inc_footer.html' %}
+        </div>
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

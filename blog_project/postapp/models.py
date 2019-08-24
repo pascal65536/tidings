@@ -12,9 +12,6 @@ from taggit.managers import TaggableManager
 
 def latin_filename(instance, filename):
     f_folder = os.path.join('{:%Y/%m/%d}'.format(instance.date_post))
-
-    print(MEDIA_URL)
-
     salt = '{:%M%S}'.format(instance.date_post)
     part_of_name = filename.split(".")
     f_name = utils.cyr_lat(instance.title)
@@ -80,4 +77,6 @@ class Post(models.Model):
         ordering = ['-date_post']
 
     def __str__(self):
-        return u'Публикация №%d: %s ' % (self.id, self.title)
+        tag_list = []
+        [tag_list.append(tag.name) for tag in self.tags.all()]
+        return u'%d: %s | %s' % (self.id, self.title, ', '.join(tag_list))

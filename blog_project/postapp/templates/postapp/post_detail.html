@@ -1,27 +1,17 @@
 {% extends 'postapp/base.html' %}
-{% load staticfiles %}
+{% load tagging_tags staticfiles %}
 {% block content %}
-{% load tagging_tags %}
-
 
 <div class="container">
-	<div class="container">
-		<span>
-			<b><a href="{% url 'post_list' %}">Main page</a></b> |
-			{% for tag in post.tags.all %}
-				<a href="{% url 'post_list' %}?tag={{ tag.slug }}"> {{ tag.name }}</a> |
-			{% endfor %}
-		</span>
-	</div>
-	<div class="container">
-        <p>{{ MEDIA_URL }}</p>
-        <p>{{ MEDIA_ROOT }}</p>
-        <img src="/media/opengraph/post/{{ post.og_picture }}">
-<!--		<img src="/media/{{ post.picture }}">-->
-		<h1 class="display-3">{{ post.title }}</h1>
+	<div class="jumbotron">
+<!--		<img src="/media/opengraph/post/{{ post.og_picture }}">-->
+		<h1 class="display-4">{{ post.title }}</h1>
+<!--		{% if post.picture %}-->
+<!--			<img src="/media/{{ post.picture }}" width="640">-->
+<!--		{% endif %}-->
 		<span>{{ post.text|safe|escape }}</span>
+		<hr class="my-4">
 	</div>
-
 </div>
 
 {% endblock %}
