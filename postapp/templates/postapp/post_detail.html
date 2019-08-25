@@ -1,0 +1,17 @@
+{% extends 'postapp/base.html' %}
+{% load tagging_tags staticfiles %}
+{% block content %}
+
+<div class="container">
+	<div class="jumbotron">
+<!--		<img src="/media/opengraph/post/{{ post.og_picture }}">-->
+		<h1 class="display-4">{{ post.title }}</h1>
+<!--		{% if post.picture %}-->
+<!--			<img src="/media/{{ post.picture }}" width="640">-->
+<!--		{% endif %}-->
+		<span>{{ post.text|safe|escape }}</span>
+		<hr class="my-4">
+	</div>
+</div>
+
+{% endblock %}
