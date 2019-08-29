@@ -1,21 +1,107 @@
-{% extends 'postapp/base.html' %}
+{% extends 'postapp/base_post_list.html' %}
 {% load staticfiles tagging_tags %}
 {% block content %}
 
-<div class="container">
-		<div class="row">
-			{% for post in post_list %}
-			<div class="col-md-4">
-				<h2>{{ post.title }}</h2>
-				<span>{{ post.lead|safe|escape }}</span>
-				<p>
-					<a title="{{ post.title }}" class="btn btn-secondary" href="{% url 'post_detail' %}?post={{ post.id }}" role="button">
-						<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Читать далее</font></font>
-					</a>
+<!-- Start Blog Area -->
+<div id="blog" class="blog-area">
+    <div class="blog-inner area-padding">
+      <div class="blog-overly"></div>
+      <div class="container ">
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="section-headline text-center">
+              <h2>Latest News</h2>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <!-- Start Left Blog -->
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="single-blog">
+              <div class="single-blog-img">
+                <a href="blog.html">
+					<img src="img/blog/1.jpg" alt="">
+				</a>
+              </div>
+              <div class="blog-meta">
+                <span class="date-type">
+					<i class="fa fa-calendar"></i>{{ post_dict.left.date_post }}
+				</span>
+              </div>
+              <div class="blog-text">
+                <h4>
+					<a href="{% url 'post_detail' %}?post={{ post_dict.left.id }}">{{ post_dict.left.title }}</a>
+				</h4>
+                <p>
+					{{ post_dict.left.lead|safe|escape }}
 				</p>
-			</div>
-			{% endfor %}
-		</div>
-</div>
+              </div>
+              <span>
+				  <a href="blog.html" class="ready-btn">Read more</a>
+			  </span>
+            </div>
+            <!-- Start single blog -->
+          </div>
+          <!-- End Left Blog-->
+          <!-- Start Left Blog -->
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="single-blog">
+              <div class="single-blog-img">
+                <a href="blog.html">
+					<img src="img/blog/2.jpg" alt="">
+				</a>
+              </div>
+              <div class="blog-meta">
+                <span class="date-type">
+					<i class="fa fa-calendar"></i>{{ post_dict.center.date_post }}
+				</span>
+              </div>
+              <div class="blog-text">
+                <h4>
+					<a href="{% url 'post_detail' %}?post={{ post_dict.center.id }}">{{ post_dict.center.title }}</a>
+				</h4>
+                <p>
+                  {{ post_dict.center.lead|safe|escape }}
+                </p>
+              </div>
+              <span>
+				  <a href="blog.html" class="ready-btn">Read more</a>
+			  </span>
+            </div>
+            <!-- Start single blog -->
+          </div>
+          <!-- End Left Blog-->
+          <!-- Start Right Blog-->
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="single-blog">
+              <div class="single-blog-img">
+                <a href="blog.html">
+					<img src="img/blog/3.jpg" alt="">
+				</a>
+              </div>
+              <div class="blog-meta">
+                <span class="date-type">
+					<i class="fa fa-calendar"></i>{{ post_dict.right.date_post }}
+				</span>
+              </div>
+              <div class="blog-text">
+                <h4>
+					<a href="{% url 'post_detail' %}?post={{ post_dict.right.id }}">{{ post_dict.right.title }}</a>
+				</h4>
+                <p>
+					{{ post_dict.right.lead|safe|escape }}
+				</p>
+              </div>
+              <span>
+				  <a href="{% url 'post_detail' %}?post={{ post_dict.right.id }}" class="ready-btn">Read more</a>
+			  </span>
+            </div>
+          </div>
+          <!-- End Right Blog-->
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- End Blog -->
 
 {% endblock %}

@@ -10,10 +10,17 @@ def post_list(request):
     if slug:
         tag = get_object_or_404(Tag, slug=slug)
         post_qs = Post.objects.filter(tags__in=[tag])
+
+    post_dict = {
+        'left': post_qs[0],
+        'center': post_qs[1],
+        'right': post_qs[2],
+    }
     return render(
         request, 'postapp/post_list.html',
         {
-            'post_list': post_qs,
+            'post_dict': post_dict,
+            'post': post_qs[2],
             'tag': tag,
         }
     )

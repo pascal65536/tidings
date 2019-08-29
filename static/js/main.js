@@ -1,255 +1,212 @@
-jQuery(function ($) {
+(function($) {
+  "use strict";
 
-    'use strict';
-	
-	/*==============================================================*/
-    // Table of index
-    /*==============================================================*/
+  /*--------------------------
+  preloader
+  ---------------------------- */
+  $(window).on('load', function() {
+    var pre_loader = $('#preloader');
+    pre_loader.fadeOut('slow', function() {
+      $(this).remove();
+    });
+  });
 
-    /*==============================================================
-    # sticky-nav
-    # Date Time
-    # language Select
-	# Search Slide
-	# Breaking News
-	# Owl Carousel
-	# magnificPopup
-	# newsletter
-	# weather	
-	
-    ==============================================================*/
-	
-	
-	
-	
-	/*==============================================================*/
-    // # sticky-nav
-    /*==============================================================*/
-	(function () {
-		var windowWidth = $(window).width();
-		if(windowWidth > 1000 ){
-        $(window).scroll (function () {
-            var sT = $(this).scrollTop();
-				if (sT >= 120) {
-					$('.homepage .navbar, .homepage-two.fixed-nav .navbar').addClass('sticky-nav')
-				}else {
-					$('.homepage .navbar, .homepage-two.fixed-nav .navbar').removeClass('sticky-nav')
-				};
-			});
-		}else{				
-			$('.homepage .navbar, .homepage-two.fixed-nav .navbar').removeClass('sticky-nav')			
-		};	
-		if(windowWidth > 1000 ){
-        $(window).scroll (function () {
-            var sT = $(this).scrollTop();
-				if (sT >= 120) {
-					$('.homepage #menubar, .homepage-two.fixed-nav #navigation').removeClass('container')
-					$('.homepage #menubar, .homepage-two.fixed-nav #navigation').addClass('container-fluid')
-				}else {
-					$('.homepage #menubar, .homepage-two.fixed-nav #navigation').removeClass('container-fluid')
-					$('.homepage #menubar').addClass('container')
-				}
-			});
-		}else{				
-			$('.homepage #menubar, .homepage-two.fixed-nav #navigation').removeClass('container-fluid')			
-		};	 
+  /*---------------------
+   TOP Menu Stick
+  --------------------- */
+  var s = $("#sticker");
+  var pos = s.position();
+  $(window).on('scroll', function() {
+    var windowpos = $(window).scrollTop() > 300;
+    if (windowpos > pos.top) {
+      s.addClass("stick");
+    } else {
+      s.removeClass("stick");
+    }
+  });
 
-    }());
-	
-	
-		
-	/*==============================================================*/
-    // # Date Time
-    /*==============================================================*/
+  /*----------------------------
+   Navbar nav
+  ------------------------------ */
+  var main_menu = $(".main-menu ul.navbar-nav li ");
+  main_menu.on('click', function() {
+    main_menu.removeClass("active");
+    $(this).addClass("active");
+  });
 
-    (function() {
+  /*----------------------------
+   wow js active
+  ------------------------------ */
+  new WOW().init();
 
-		var datetime = null,
-        date = null;
-		var update = function() {
-			date = moment(new Date())
-			datetime.html(date.format('dddd, MMMM D,  YYYY'));
-		};
-		datetime = $('#date-time')
-		update();
-		setInterval(update, 1000);
+  $(".navbar-collapse a:not(.dropdown-toggle)").on('click', function() {
+    $(".navbar-collapse.collapse").removeClass('in');
+  });
 
-    }());
-	
-	/*==============================================================*/
-    // # language Select
-    /*==============================================================*/
-   (function() {
-		$('.language-dropdown').on('click', '.language-change a', function(ev) {
-			if ("#" === $(this).attr('href')) {
-				ev.preventDefault();
-				var parent = $(this).parents('.language-dropdown');
-				parent.find('.change-text').html($(this).html());
-			}
-		});
-	}());
-	
-	/*==============================================================*/
-	// Search Slide
-	/*==============================================================*/
-	
-	$('.search-icon').on('click', function() {
-		$('.searchNlogin').toggleClass("expanded");
-	});
-		
-	
-	/*==============================================================*/
-    // Breaking News
-    /*==============================================================*/
-	 (function() {
-		$('.breaking-news-scroll').easyTicker({
-			direction: 'up',
-			easing: 'swing',
-			speed: 'slow',
-			interval: 3000,
-			height: 'auto',
-			visible: 1,
-			mousePause: 1,
-			controls: {
-				up: '',
-				down: '',
-				toggle: '',
-				playText: 'Play',
-				stopText: 'Stop'
-			}
-		});
-	
-	}());
-	
-	
-	/*==============================================================*/
-    // sticky
-    /*==============================================================*/
-	(function () {
-		$("#sticky").stick_in_parent();
-	}());
-	
-	/*==============================================================*/
-    // Owl Carousel
-    /*==============================================================*/
-	$("#home-slider").owlCarousel({ 
-		pagination	: true,	
-		autoPlay	: true,
-		singleItem	: true,
-		stopOnHover	: true,
-	});
-	
-	$("#latest-news").owlCarousel({ 
-		items : 4,
-		pagination	: true,	
-		autoPlay	: true,
-		stopOnHover	: true,
-	});
-	
-	$(".twitter-feeds").owlCarousel({ 
-		items : 1,
-		singleItem : true,
-		pagination	: false,	
-		autoPlay	: true,
-		stopOnHover	: true,
-	});
-	
-	$("#main-slider").owlCarousel({ 
-		items : 3,
-		pagination	: false,
-		navigation	: false,
-		autoPlay	: true,
-		stopOnHover	: true
-		
-	});
-	
-	
-	
+  //---------------------------------------------
+  //Nivo slider
+  //---------------------------------------------
+  $('#ensign-nivoslider').nivoSlider({
+    effect: 'random',
+    slices: 15,
+    boxCols: 12,
+    boxRows: 8,
+    animSpeed: 500,
+    pauseTime: 5000,
+    startSlide: 0,
+    directionNav: true,
+    controlNavThumbs: false,
+    pauseOnHover: true,
+    manualAdvance: false,
+  });
 
-	/*==============================================================*/
-    // Magnific Popup
-    /*==============================================================*/
-	
-	(function () {
-		$('.image-link').magnificPopup({
-			gallery: {
-			enabled: true
-			},		
-			type: 'image' 
-		});
-		$('.feature-image .image-link').magnificPopup({
-			gallery: {
-				enabled: false
-			},		
-			type: 'image' 
-		});
-		$('.image-popup').magnificPopup({	
-			type: 'image' 
-		});
-		$('.video-link').magnificPopup({type:'iframe'});
-	}());
-	
-	
-	/*==============================================================*/
-    // Newsletter Popup
-    /*==============================================================*/
-	(function () {
-		$(".subscribe-me").subscribeBetter({
-			trigger: "onidle",  
-			animation: "fade",          
-			delay:70,  
-			showOnce: true,
-			autoClose: false, 
-			scrollableModal: false 
-		});
-	}());
-	
-	
-	
-	
-	
-	
-	
-});
+  /*----------------------------
+   Scrollspy js
+  ------------------------------ */
+  var Body = $('body');
+  Body.scrollspy({
+    target: '.navbar-collapse',
+    offset: 80
+  });
 
-/*==============================================================*/
- // Weather
-/*==============================================================*/
+  /*---------------------
+    Venobox
+  --------------------- */
+  var veno_box = $('.venobox');
+  veno_box.venobox();
 
-  
-	$.simpleWeather({
-		location: 'london, uk',
-		woeid: '',
-		unit: 'c',
-		success: function(weather) {
-		 html = '<span>'+weather.city+' </span><img src="'+weather.thumbnail+'"><span> '+weather.temp+'&deg;'+weather.units.temp+'</span>';
-		  $("#weather").html(html);
-		},
-		error: function(error) {
-		  $("#weather").html('<p>'+error+'</p>');
-		}
-	});
-	
-	$.simpleWeather({
-		location: 'london, uk',
-		woeid: '',
-		unit: 'c',
-		success: function(weather) {		 
-		 for(var i=4;i<weather.forecast.length;i++) {
-			html = '<img class="weather-image" src="'+weather.image+'">'+'<span class="weather-type">'+weather.currently+'</span><span class="weather-temp"> '+weather.temp+'&deg;'+weather.units.temp+'</span><span class="weather-date">'+weather.forecast[i].date+'</span><span class="weather-region">'+weather.city+', '+weather.country+'</span>';
-		  }
-		  html +='<span class="weather-humidity">'+weather.humidity+'%</span> ';
-		  html +='<span class="weather-wind">'+weather.wind.speed+' MPH</span>';
+  /*----------------------------
+  Page Scroll
+  ------------------------------ */
+  var page_scroll = $('a.page-scroll');
+  page_scroll.on('click', function(event) {
+    var $anchor = $(this);
+    $('html, body').stop().animate({
+      scrollTop: $($anchor.attr('href')).offset().top - 55
+    }, 1500, 'easeInOutExpo');
+    event.preventDefault();
+  });
 
-		  $("#weather-widget").html(html);
-		},
-		error: function(error) {
-		  $("#weather-widget").html('<p>'+error+'</p>');
-		}
-	});
-	  
-	  
-	  
-	  
-	  
-	
+  /*--------------------------
+    Back to top button
+  ---------------------------- */
+  $(window).scroll(function() {
+    if ($(this).scrollTop() > 100) {
+      $('.back-to-top').fadeIn('slow');
+    } else {
+      $('.back-to-top').fadeOut('slow');
+    }
+  });
+
+  $('.back-to-top').click(function(){
+    $('html, body').animate({scrollTop : 0},1500, 'easeInOutExpo');
+    return false;
+  });
+
+  /*----------------------------
+   Parallax
+  ------------------------------ */
+  var well_lax = $('.wellcome-area');
+  well_lax.parallax("50%", 0.4);
+  var well_text = $('.wellcome-text');
+  well_text.parallax("50%", 0.6);
+
+  /*--------------------------
+   collapse
+  ---------------------------- */
+  var panel_test = $('.panel-heading a');
+  panel_test.on('click', function() {
+    panel_test.removeClass('active');
+    $(this).addClass('active');
+  });
+
+  /*---------------------
+   Testimonial carousel
+  ---------------------*/
+  var test_carousel = $('.testimonial-carousel');
+  test_carousel.owlCarousel({
+    loop: true,
+    nav: false,
+    dots: true,
+    autoplay: true,
+    responsive: {
+      0: {
+        items: 1
+      },
+      768: {
+        items: 1
+      },
+      1000: {
+        items: 1
+      }
+    }
+  });
+  /*----------------------------
+   isotope active
+  ------------------------------ */
+  // portfolio start
+  $(window).on("load", function() {
+    var $container = $('.awesome-project-content');
+    $container.isotope({
+      filter: '*',
+      animationOptions: {
+        duration: 750,
+        easing: 'linear',
+        queue: false
+      }
+    });
+    var pro_menu = $('.project-menu li a');
+    pro_menu.on("click", function() {
+      var pro_menu_active = $('.project-menu li a.active');
+      pro_menu_active.removeClass('active');
+      $(this).addClass('active');
+      var selector = $(this).attr('data-filter');
+      $container.isotope({
+        filter: selector,
+        animationOptions: {
+          duration: 750,
+          easing: 'linear',
+          queue: false
+        }
+      });
+      return false;
+    });
+
+  });
+  //portfolio end
+
+  /*---------------------
+   Circular Bars - Knob
+--------------------- */
+  if (typeof($.fn.knob) != 'undefined') {
+    var knob_tex = $('.knob');
+    knob_tex.each(function() {
+      var $this = $(this),
+        knobVal = $this.attr('data-rel');
+
+      $this.knob({
+        'draw': function() {
+          $(this.i).val(this.cv + '%')
+        }
+      });
+
+      $this.appear(function() {
+        $({
+          value: 0
+        }).animate({
+          value: knobVal
+        }, {
+          duration: 2000,
+          easing: 'swing',
+          step: function() {
+            $this.val(Math.ceil(this.value)).trigger('change');
+          }
+        });
+      }, {
+        accX: 0,
+        accY: -150
+      });
+    });
+  }
+
+})(jQuery);

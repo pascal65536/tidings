@@ -7,6 +7,7 @@ class Command(BaseCommand):
         import ipdb; ipdb.set_trace()
 
         file_name = '/home/pascal65536/Загрузки/нюанс.rtf'
+        file_name = '/home/pascal65536/Загрузки/язык.rtf'
         with open(file_name, 'r') as file:
             for rtf in file:
                 print(rtf)
