@@ -46,45 +46,19 @@
 
   <div id="preloader"></div>
 
-  <header>
-    <!-- header-area start -->
-    <div id="sticker" class="header-area">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 col-sm-12">
-
-            <!-- Navigation -->
-            {% include 'postapp/includes/inc_navigation.html' %}
-            <!-- END: Navigation -->
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- header-area end -->
-  </header>
+  {% include 'postapp/includes/inc_header_detail.html' %}
   <!-- header end -->
 
   <!-- Start Bottom Header -->
   {% include 'postapp/includes/inc_bottom_header.html' %}
   <!-- END Header -->
-  <div class="blog-page area-padding">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-          {% include 'postapp/includes/inc_page.html' %}
-        </div>
-        <!-- End left sidebar -->
-        <!-- Start single blog -->
-            {% block content %}
-            {% endblock %}
-      </div>
-    </div>
-  </div>
+  {% block content %}
+  {% endblock %}
   <!-- End Blog Area -->
   <div class="clearfix"></div>
 
   <!-- Start Footer bottom Area -->
-  {% include 'postapp/includes/inc_footer.html' %}
+  {% include 'postapp/includes/inc_footer_detail.html' %}
 
   <a href="/static/#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 

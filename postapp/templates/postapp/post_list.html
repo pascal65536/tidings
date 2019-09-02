@@ -37,7 +37,7 @@
 				</p>
               </div>
               <span>
-				  <a href="blog.html" class="ready-btn">Read more</a>
+                  <a href="{% url 'post_detail' %}?post={{ post_dict.left.id }}" class="ready-btn">Read more</a>
 			  </span>
             </div>
             <!-- Start single blog -->
@@ -65,7 +65,7 @@
                 </p>
               </div>
               <span>
-				  <a href="blog.html" class="ready-btn">Read more</a>
+				  <a href="{% url 'post_detail' %}?post={{ post_dict.center.id }}" class="ready-btn">Read more</a>
 			  </span>
             </div>
             <!-- Start single blog -->
