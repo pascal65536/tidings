@@ -14,13 +14,13 @@
               {% include 'postapp/includes/inc_recent.html' %}
             </div>
             <div class="single-blog-page">
-              {% include 'postapp/includes/inc_categories.html' %}
+{#              {% include 'postapp/includes/inc_categories.html' %} #}
             </div>
             <div class="single-blog-page">
-              {% include 'postapp/includes/inc_archive.html' %}
+{#              {% include 'postapp/includes/inc_archive.html' %} #}
             </div>
             <div class="single-blog-page">
-              {% include 'postapp/includes/inc_tags.html' %}
+{#              {% include 'postapp/includes/inc_tags.html' %} #}
             </div>
           </div>
         </div>
@@ -28,29 +28,24 @@
         <!-- Start single blog -->
         <div class="col-md-8 col-sm-8 col-xs-12">
 	    <div class="row">
-		<div class="col-md-12 col-sm-12 col-xs-12">
+		    <div class="col-md-12 col-sm-12 col-xs-12">
               <!-- single-blog start -->
               <article class="blog-post-wrapper">
                 <div class="post-thumbnail">
-                  <img src="/media/{{ post.picture }}" width="640" alt="{{ post.title }}" />
+                  <img src="/media/{{ post.picture }}" alt="{{ post.title }}" />
                 </div>
                 <div class="post-information">
                   <h2>{{ post.title }}</h2>
                   <div class="entry-meta">
-                    <span class="author-meta"><i class="fa fa-user"></i> <a href="#">admin</a></span>
+{#                    <span class="author-meta"><i class="fa fa-user"></i> <a href=".">admin</a></span> #}
                     <span><i class="fa fa-clock-o"></i> {{ post.date_post }}</span>
-                    <span class="tag-meta">
-						<i class="fa fa-folder-o"></i>
-						<a href="#">painting</a>,
-						<a href="#">work</a>
-					</span>
-                    <span>
-						<i class="fa fa-tags"></i>
-						<a href="#">tools</a>,
-						<a href="#">Humer</a>,
-						<a href="#">House</a>
-					</span>
-                    <span><i class="fa fa-comments-o"></i> <a href="#">6 comments</a></span>
+{#                    <span class="tag-meta"><i class="fa fa-folder-o"></i><a href="#">painting</a>,<a href="#">work</a></span> #}
+                    <span><i class="fa fa-tags"></i>
+                        {% for tag in post.tags.all %}
+                            <a href="{% url 'post_list' %}?tag={{ tag.slug }}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </span>
+{#                    <span><i class="fa fa-comments-o"></i> <a href=".">6 comments</a></span> #}
                   </div>
                   <div class="entry-content">
 					  {{ post.text|safe|escape }}
@@ -59,15 +54,15 @@
               </article>
               <div class="clear"></div>
                 <div class="single-post-comments">
-                  {% include 'postapp/includes/inc_single_post_comments.html' %}
-                  {% include 'postapp/includes/inc_single_post_respond.html' %}
+{#                  {% include 'postapp/includes/inc_single_post_comments.html' %} #}
+{#                  {% include 'postapp/includes/inc_single_post_respond.html' %} #}
                 </div>
               <!-- single-blog end -->
             </div>
-	</div>
-</div>
+        </div>
+        </div>
       </div>
     </div>
-  </div>
+</div>
 
 {% endblock %}

@@ -3,7 +3,7 @@
 {% block content %}
 
 <!-- Start Blog Area -->
-<div id="blog" class="blog-area">
+  <div id="blog" class="blog-area">
     <div class="blog-inner area-padding">
       <div class="blog-overly"></div>
       <div class="container ">
@@ -14,30 +14,31 @@
             </div>
           </div>
         </div>
+        {%for post in post_list%}
         <div class="row">
           <!-- Start Left Blog -->
           <div class="col-md-4 col-sm-4 col-xs-12">
             <div class="single-blog">
               <div class="single-blog-img">
                 <a href="blog.html">
-					<img src="img/blog/1.jpg" alt="">
+                    <img src="/media/{{ post.left.picture }}" alt="{{ post.left.title }}" />
 				</a>
               </div>
               <div class="blog-meta">
                 <span class="date-type">
-					<i class="fa fa-calendar"></i>{{ post_dict.left.date_post }}
+					<i class="fa fa-calendar"></i>{{ post.left.date_post }}
 				</span>
               </div>
               <div class="blog-text">
                 <h4>
-					<a href="{% url 'post_detail' %}?post={{ post_dict.left.id }}">{{ post_dict.left.title }}</a>
+					<a href="{% url 'post_detail' %}?post={{ post.left.id }}">{{ post.left.title }}</a>
 				</h4>
                 <p>
-					{{ post_dict.left.lead|safe|escape }}
+					{{ post.left.lead|safe|escape }}
 				</p>
               </div>
               <span>
-                  <a href="{% url 'post_detail' %}?post={{ post_dict.left.id }}" class="ready-btn">Read more</a>
+                  <a href="{% url 'post_detail' %}?post={{ post.left.id }}" class="ready-btn">Read more</a>
 			  </span>
             </div>
             <!-- Start single blog -->
@@ -48,24 +49,24 @@
             <div class="single-blog">
               <div class="single-blog-img">
                 <a href="blog.html">
-					<img src="img/blog/2.jpg" alt="">
+                    <img src="/media/{{ post.center.picture }}" alt="{{ post.center.title }}" />
 				</a>
               </div>
               <div class="blog-meta">
                 <span class="date-type">
-					<i class="fa fa-calendar"></i>{{ post_dict.center.date_post }}
+					<i class="fa fa-calendar"></i>{{ post.center.date_post }}
 				</span>
               </div>
               <div class="blog-text">
                 <h4>
-					<a href="{% url 'post_detail' %}?post={{ post_dict.center.id }}">{{ post_dict.center.title }}</a>
+					<a href="{% url 'post_detail' %}?post={{ post.center.id }}">{{ post.center.title }}</a>
 				</h4>
                 <p>
-                  {{ post_dict.center.lead|safe|escape }}
+                  {{ post.center.lead|safe|escape }}
                 </p>
               </div>
               <span>
-				  <a href="{% url 'post_detail' %}?post={{ post_dict.center.id }}" class="ready-btn">Read more</a>
+				  <a href="{% url 'post_detail' %}?post={{ post.center.id }}" class="ready-btn">Read more</a>
 			  </span>
             </div>
             <!-- Start single blog -->
@@ -76,32 +77,39 @@
             <div class="single-blog">
               <div class="single-blog-img">
                 <a href="blog.html">
-					<img src="img/blog/3.jpg" alt="">
+					<img src="/media/{{ post.right.picture }}" alt="{{ post.right.title }}" />
 				</a>
               </div>
               <div class="blog-meta">
                 <span class="date-type">
-					<i class="fa fa-calendar"></i>{{ post_dict.right.date_post }}
+					<i class="fa fa-calendar"></i>{{ post.right.date_post }}
 				</span>
               </div>
               <div class="blog-text">
                 <h4>
-					<a href="{% url 'post_detail' %}?post={{ post_dict.right.id }}">{{ post_dict.right.title }}</a>
+					<a href="{% url 'post_detail' %}?post={{ post.right.id }}">{{ post.right.title }}</a>
 				</h4>
                 <p>
-					{{ post_dict.right.lead|safe|escape }}
+					{{ post.right.lead|safe|escape }}
 				</p>
               </div>
               <span>
-				  <a href="{% url 'post_detail' %}?post={{ post_dict.right.id }}" class="ready-btn">Read more</a>
+				  <a href="{% url 'post_detail' %}?post={{ post.right.id }}" class="ready-btn">Read more</a>
 			  </span>
             </div>
           </div>
           <!-- End Right Blog-->
         </div>
+        <div><br></div>
+        <div class="clearfix"></div>
+        {% endfor %}
       </div>
     </div>
   </div>
+
+
 <!-- End Blog -->
 
 {% endblock %}
+
+

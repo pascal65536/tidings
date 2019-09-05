@@ -4,23 +4,31 @@ from taggit.models import Tag
 
 
 def post_list(request):
-    post_qs = Post.objects.all().order_by('-date_post')
+    post_queryset = Post.objects.all().order_by('-date_post')
     tag = None
     slug = request.GET.get('tag', None)
     if slug:
         tag = get_object_or_404(Tag, slug=slug)
-        post_qs = Post.objects.filter(tags__in=[tag])
+        post_queryset = Post.objects.filter(tags__in=[tag]).order_by('-date_post')
 
-    post_dict = {
-        'left': post_qs[0],
-        'center': post_qs[1],
-        'right': post_qs[2],
-    }
+    post_list = []
+    begin = 0
+    width = 3
+    height = 4
+    while begin < height:
+        post_qs = post_queryset[begin*width:(begin+1)*width]
+        post_dict = {
+            'left': post_qs[0],
+            'center': post_qs[1],
+            'right': post_qs[2],
+        }
+        begin = begin + 1
+        post_list.append(post_dict)
+
     return render(
         request, 'postapp/post_list.html',
         {
-            'post_dict': post_dict,
-            'post': post_qs[2],
+            'post_list': post_list,
             'tag': tag,
         }
     )
@@ -31,10 +39,15 @@ def post_detail(request):
         post = Post.objects.get(id=request.GET.get('post', None))
     else:
         post = Post.objects.all().order_by('-date_post')[0]
+
+    len_recent_post = 6
+    recent_post = Post.objects.all().exclude(id=post.id).order_by('-date_post')[0:len_recent_post]
+
     return render(
         request, 'postapp/post_detail.html',
         {
-            'post': post
+            'post': post,
+            'recent_post': recent_post,
         }
     )
 
@@ -50,9 +63,10 @@ Parameters:
 add(*tags)
 This adds tags to an object. The tags can be either Tag instances, or strings:
 
->>> apple.tags.all()
+apple.tags.all()
 []
->>> apple.tags.add("red", "green", "fruit")
+
+apple.tags.add("red", "green", "fruit")
 
 remove(*tags)
 Removes a tag from an object. No exception is raised if the object doesn’t have that tag.
@@ -70,12 +84,12 @@ If the model is using generic tagging (the default), this method searches tagged
 names()
 Convenience method, returning a ValuesListQuerySet (basically just an iterable) containing the name of each tag as a string:
 
->>> apple.tags.names()
+apple.tags.names()
 [u'green and juicy', u'red']
 
 slugs()
 Convenience method, returning a ValuesListQuerySet (basically just an iterable) containing the slug of each tag as a string:
 
->>> apple.tags.slugs()
+apple.tags.slugs()
 [u'green-and-juicy', u'red']
 """
