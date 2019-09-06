@@ -4,6 +4,7 @@ import textwrap
 from autoslug import AutoSlugField
 from ckeditor.fields import RichTextField
 from django.db import models
+from django.db.models import TextField
 from django.db.models.functions import datetime
 from PIL import Image, ImageDraw, ImageFont
 from taggit.managers import TaggableManager
@@ -53,7 +54,7 @@ def opengraph(instance):
 
 class Post(models.Model):
     title = models.CharField(verbose_name='Заголовок поста', max_length=255)
-    lead = RichTextField(verbose_name='Лидер-абзац',)
+    lead = TextField(verbose_name='Лидер-абзац',)
     text = RichTextField(verbose_name='Тело поста',)
     date_post = models.DateTimeField(verbose_name='Дата публикации', default=datetime.datetime.now())
     picture = models.ImageField(verbose_name='Картинка для привлечения внимания', upload_to=latin_filename, blank=True)

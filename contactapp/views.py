@@ -10,4 +10,4 @@ def contact(request):
         'menu_links': 'menu_links',
         'contact_list': contact_list
     }
-    return render(request, 'postapp/post_list.html', context)
+    return render(request, 'postapp/post_index.html', context)

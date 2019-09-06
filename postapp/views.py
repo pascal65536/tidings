@@ -3,6 +3,16 @@ from postapp.models import Post
 from taggit.models import Tag
 
 
+def post_index(request):
+    return render(
+        request, 'postapp/post_index.html',
+        {
+            'post_list': [],
+            'tag': [],
+        }
+    )
+
+
 def post_list(request):
     post_queryset = Post.objects.all().order_by('-date_post')
     tag = None

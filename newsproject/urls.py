@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^author/(?P<slug>[\w-]+)', person, name='person'),
     url(r'^admin/', admin.site.urls),
     url(r'^contact/', contact, name='contact'),
+    url(r'^$', post_list, name='post_index'),
     url(r'^post_list/', post_list, name='post_list'),
     url(r'^post_detail/', post_detail, name='post_detail'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
