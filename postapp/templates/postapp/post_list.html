@@ -3,111 +3,71 @@
 {% block content %}
 
 <!-- Start Blog Area -->
-  <div id="blog" class="blog-area">
-    <div class="blog-inner area-padding">
-      <div class="blog-overly"></div>
-      <div class="container ">
-        <div class="row">
-          <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="section-headline text-center">
-              <h2>Latest News</h2>
+  <div class="blog-page area-padding">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+          <div class="page-head-blog">
+            <div class="single-blog-page">
+              <!-- search option start -->
+                {% include 'postapp/includes/inc_search.html' %}
+              <!-- search option end -->
+            </div>
+            <div class="single-blog-page">
+              <!-- recent start -->
+              {% include 'postapp/includes/inc_recent.html' %}
+              <!-- recent end -->
+            </div>
+            <div class="single-blog-page">
+{#              {% include 'postapp/includes/inc_categories.html' %} #}
+            </div>
+            <div class="single-blog-page">
+{#              {% include 'postapp/includes/inc_archive.html' %} #}
+            </div>
+            <div class="single-blog-page">
+{#              {% include 'postapp/includes/inc_tags.html' %} #}
             </div>
           </div>
         </div>
-        {%for post in post_list%}
-        <div class="row">
-          <!-- Start Left Blog -->
-          <div class="col-md-4 col-sm-4 col-xs-12">
-            <div class="single-blog">
-              <div class="single-blog-img">
-                <a href="blog.html">
-                    <img src="/media/{{ post.left.picture }}" alt="{{ post.left.title }}" />
-				</a>
+        <!-- End left sidebar -->
+        <!-- Start single blog -->
+        <div class="col-md-8 col-sm-8 col-xs-12">
+          <div class="row">
+              {% for post in post_queryset%}
+              <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="single-blog">
+                <div class="single-blog-img">
+                  <a href="{% url 'post_detail' %}?post={{ post.id }}">
+                      <img src="/media/{{ post.picture }}" alt="{{ post.title }}" />
+                  </a>
+                </div>
+                <div class="blog-meta">
+                  <span class="comments-type">
+{#                      <i class="fa fa-comment-o"></i><a href="/static/#">11 comments</a> #}
+                  </span>
+                    <span class="date-type">
+                        <i class="fa fa-calendar"></i> {{ post.date_post }}
+                    </span>
+                </div>
+                <div class="blog-text">
+                    <h4>
+                        <a href="{% url 'post_detail' %}?post={{ post.id }}">{{ post.title }}</a>
+                    </h4>
+                    <p>{{ post.lead|safe|escape }}</p>
+                </div>
+                <span>
+                    <a href="{% url 'post_detail' %}?post={{ post.id }}" class="ready-btn">Read more</a>
+                </span>
               </div>
-              <div class="blog-meta">
-                <span class="date-type">
-					<i class="fa fa-calendar"></i>{{ post.left.date_post }}
-				</span>
-              </div>
-              <div class="blog-text">
-                <h4>
-					<a href="{% url 'post_detail' %}?post={{ post.left.id }}">{{ post.left.title }}</a>
-				</h4>
-                <p>
-					{{ post.left.lead|safe|escape }}
-				</p>
-              </div>
-              <span>
-                  <a href="{% url 'post_detail' %}?post={{ post.left.id }}" class="ready-btn">Read more</a>
-			  </span>
             </div>
-            <!-- Start single blog -->
+              {% endfor %}
+
+              {% include 'postapp/includes/inc_pagination.html' %}
           </div>
-          <!-- End Left Blog-->
-          <!-- Start Left Blog -->
-          <div class="col-md-4 col-sm-4 col-xs-12">
-            <div class="single-blog">
-              <div class="single-blog-img">
-                <a href="blog.html">
-                    <img src="/media/{{ post.center.picture }}" alt="{{ post.center.title }}" />
-				</a>
-              </div>
-              <div class="blog-meta">
-                <span class="date-type">
-					<i class="fa fa-calendar"></i>{{ post.center.date_post }}
-				</span>
-              </div>
-              <div class="blog-text">
-                <h4>
-					<a href="{% url 'post_detail' %}?post={{ post.center.id }}">{{ post.center.title }}</a>
-				</h4>
-                <p>
-                  {{ post.center.lead|safe|escape }}
-                </p>
-              </div>
-              <span>
-				  <a href="{% url 'post_detail' %}?post={{ post.center.id }}" class="ready-btn">Read more</a>
-			  </span>
-            </div>
-            <!-- Start single blog -->
-          </div>
-          <!-- End Left Blog-->
-          <!-- Start Right Blog-->
-          <div class="col-md-4 col-sm-4 col-xs-12">
-            <div class="single-blog">
-              <div class="single-blog-img">
-                <a href="blog.html">
-					<img src="/media/{{ post.right.picture }}" alt="{{ post.right.title }}" />
-				</a>
-              </div>
-              <div class="blog-meta">
-                <span class="date-type">
-					<i class="fa fa-calendar"></i>{{ post.right.date_post }}
-				</span>
-              </div>
-              <div class="blog-text">
-                <h4>
-					<a href="{% url 'post_detail' %}?post={{ post.right.id }}">{{ post.right.title }}</a>
-				</h4>
-                <p>
-					{{ post.right.lead|safe|escape }}
-				</p>
-              </div>
-              <span>
-				  <a href="{% url 'post_detail' %}?post={{ post.right.id }}" class="ready-btn">Read more</a>
-			  </span>
-            </div>
-          </div>
-          <!-- End Right Blog-->
         </div>
-        <div><br></div>
-        <div class="clearfix"></div>
-        {% endfor %}
       </div>
     </div>
   </div>
-
-
 <!-- End Blog -->
 
 {% endblock %}

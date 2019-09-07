@@ -4,11 +4,18 @@ from taggit.models import Tag
 
 
 def post_index(request):
+    print('-' * 80)
+    post_qs = Post.objects.all().order_by('-date_post')[0:3]
+    post = {
+        'left': post_qs[0],
+        'center': post_qs[1],
+        'right': post_qs[2],
+    }
+
     return render(
         request, 'postapp/post_index.html',
         {
-            'post_list': [],
-            'tag': [],
+            'post': post,
         }
     )
 
@@ -20,25 +27,16 @@ def post_list(request):
     if slug:
         tag = get_object_or_404(Tag, slug=slug)
         post_queryset = Post.objects.filter(tags__in=[tag]).order_by('-date_post')
-
-    post_list = []
-    begin = 0
-    width = 3
-    height = 4
-    while begin < height:
-        post_qs = post_queryset[begin*width:(begin+1)*width]
-        post_dict = {
-            'left': post_qs[0],
-            'center': post_qs[1],
-            'right': post_qs[2],
-        }
-        begin = begin + 1
-        post_list.append(post_dict)
+    # Все индексы постов, попавших в этот тег
+    post_idx = set(post_queryset.values_list('id', flat=True))
+    len_recent_post = 6
+    recent_post = Post.objects.all().exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
 
     return render(
         request, 'postapp/post_list.html',
         {
-            'post_list': post_list,
+            'post_queryset': post_queryset,
+            'recent_post': recent_post,
             'tag': tag,
         }
     )

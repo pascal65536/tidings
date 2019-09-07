@@ -12,7 +12,7 @@
   <link href="/static/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Raleway:300,400,400i,500,500i,700,800,900" rel="stylesheet">
+  <link href="/static/https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Raleway:300,400,400i,500,500i,700,800,900" rel="stylesheet">
 
   <!-- Bootstrap CSS File -->
   <link href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -46,65 +46,22 @@
 
   <div id="preloader"></div>
 
-  {% include 'postapp/includes/inc_header.html' %}
+  {% include 'postapp/includes/inc_header_list.html' %}
   <!-- header end -->
 
-  <!-- Start slider Area -->
-{#  {% include 'postapp/includes/inc_slider.html' %} #}
-  <!-- End Slider Area -->
-
-  <!-- Start about area -->
-  {% include 'postapp/includes/inc_about.html' %}
-  <!-- End About area -->
-
-  <!-- Start service area -->
-{#  {% include 'postapp/includes/inc_service.html' %} #}
-  <!-- End Service area -->
-
-  <!-- our-skill-area start -->
-{#  {% include 'postapp/includes/inc_ourskillarea.html' %} #}
-  <!-- our-skill-area end -->
-
-  <!-- faq area start -->
-{#  {% include 'postapp/includes/inc_faq.html' %} #}
-  <!-- End Faq Area -->
-
-  <!-- Start wellcome Area -->
-{#  {% include 'postapp/includes/inc_wellcome.html' %} #}
-  <!-- End Wellcome Area -->
-
-  <!-- Start team Area -->
-{#  {% include 'postapp/includes/inc_team.html' %} #}
-  <!-- End Team Area -->
-
-  <!-- Start reviews Area -->
-{#  {% include 'postapp/includes/inc_reviews.html' %} #}
-  <!-- End reviews Area -->
-
-  <!-- Start portfolio Area -->
-{#  {% include 'postapp/includes/inc_portfolio.html' %} #}
-  <!-- awesome-portfolio end -->
-  <!-- start pricing area -->
-{#  {% include 'postapp/includes/inc_pricing.html' %} #}
-  <!-- End pricing table area -->
-  <!-- Start testimonials -->
-{#  {% include 'postapp/includes/inc_testimonials.html' %} #}
-  <!-- End Testimonials -->
-  <!-- Start Blog Area -->
+  <!-- Start Bottom Header -->
+  {% include 'postapp/includes/inc_bottom_header_list.html' %}
+  <!-- END Header -->
   {% block content %}
   {% endblock %}
-  <!-- End Blog -->
-  <!-- Start subscribe Area -->
-  {% include 'postapp/includes/inc_subscribe.html' %}
-  <!-- End Subscribe Area -->
-  <!-- Start contact Area -->
-{#  {% include 'postapp/includes/inc_contact.html' %} #}
-  <!-- End Contact Area -->
+  <!-- End Blog Area -->
+
+  <div class="clearfix"></div>
 
   <!-- Start Footer bottom Area -->
-  {% include 'postapp/includes/inc_footer.html' %}
+  {% include 'postapp/includes/inc_footer_list.html' %}
 
-  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+  <a href="/static/#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 
   <!-- JavaScript Libraries -->
   <script src="/static/lib/jquery/jquery.min.js"></script>
