@@ -5,7 +5,7 @@ from taggit.models import Tag
 
 def post_index(request):
     print('-' * 80)
-    post_qs = Post.objects.all().order_by('-date_post')[0:3]
+    post_qs = Post.objects.filter(deleted__isnull=True).order_by('-date_post')[0:3]
     post = {
         'left': post_qs[0],
         'center': post_qs[1],
@@ -21,16 +21,16 @@ def post_index(request):
 
 
 def post_list(request):
-    post_queryset = Post.objects.all().order_by('-date_post')
+    post_queryset = Post.objects.filter(deleted__isnull=True).order_by('-date_post')
     tag = None
     slug = request.GET.get('tag', None)
     if slug:
         tag = get_object_or_404(Tag, slug=slug)
-        post_queryset = Post.objects.filter(tags__in=[tag]).order_by('-date_post')
+        post_queryset = Post.objects.filter(tags__in=[tag], deleted__isnull=True).order_by('-date_post')
     # Все индексы постов, попавших в этот тег
     post_idx = set(post_queryset.values_list('id', flat=True))
     len_recent_post = 6
-    recent_post = Post.objects.all().exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
+    recent_post = Post.objects.filter(deleted__isnull=True).exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
 
     return render(
         request, 'postapp/post_list.html',
@@ -46,10 +46,10 @@ def post_detail(request):
     if request.GET.get('post', None):
         post = get_object_or_404(Post, id=request.GET.get('post', None))
     else:
-        post = Post.objects.all().order_by('-date_post')[0]
+        post = Post.objects.filter(deleted__isnull=True).order_by('-date_post')[0]
 
     len_recent_post = 6
-    recent_post = Post.objects.all().exclude(id=post.id).order_by('-date_post')[0:len_recent_post]
+    recent_post = Post.objects.filter(deleted__isnull=True).exclude(id=post.id).order_by('-date_post')[0:len_recent_post]
 
     return render(
         request, 'postapp/post_detail.html',
