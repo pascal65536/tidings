@@ -41,8 +41,6 @@ INSTALLED_APPS = [
     'autoslug',
     'taggit',
     'tagging',
-    'authorapp',
-    'contactapp',
     'postapp',
 ]
 

@@ -19,9 +19,9 @@
           <div class="col-md-4 col-sm-4 col-xs-12">
             <div class="single-blog">
               <div class="single-blog-img">
-                <a href="blog.html">
+                  <a href="{% url 'post_detail' %}?post={{ post.left.id }}">
                     <img src="/media/{{ post.left.picture }}" alt="{{ post.left.title }}" />
-				</a>
+                  </a>
               </div>
               <div class="blog-meta">
                 <span class="date-type">
@@ -47,7 +47,7 @@
           <div class="col-md-4 col-sm-4 col-xs-12">
             <div class="single-blog">
               <div class="single-blog-img">
-                <a href="blog.html">
+                <a href="{% url 'post_detail' %}?post={{ post.center.id }}">
                     <img src="/media/{{ post.center.picture }}" alt="{{ post.center.title }}" />
 				</a>
               </div>
@@ -75,7 +75,7 @@
           <div class="col-md-4 col-sm-4 col-xs-12">
             <div class="single-blog">
               <div class="single-blog-img">
-                <a href="blog.html">
+                <a href="{% url 'post_detail' %}?post={{ post.right.id }}">
 					<img src="/media/{{ post.right.picture }}" alt="{{ post.right.title }}" />
 				</a>
               </div>

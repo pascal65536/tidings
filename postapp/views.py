@@ -44,7 +44,7 @@ def post_list(request):
 
 def post_detail(request):
     if request.GET.get('post', None):
-        post = Post.objects.get(id=request.GET.get('post', None))
+        post = get_object_or_404(Post, id=request.GET.get('post', None))
     else:
         post = Post.objects.all().order_by('-date_post')[0]
 
