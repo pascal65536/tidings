@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404
-from postapp.models import Post
+from postapp.models import Post, Charter
 from taggit.models import Tag
 
 
 def post_index(request):
-    print('-' * 80)
     post_qs = Post.objects.filter(deleted__isnull=True).order_by('-date_post')[0:3]
+    charter = Charter.objects.filter(order__gt=0).order_by('order')
     post = {
         'left': post_qs[0],
         'center': post_qs[1],
@@ -16,6 +16,7 @@ def post_index(request):
         request, 'postapp/post_index.html',
         {
             'post': post,
+            'charter': charter,
         }
     )
 
@@ -31,6 +32,7 @@ def post_list(request):
     post_idx = set(post_queryset.values_list('id', flat=True))
     len_recent_post = 6
     recent_post = Post.objects.filter(deleted__isnull=True).exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
+    charter = Charter.objects.filter(order__gt=0).order_by('order')
 
     return render(
         request, 'postapp/post_list.html',
@@ -38,6 +40,7 @@ def post_list(request):
             'post_queryset': post_queryset,
             'recent_post': recent_post,
             'tag': tag,
+            'charter': charter,
         }
     )
 
@@ -47,15 +50,16 @@ def post_detail(request):
         post = get_object_or_404(Post, id=request.GET.get('post', None))
     else:
         post = Post.objects.filter(deleted__isnull=True).order_by('-date_post')[0]
-
     len_recent_post = 6
     recent_post = Post.objects.filter(deleted__isnull=True).exclude(id=post.id).order_by('-date_post')[0:len_recent_post]
+    charter = Charter.objects.filter(order__gt=0).order_by('order')
 
     return render(
         request, 'postapp/post_detail.html',
         {
             'post': post,
             'recent_post': recent_post,
+            'charter': charter,
         }
     )
 

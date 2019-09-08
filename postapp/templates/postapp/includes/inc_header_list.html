@@ -19,7 +19,7 @@
               </button>
               <!-- Brand -->
               <a class="navbar-brand page-scroll sticky-logo" href="{% url 'post_index' %}">
-                <h1><span>e</span>Business</h1>
+                <h1>Красно<span>Я</span>рск</h1>
                 <!-- Uncomment below if you prefer to use an image logo -->
                 <!-- <img src="/static/img/logo.png" alt="" title=""> -->
               </a>
@@ -27,27 +27,14 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse main-menu bs-example-navbar-collapse-1" id="navbar-example">
               <ul class="nav navbar-nav navbar-right">
-                <li class="active">
-                  <a class="page-scroll" href="/static/#home">Home</a>
-                </li>
-                <li>
-                  <a class="page-scroll" href="/static/#about">About</a>
-                </li>
-                <li>
-                  <a class="page-scroll" href="/static/#services">Services</a>
-                </li>
-                <li>
-                  <a class="page-scroll" href="/static/#team">Team</a>
-                </li>
-                <li>
-                  <a class="page-scroll" href="/static/#portfolio">Portfolio</a>
-                </li>
-                <li>
-                  <a class="page-scroll" href="/static/#blog">Blog</a>
-                </li>
-                <li>
-                  <a class="page-scroll" href="/static/#contact">Contact</a>
-                </li>
+                  <li>
+                    <a class="page-scroll" href="{% url 'post_index' %}">Главная</a>
+                  </li>
+                {% for chart in charter %}
+                  <li class="{% if post_queryset.0.charter == chart %}active{% endif %}" >
+                    <a class="page-scroll" href="/static/#home">{{ chart.title }}</a>
+                  </li>
+                {% endfor %}
               </ul>
             </div>
             <!-- navbar-collapse -->

@@ -13,8 +13,9 @@ from newsproject.settings import MEDIA_ROOT
 
 
 def latin_filename(instance, filename):
-    f_folder = os.path.join('{:%Y/%m/%d}'.format(instance.date_post))
-    salt = '{:%M%S}'.format(instance.date_post)
+    date_post = datetime.datetime.now()
+    f_folder = os.path.join('{:%Y/%m/%d}'.format(date_post))
+    salt = '{:%M%S}'.format(date_post)
     part_of_name = filename.split(".")
     f_name = cyr_lat(instance.title)
     f_ext = cyr_lat(part_of_name[-1])
@@ -41,7 +42,8 @@ def opengraph(instance):
 
     # Создадим путь и имя файла
     f_folder = os.path.join(MEDIA_ROOT, 'opengraph', 'post')
-    salt = '{:%M%S}'.format(instance.date_post)
+    date_post = datetime.datetime.now()
+    salt = '{:%M%S}'.format(date_post)
     # f_name = str(instance.id)
     # f_name = utils.cyr_lat(instance.title)
     f_name = uuid.uuid4()
@@ -52,9 +54,16 @@ def opengraph(instance):
 
 
 class Charter(models.Model):
-    name = models.CharField(verbose_name='Название', max_length=20)
+    title = models.CharField(verbose_name='Название', max_length=20)
     order = models.IntegerField(verbose_name='Сортировка', default=1)
-    slug = AutoSlugField(populate_from='name')
+    slug = AutoSlugField(populate_from='title')
+    text = RichTextField(verbose_name='Описание раздела', blank=True, null=True)
+    picture = models.ImageField(verbose_name='Картинка раздела', upload_to=latin_filename, blank=True)
+    og_picture = models.CharField(verbose_name='Картинка для соцсетей', max_length=255, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.og_picture = opengraph(self)
+        super(Charter, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Название раздела'
@@ -62,7 +71,7 @@ class Charter(models.Model):
         ordering = ['-order']
 
     def __str__(self):
-        return u'%d: %s' % (self.order, self.name)
+        return u'%d: %s' % (self.order, self.title)
 
 
 class Post(models.Model):
