@@ -7,10 +7,10 @@
     {% for recent in recent_post %}
       <div class="recent-single-post">
         <div class="post-img">
-          <a href="{% url 'post_detail' %}?post={{ recent.id }}" ><img src="/media/{{ recent.picture }}" alt="{{ recent.title }}"></a>
+          <a href="{% url 'post_detail' recent.id %}" ><img src="/media/{{ recent.picture }}" alt="{{ recent.title }}"></a>
         </div>
         <div class="pst-content">
-          <p><a href="{% url 'post_detail' %}?post={{ recent.id }}" > {{ recent.title }}</a></p>
+          <p><a href="{% url 'post_detail' recent.id %}" > {{ recent.title }}</a></p>
         </div>
       </div>
     {% endfor %}

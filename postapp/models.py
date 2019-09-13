@@ -34,11 +34,11 @@ def opengraph(instance):
     draw = ImageDraw.Draw(image)
     unicode_font = ImageFont.truetype("DejaVuSans.ttf", font_size)
 
-    textwidth, textheight = draw.textsize(unicode_text, font=unicode_font)
-    texttop = (height - textheight) // 2
-    textleft = (width - textwidth) // 2
+    text_width, text_height = draw.textsize(unicode_text, font=unicode_font)
+    text_top = (height - text_height) // 2
+    text_left = (width - text_width) // 2
 
-    draw.text((textleft, texttop), unicode_text, font=unicode_font, fill=font_color)
+    draw.text((text_left, text_top), unicode_text, font=unicode_font, fill=font_color)
 
     # Создадим путь и имя файла
     f_folder = os.path.join(MEDIA_ROOT, 'opengraph', 'post')

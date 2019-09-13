@@ -32,7 +32,7 @@
                   </li>
                 {% for chart in charter %}
                   <li class="{% if post_queryset.0.charter == chart %}active{% endif %}" >
-                    <a class="page-scroll" href="/static/#home">{{ chart.title }}</a>
+                    <a class="page-scroll" href="{% url 'post_list' chart.slug %}">{{ chart.title }}</a>
                   </li>
                 {% endfor %}
               </ul>

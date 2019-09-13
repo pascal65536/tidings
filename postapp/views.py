@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from postapp.models import Post, Charter
 from taggit.models import Tag
@@ -21,18 +22,27 @@ def post_index(request):
     )
 
 
-def post_list(request):
-    post_queryset = Post.objects.filter(deleted__isnull=True).order_by('-date_post')
+def post_list(request, slug=None):
+    post_queryset = Post.objects.filter(deleted__isnull=True)
+    try:
+        charter_slug = Charter.objects.get(slug=slug)
+        post_queryset = post_queryset.filter(charter=charter_slug)
+        print('-' * 80)
+    except Charter.DoesNotExist:
+        raise Http404
+
     tag = None
-    slug = request.GET.get('tag', None)
-    if slug:
-        tag = get_object_or_404(Tag, slug=slug)
-        post_queryset = Post.objects.filter(tags__in=[tag], deleted__isnull=True).order_by('-date_post')
+    slug_tag = request.GET.get('tag', None)
+    if slug_tag:
+        tag = get_object_or_404(Tag, slug=slug_tag)
+        post_queryset = post_queryset.filter(tags__in=[tag])
+
     # Все индексы постов, попавших в этот тег
-    post_idx = set(post_queryset.values_list('id', flat=True))
     len_recent_post = 6
+    post_queryset = post_queryset.order_by('-date_post')[0:len_recent_post]
+    post_idx = set(post_queryset.values_list('id', flat=True))
     recent_post = Post.objects.filter(deleted__isnull=True).exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
-    charter = Charter.objects.filter(order__gt=0).order_by('order')
+    charter = Charter.objects.filter(order__gt=0)
 
     return render(
         request, 'postapp/post_list.html',
@@ -40,16 +50,17 @@ def post_list(request):
             'post_queryset': post_queryset,
             'recent_post': recent_post,
             'tag': tag,
-            'charter': charter,
+            'charter': charter.order_by('order'),
         }
     )
 
 
-def post_detail(request):
-    if request.GET.get('post', None):
-        post = get_object_or_404(Post, id=request.GET.get('post', None))
-    else:
-        post = Post.objects.filter(deleted__isnull=True).order_by('-date_post')[0]
+def post_detail(request, pk=None):
+    try:
+        post = Post.objects.get(pk=pk)
+    except Post.DoesNotExist:
+        raise Http404
+
     len_recent_post = 6
     recent_post = Post.objects.filter(deleted__isnull=True).exclude(id=post.id).order_by('-date_post')[0:len_recent_post]
     charter = Charter.objects.filter(order__gt=0).order_by('order')

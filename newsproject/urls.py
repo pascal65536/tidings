@@ -9,8 +9,8 @@ from postapp.views import post_index, post_detail, post_list
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', post_index, name='post_index'),
-    url(r'^post_list/', post_list, name='post_list'),
-    url(r'^post_detail/', post_detail, name='post_detail'),
+    url(r'^list/(?P<slug>\w+)/$', post_list, name='post_list'),
+    url(r'^detail/(?P<pk>\d+)/$', post_detail, name='post_detail'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

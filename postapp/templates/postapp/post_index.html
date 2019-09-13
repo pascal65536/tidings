@@ -19,7 +19,7 @@
           <div class="col-md-4 col-sm-4 col-xs-12">
             <div class="single-blog">
               <div class="single-blog-img">
-                  <a href="{% url 'post_detail' %}?post={{ post.left.id }}">
+                  <a href="{% url 'post_detail' post.left.id %}">
                     <img src="/media/{{ post.left.picture }}" alt="{{ post.left.title }}" />
                   </a>
               </div>
@@ -30,14 +30,14 @@
               </div>
               <div class="blog-text">
                 <h4>
-					<a href="{% url 'post_detail' %}?post={{ post.left.id }}">{{ post.left.title }}</a>
+					<a href="{% url 'post_detail' post.left.id %}">{{ post.left.title }}</a>
 				</h4>
                 <p>
 					{{ post.left.lead|safe|escape }}
 				</p>
               </div>
               <span>
-                  <a href="{% url 'post_detail' %}?post={{ post.left.id }}" class="ready-btn">Read more</a>
+                  <a href="{% url 'post_detail' post.left.id %}" class="ready-btn">Read more</a>
 			  </span>
             </div>
             <!-- Start single blog -->
@@ -47,7 +47,7 @@
           <div class="col-md-4 col-sm-4 col-xs-12">
             <div class="single-blog">
               <div class="single-blog-img">
-                <a href="{% url 'post_detail' %}?post={{ post.center.id }}">
+                <a href="{% url 'post_detail' post.center.id %}">
                     <img src="/media/{{ post.center.picture }}" alt="{{ post.center.title }}" />
 				</a>
               </div>
@@ -58,14 +58,14 @@
               </div>
               <div class="blog-text">
                 <h4>
-					<a href="{% url 'post_detail' %}?post={{ post.center.id }}">{{ post.center.title }}</a>
+					<a href="{% url 'post_detail' post.center.id %}">{{ post.center.title }}</a>
 				</h4>
                 <p>
                   {{ post.center.lead|safe|escape }}
                 </p>
               </div>
               <span>
-				  <a href="{% url 'post_detail' %}?post={{ post.center.id }}" class="ready-btn">Read more</a>
+				  <a href="{% url 'post_detail' post.center.id %}" class="ready-btn">Read more</a>
 			  </span>
             </div>
             <!-- Start single blog -->
@@ -75,7 +75,7 @@
           <div class="col-md-4 col-sm-4 col-xs-12">
             <div class="single-blog">
               <div class="single-blog-img">
-                <a href="{% url 'post_detail' %}?post={{ post.right.id }}">
+                <a href="{% url 'post_detail' post.right.id %}">
 					<img src="/media/{{ post.right.picture }}" alt="{{ post.right.title }}" />
 				</a>
               </div>
@@ -86,14 +86,14 @@
               </div>
               <div class="blog-text">
                 <h4>
-					<a href="{% url 'post_detail' %}?post={{ post.right.id }}">{{ post.right.title }}</a>
+					<a href="{% url 'post_detail' post.right.id %}">{{ post.right.title }}</a>
 				</h4>
                 <p>
 					{{ post.right.lead|safe|escape }}
 				</p>
               </div>
               <span>
-				  <a href="{% url 'post_detail' %}?post={{ post.right.id }}" class="ready-btn">Read more</a>
+				  <a href="{% url 'post_detail' post.right.id %}" class="ready-btn">Read more</a>
 			  </span>
             </div>
           </div>
