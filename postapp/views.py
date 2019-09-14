@@ -48,6 +48,7 @@ def post_list(request, slug=None):
         request, 'postapp/post_list.html',
         {
             'post_queryset': post_queryset,
+            'post': post_queryset[0],
             'recent_post': recent_post,
             'tag': tag,
             'charter': charter.order_by('order'),
