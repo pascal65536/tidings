@@ -1,3 +1,6 @@
+import datetime
+from django.utils.timezone import localtime, now
+
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
@@ -8,7 +11,7 @@ from taggit.models import Tag
 
 
 def post_index(request):
-    post_queryset = Post.objects.filter(deleted__isnull=True).order_by('-date_post')[0:3]
+    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:3]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
 
     return render(
@@ -21,7 +24,7 @@ def post_index(request):
 
 
 def post_list(request, slug=None):
-    post_queryset = Post.objects.filter(deleted__isnull=True)
+    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now())
     try:
         charter_slug = Charter.objects.get(slug=slug)
         post_queryset = post_queryset.filter(charter=charter_slug)
@@ -31,7 +34,7 @@ def post_list(request, slug=None):
     len_recent_post = 6
     post_queryset = post_queryset.order_by('-date_post')[0:len_recent_post]
     post_idx = set(post_queryset.values_list('id', flat=True))
-    recent_post = Post.objects.filter(deleted__isnull=True).exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
+    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
     charter = Charter.objects.filter(order__gt=0)
     post = None
     if len(post_queryset) > 0:
@@ -55,7 +58,7 @@ def post_detail(request, pk=None):
         raise Http404
 
     len_recent_post = 6
-    recent_post = Post.objects.filter(deleted__isnull=True).exclude(id=post.id).order_by('-date_post')[0:len_recent_post]
+    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id=post.id).order_by('-date_post')[0:len_recent_post]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
 
     return render(
@@ -69,7 +72,7 @@ def post_detail(request, pk=None):
 
 
 def post_filter(request):
-    post_queryset = Post.objects.filter(deleted__isnull=True).order_by('-date_post')
+    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')
     charter = Charter.objects.filter(order__gt=0).order_by('order')
     head_name = None
 

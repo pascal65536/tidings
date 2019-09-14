@@ -80,7 +80,7 @@ class Post(models.Model):
     lead = models.TextField(verbose_name='Лидер-абзац', blank=True, null=True)
     text = RichTextField(verbose_name='Тело поста')
     charter = models.ForeignKey(Charter, blank=True, null=True, verbose_name='Раздел', on_delete=models.SET_NULL)
-    date_post = models.DateTimeField(verbose_name='Дата начала публикации', default=datetime.datetime.now())
+    date_post = models.DateTimeField(verbose_name='Дата начала публикации')
     picture = models.ImageField(verbose_name='Картинка для привлечения внимания', upload_to=latin_filename, blank=True)
     og_picture = models.CharField(verbose_name='Картинка для соцсетей', max_length=255, blank=True)
     tags = TaggableManager(verbose_name=u'Список тегов', blank=True)
