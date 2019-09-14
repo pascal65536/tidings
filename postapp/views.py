@@ -43,12 +43,15 @@ def post_list(request, slug=None):
     post_idx = set(post_queryset.values_list('id', flat=True))
     recent_post = Post.objects.filter(deleted__isnull=True).exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
     charter = Charter.objects.filter(order__gt=0)
+    post = None
+    if len(post_queryset) > 0:
+        post = post_queryset[0]
 
     return render(
         request, 'postapp/post_list.html',
         {
             'post_queryset': post_queryset,
-            'post': post_queryset[0],
+            'post': post,
             'recent_post': recent_post,
             'tag': tag,
             'charter': charter.order_by('order'),

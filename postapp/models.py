@@ -72,21 +72,21 @@ class Charter(models.Model):
         ordering = ['-order']
 
     def __str__(self):
-        return u'%d: %s' % (self.order, self.title)
+        return self.title
 
 
 class Post(models.Model):
     title = models.CharField(verbose_name='Заголовок поста', max_length=255)
-    lead = TextField(verbose_name='Лидер-абзац',)
+    lead = models.TextField(verbose_name='Лидер-абзац', blank=True, null=True)
     text = RichTextField(verbose_name='Тело поста')
     charter = models.ForeignKey(Charter, blank=True, null=True, verbose_name='Раздел', on_delete=models.SET_NULL)
-    date_post = models.DateTimeField(verbose_name='Дата публикации', default=datetime.datetime.now())
+    date_post = models.DateTimeField(verbose_name='Дата начала публикации', default=datetime.datetime.now())
     picture = models.ImageField(verbose_name='Картинка для привлечения внимания', upload_to=latin_filename, blank=True)
     og_picture = models.CharField(verbose_name='Картинка для соцсетей', max_length=255, blank=True)
     tags = TaggableManager(verbose_name=u'Список тегов', blank=True)
     created = models.DateTimeField(verbose_name=u'Начало публикации', auto_now_add=True)
     changed = models.DateTimeField(verbose_name=u'Изменен', auto_now=True)
-    deleted = models.DateTimeField(verbose_name=u'Конец публикации', blank=True, null=True)
+    deleted = models.DateTimeField(verbose_name=u'Дата окончания публикации', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.og_picture = opengraph(self)
@@ -98,9 +98,7 @@ class Post(models.Model):
         ordering = ['-date_post']
 
     def __str__(self):
-        tag_list = []
-        [tag_list.append(tag.name) for tag in self.tags.all()]
-        return u'%d: %s | %s | %s' % (self.id, self.title, ', '.join(tag_list), self.charter)
+        return self.title
 
 
 class News(models.Model):
