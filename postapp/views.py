@@ -1,5 +1,8 @@
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
+
+from postapp.form import SearchForm
 from postapp.models import Post, Charter
 from taggit.models import Tag
 
@@ -66,17 +69,24 @@ def post_detail(request, pk=None):
 
 
 def post_filter(request):
-
     post_queryset = Post.objects.filter(deleted__isnull=True).order_by('-date_post')
     charter = Charter.objects.filter(order__gt=0).order_by('order')
+    head_name = None
+
+    form = SearchForm(data=request.POST or None)
+    if form.is_valid():
+        cd = form.cleaned_data
+        search_string = cd.get('search')
+        post_queryset = post_queryset.filter(
+            Q(title__icontains=search_string) | Q(lead__icontains=search_string) | Q(text__icontains=search_string))
+        head_name = 'Все материалы по поиску %s:' % search_string
 
     tag = None
     slug_tag = request.GET.get('tag', None)
     if slug_tag:
         tag = get_object_or_404(Tag, slug=slug_tag)
         post_queryset = post_queryset.filter(tags__in=[tag])
-
-    head_name = 'Все материалы по тегу %s:' % tag.name
+        head_name = 'Все материалы по тегу %s:' % tag.name
 
     return render(
         request, 'postapp/post_filter.html',
