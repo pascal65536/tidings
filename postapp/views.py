@@ -5,18 +5,13 @@ from taggit.models import Tag
 
 
 def post_index(request):
-    post_qs = Post.objects.filter(deleted__isnull=True).order_by('-date_post')[0:3]
+    post_queryset = Post.objects.filter(deleted__isnull=True).order_by('-date_post')[0:3]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
-    post = {
-        'left': post_qs[0],
-        'center': post_qs[1],
-        'right': post_qs[2],
-    }
 
     return render(
         request, 'postapp/post_index.html',
         {
-            'post': post,
+            'post_queryset': post_queryset,
             'charter': charter,
         }
     )
@@ -27,17 +22,9 @@ def post_list(request, slug=None):
     try:
         charter_slug = Charter.objects.get(slug=slug)
         post_queryset = post_queryset.filter(charter=charter_slug)
-        print('-' * 80)
     except Charter.DoesNotExist:
         raise Http404
 
-    tag = None
-    slug_tag = request.GET.get('tag', None)
-    if slug_tag:
-        tag = get_object_or_404(Tag, slug=slug_tag)
-        post_queryset = post_queryset.filter(tags__in=[tag])
-
-    # Все индексы постов, попавших в этот тег
     len_recent_post = 6
     post_queryset = post_queryset.order_by('-date_post')[0:len_recent_post]
     post_idx = set(post_queryset.values_list('id', flat=True))
@@ -53,7 +40,6 @@ def post_list(request, slug=None):
             'post_queryset': post_queryset,
             'post': post,
             'recent_post': recent_post,
-            'tag': tag,
             'charter': charter.order_by('order'),
         }
     )
@@ -75,6 +61,29 @@ def post_detail(request, pk=None):
             'post': post,
             'recent_post': recent_post,
             'charter': charter,
+        }
+    )
+
+
+def post_filter(request):
+
+    post_queryset = Post.objects.filter(deleted__isnull=True).order_by('-date_post')
+    charter = Charter.objects.filter(order__gt=0).order_by('order')
+
+    tag = None
+    slug_tag = request.GET.get('tag', None)
+    if slug_tag:
+        tag = get_object_or_404(Tag, slug=slug_tag)
+        post_queryset = post_queryset.filter(tags__in=[tag])
+
+    head_name = 'Все материалы по тегу %s:' % tag.name
+
+    return render(
+        request, 'postapp/post_filter.html',
+        {
+            'post_queryset': post_queryset,
+            'charter': charter,
+            'head_name': head_name,
         }
     )
 
