@@ -176,3 +176,14 @@ class Person(models.Model):
         return self.person_status
 
 
+class Site(models.Model):
+    name = models.CharField(verbose_name='Название поля', max_length=200)
+    value = models.CharField(verbose_name='Значение поля', max_length=200)
+
+    class Meta:
+        verbose_name = 'Настройки сайта'
+        verbose_name_plural = 'Настройки сайта'
+        ordering = ['-value']
+
+    def __str__(self):
+        return self.value

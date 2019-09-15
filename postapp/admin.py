@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from postapp.models import Post, Charter, News, Content, Person
+from postapp.models import Post, Charter, Site
 
 
 @admin.register(Post)
@@ -44,6 +44,11 @@ class CharterAdmin(admin.ModelAdmin):
             'fields': ('og_picture', 'meta_title', 'meta_keywords', 'meta_description')
         }),
     )
+
+
+@admin.register(Site)
+class SiteAdmin(admin.ModelAdmin):
+    list_display = ('name', 'value', )
 
 # admin.site.register(Post, PostAdmin)
 # admin.site.register(Charter, PostAdmin)
