@@ -16,10 +16,13 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ('charter', 'tags')
         }),
         ('Изображения', {
-            'fields': ('picture', 'og_picture')
+            'fields': ('picture', )
         }),
         ('Даты', {
             'fields': ('date_post', 'deleted')
+        }),
+        ('SEO', {
+            'fields': ('og_picture', 'meta_title', 'meta_keywords', 'meta_description')
         }),
     )
 
@@ -27,7 +30,20 @@ class PostAdmin(admin.ModelAdmin):
 @admin.register(Charter)
 class CharterAdmin(admin.ModelAdmin):
     list_display = ('title', 'lead', 'order')
-
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'lead', 'text')
+        }),
+        ('Фильтрация', {
+            'fields': ('order',)
+        }),
+        ('Изображения', {
+            'fields': ('picture', )
+        }),
+        ('SEO', {
+            'fields': ('og_picture', 'meta_title', 'meta_keywords', 'meta_description')
+        }),
+    )
 
 # admin.site.register(Post, PostAdmin)
 # admin.site.register(Charter, PostAdmin)

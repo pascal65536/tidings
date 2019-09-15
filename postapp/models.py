@@ -61,6 +61,9 @@ class Charter(models.Model):
     text = RichTextField(verbose_name='Описание раздела', blank=True, null=True)
     picture = models.ImageField(verbose_name='Картинка раздела', upload_to=latin_filename, blank=True)
     og_picture = models.CharField(verbose_name='Картинка для соцсетей', max_length=255, blank=True)
+    meta_title = models.CharField(max_length=255, verbose_name=u'Title', null=True, blank=True)
+    meta_keywords = models.CharField(max_length=255, verbose_name=u'Keywords', null=True, blank=True)
+    meta_description = models.TextField(max_length=255, verbose_name=u'Description', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.og_picture = opengraph(self)
@@ -87,6 +90,9 @@ class Post(models.Model):
     created = models.DateTimeField(verbose_name=u'Начало публикации', auto_now_add=True)
     changed = models.DateTimeField(verbose_name=u'Изменен', auto_now=True)
     deleted = models.DateTimeField(verbose_name=u'Дата окончания публикации', blank=True, null=True)
+    meta_title = models.CharField(max_length=255, verbose_name=u'Title', null=True, blank=True)
+    meta_keywords = models.CharField(max_length=255, verbose_name=u'Keywords', null=True, blank=True)
+    meta_description = models.TextField(max_length=255, verbose_name=u'Description', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.og_picture = opengraph(self)
@@ -168,6 +174,5 @@ class Person(models.Model):
 
     def __str__(self):
         return self.person_status
-
 
 

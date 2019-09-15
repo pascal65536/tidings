@@ -17,8 +17,8 @@ def post_index(request):
     return render(
         request, 'postapp/post_index.html',
         {
-            'post_queryset': post_queryset,
-            'charter': charter,
+            'post_queryset': post_queryset,  # Все выводимые записи
+            'charter': charter,  # Пункты меню
         }
     )
 
@@ -35,7 +35,7 @@ def post_list(request, slug=None):
     post_queryset = post_queryset.order_by('-date_post')[0:len_recent_post]
     post_idx = set(post_queryset.values_list('id', flat=True))
     recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
-    charter = Charter.objects.filter(order__gt=0)
+    charter = Charter.objects.filter(order__gt=0).order_by('order')
     post = None
     if len(post_queryset) > 0:
         post = post_queryset[0]
@@ -43,10 +43,10 @@ def post_list(request, slug=None):
     return render(
         request, 'postapp/post_list.html',
         {
-            'post_queryset': post_queryset,
-            'post': post,
-            'recent_post': recent_post,
-            'charter': charter.order_by('order'),
+            'post_queryset': post_queryset,  # Все выводимые записи
+            'post': post,  # Единственная запись, по которой определим рубрику
+            'recent_post': recent_post,  # Колонка записей
+            'charter': charter,  # Пункты меню
         }
     )
 
@@ -64,9 +64,9 @@ def post_detail(request, pk=None):
     return render(
         request, 'postapp/post_detail.html',
         {
-            'post': post,
-            'recent_post': recent_post,
-            'charter': charter,
+            'post': post,  # Единственная запись
+            'recent_post': recent_post,  # Колонка записей
+            'charter': charter,  # Пункты меню
         }
     )
 
@@ -94,7 +94,7 @@ def post_filter(request):
     return render(
         request, 'postapp/post_filter.html',
         {
-            'post_queryset': post_queryset,
+            'post_queryset': post_queryset,  # Все выводимые записи
             'charter': charter,
             'head_name': head_name,
         }
