@@ -55,7 +55,7 @@ def opengraph(instance):
 
 class Charter(models.Model):
     title = models.CharField(verbose_name='Название', max_length=20)
-    lead = TextField(verbose_name='Лидер-абзац', )
+    lead = TextField(verbose_name='Лидер-абзац')
     order = models.IntegerField(verbose_name='Сортировка', default=1)
     slug = AutoSlugField(populate_from='title')
     text = RichTextField(verbose_name='Описание раздела', blank=True, null=True)
