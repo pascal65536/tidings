@@ -5,7 +5,7 @@ from postapp.models import Post, Charter, Site
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'charter', 'date_post')
+    list_display = ('title', 'date_post', 'deleted')
     list_filter = ('charter',)
     # fields = ['title', 'lead', 'text', 'charter', 'tags', 'picture', 'og_picture', ('date_post', 'deleted')]
     fieldsets = (
