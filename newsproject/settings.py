@@ -11,9 +11,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '=f^2e4hm1g(r^s37=ndk-__z^4c19!r43g%@rbh#=b5-2-j59o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['krasnoarsk.ru', 'www.krasnoarsk.ru']
 
 
 # Application definition
@@ -63,32 +63,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'newsproject.wsgi.application'
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            'read_default_file': '/home/pascal65536/git/my.cnf',
-        },
+        'NAME': 'u0812926_tidings',
+        'USER': 'u0812926_default',
+        'PASSWORD': 'MsK_!zU1',
+        'HOST': 'localhost',
     }
 }
-
-# sudo apt install mysql-client-core-5.7
-# sudo apt install mariadb-client-core-10.1
-# sudo apt-get install mysql-server
-# sudo apt-get install mysql-client
-# sudo service mysql restart
-# mysql -u root
-# python3 manage.py dumpdata postapp --indent=2 > postapp.json
-# python3 manage.py loaddata postapp.json
-
 
 
 # Password validation
@@ -128,14 +111,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-if not DEBUG:
-    STATIC_ROOT = 'static'
-
-else:
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, "static"),
-        '/home/pascal65536/git/tidings/newsproject/static',
-    ]
+STATIC_ROOT = 'static'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
