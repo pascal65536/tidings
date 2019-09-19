@@ -63,6 +63,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
             'read_default_file': '/home/pascal65536/git/my.cnf',
+            # 'read_default_file': '/var/www/u0812926/data/www/krasnoarsk.ru/my.cnf',
         },
     }
 }
@@ -107,7 +108,9 @@ else:
     ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = 'media'
+
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 CKEDITOR_CONFIGS = {
     'default': {
