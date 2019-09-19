@@ -87,12 +87,20 @@ def post_detail(request, pk=None):
 
     meta_title = '%s | %s | %s' % (post.title, post.charter.title, sitename)
 
+    og = {
+        'title': meta_title,
+        'description': post.lead,
+        'image': post.og_picture,
+        'type': 'website',
+    }
+
     return render(
         request, 'postapp/post_detail.html',
         {
             'post': post,  # Единственная запись
             'recent_post': recent_post,  # Колонка записей
             'charter': charter,  # Пункты меню
+            'og': og,  # Open Graph
             'meta_title': meta_title,
             'name_recent_post': name_recent_post,
             'name_read_more': name_read_more,
