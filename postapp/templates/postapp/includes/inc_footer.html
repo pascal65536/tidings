@@ -8,25 +8,13 @@
             <div class="footer-content">
               <div class="footer-head">
                 <div class="footer-logo">
-                  <h2><span>e</span>Business</h2>
+                  <h2>Красно<span>Я</span>рск</h2>
                 </div>
 
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
+                  {{ setting.footer_text|safe|escape }}
+
                 <div class="footer-icons">
-                  <ul>
-                    <li>
-                      <a href="#"><i class="fa fa-facebook"></i></a>
-                    </li>
-                    <li>
-                      <a href="#"><i class="fa fa-twitter"></i></a>
-                    </li>
-                    <li>
-                      <a href="#"><i class="fa fa-google"></i></a>
-                    </li>
-                    <li>
-                      <a href="#"><i class="fa fa-pinterest"></i></a>
-                    </li>
-                  </ul>
+                  {{ setting.footer_icons|safe|escape }}
                 </div>
               </div>
             </div>
@@ -35,14 +23,12 @@
           <div class="col-md-4 col-sm-4 col-xs-12">
             <div class="footer-content">
               <div class="footer-head">
-                <h4>information</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
-                </p>
+                <h4>{{ setting.footer_head }}</h4>
+
+                 {{ setting.footer_center|safe|escape }}
+
                 <div class="footer-contacts">
-                  <p><span>Tel:</span> +123 456 789</p>
-                  <p><span>Email:</span> contact@example.com</p>
-                  <p><span>Working Hours:</span> 9am-5pm</p>
+                  {{ setting.footer_contacts|safe|escape }}
                 </div>
               </div>
             </div>
@@ -51,14 +37,9 @@
           <div class="col-md-4 col-sm-4 col-xs-12">
             <div class="footer-content">
               <div class="footer-head">
-                <h4>Instagram</h4>
+                <h4>{{ setting.footer_right }}</h4>
                 <div class="flicker-img">
-                  <a href="#"><img src="/static/img/portfolio/1.jpg" alt=""></a>
-                  <a href="#"><img src="/static/img/portfolio/2.jpg" alt=""></a>
-                  <a href="#"><img src="/static/img/portfolio/3.jpg" alt=""></a>
-                  <a href="#"><img src="/static/img/portfolio/4.jpg" alt=""></a>
-                  <a href="#"><img src="/static/img/portfolio/5.jpg" alt=""></a>
-                  <a href="#"><img src="/static/img/portfolio/6.jpg" alt=""></a>
+                  {{ setting.footer_counter|safe|escape }}
                 </div>
               </div>
             </div>

@@ -178,7 +178,7 @@ class Person(models.Model):
 
 class Site(models.Model):
     name = models.CharField(verbose_name='Название поля', max_length=200)
-    value = models.CharField(verbose_name='Значение поля', max_length=200)
+    value = models.TextField(verbose_name='Значение поля', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Настройки сайта'

@@ -14,15 +14,26 @@ def post_index(request):
     post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:3]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
     meta_title = Site.objects.get(name='sitename')
-    name_read_more = Site.objects.get(name='name_read_more').value
+
+    setting = {
+        'meta_title': meta_title,
+        'name_recent_post': Site.objects.get(name='name_recent_post').value,
+        'name_read_more': Site.objects.get(name='name_read_more').value,
+        'footer_text': Site.objects.get(name='footer_text').value,
+        'footer_icons': Site.objects.get(name='footer_icons').value,
+        'footer_contacts': Site.objects.get(name='footer_contacts').value,
+        'footer_center': Site.objects.get(name='footer_center').value,
+        'footer_head': Site.objects.get(name='footer_head').value,
+        'footer_right': Site.objects.get(name='footer_right').value,
+        'footer_counter': Site.objects.get(name='footer_counter').value,
+    }
 
     return render(
         request, 'postapp/post_index.html',
         {
             'post_queryset': post_queryset,  # Все выводимые записи
             'charter': charter,  # Пункты меню
-            'meta_title': meta_title,
-            'name_read_more': name_read_more,
+            'setting': setting,
         }
     )
 
@@ -36,8 +47,6 @@ def post_list(request, slug=None):
         raise Http404
 
     len_recent_post = int(Site.objects.get(name='len_recent_post').value)
-    name_recent_post = Site.objects.get(name='name_recent_post').value
-    name_read_more = Site.objects.get(name='name_read_more').value
     sitename = Site.objects.get(name='sitename')
 
     post_queryset = post_queryset.order_by('-date_post')[0:len_recent_post]
@@ -57,6 +66,19 @@ def post_list(request, slug=None):
         'type': 'website',
     }
 
+    setting = {
+        'meta_title': meta_title,
+        'name_recent_post': Site.objects.get(name='name_recent_post').value,
+        'name_read_more': Site.objects.get(name='name_read_more').value,
+        'footer_text': Site.objects.get(name='footer_text').value,
+        'footer_icons': Site.objects.get(name='footer_icons').value,
+        'footer_contacts': Site.objects.get(name='footer_contacts').value,
+        'footer_center': Site.objects.get(name='footer_center').value,
+        'footer_head': Site.objects.get(name='footer_head').value,
+        'footer_right': Site.objects.get(name='footer_right').value,
+        'footer_counter': Site.objects.get(name='footer_counter').value,
+    }
+
     return render(
         request, 'postapp/post_list.html',
         {
@@ -65,9 +87,7 @@ def post_list(request, slug=None):
             'recent_post': recent_post,  # Колонка записей
             'charter': charter,  # Пункты меню
             'og': og,  # Open Graph
-            'meta_title': meta_title,
-            'name_recent_post': name_recent_post,
-            'name_read_more': name_read_more,
+            'setting': setting,
         }
     )
 
@@ -79,8 +99,6 @@ def post_detail(request, pk=None):
         raise Http404
 
     len_recent_post = int(Site.objects.get(name='len_recent_post').value)
-    name_recent_post = Site.objects.get(name='name_recent_post').value
-    name_read_more = Site.objects.get(name='name_read_more').value
     sitename = Site.objects.get(name='sitename')
     recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id=post.id).order_by('-date_post')[0:len_recent_post]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
@@ -94,6 +112,19 @@ def post_detail(request, pk=None):
         'type': 'website',
     }
 
+    setting = {
+        'meta_title': meta_title,
+        'name_recent_post': Site.objects.get(name='name_recent_post').value,
+        'name_read_more': Site.objects.get(name='name_read_more').value,
+        'footer_text': Site.objects.get(name='footer_text').value,
+        'footer_icons': Site.objects.get(name='footer_icons').value,
+        'footer_contacts': Site.objects.get(name='footer_contacts').value,
+        'footer_center': Site.objects.get(name='footer_center').value,
+        'footer_head': Site.objects.get(name='footer_head').value,
+        'footer_right': Site.objects.get(name='footer_right').value,
+        'footer_counter': Site.objects.get(name='footer_counter').value,
+    }
+
     return render(
         request, 'postapp/post_detail.html',
         {
@@ -101,9 +132,7 @@ def post_detail(request, pk=None):
             'recent_post': recent_post,  # Колонка записей
             'charter': charter,  # Пункты меню
             'og': og,  # Open Graph
-            'meta_title': meta_title,
-            'name_recent_post': name_recent_post,
-            'name_read_more': name_read_more,
+            'setting': setting,
         }
     )
 
@@ -111,7 +140,6 @@ def post_detail(request, pk=None):
 def post_filter(request):
     post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')
     charter = Charter.objects.filter(order__gt=0).order_by('order')
-    name_read_more = Site.objects.get(name='name_read_more').value
     sitename = Site.objects.get(name='sitename')
     meta_title = sitename
 
@@ -132,14 +160,26 @@ def post_filter(request):
         head_name = 'Все материалы по тегу «%s»:' % tag.name
         meta_title = 'Все материалы по тегу «%s» | %s' % (tag.name, sitename)
 
+    setting = {
+        'meta_title': meta_title,
+        'name_recent_post': Site.objects.get(name='name_recent_post').value,
+        'name_read_more': Site.objects.get(name='name_read_more').value,
+        'footer_text': Site.objects.get(name='footer_text').value,
+        'footer_icons': Site.objects.get(name='footer_icons').value,
+        'footer_contacts': Site.objects.get(name='footer_contacts').value,
+        'footer_center': Site.objects.get(name='footer_center').value,
+        'footer_head': Site.objects.get(name='footer_head').value,
+        'footer_right': Site.objects.get(name='footer_right').value,
+        'footer_counter': Site.objects.get(name='footer_counter').value,
+    }
+
     return render(
         request, 'postapp/post_filter.html',
         {
             'post_queryset': post_queryset,  # Все выводимые записи
             'charter': charter,
             'head_name': head_name,
-            'meta_title': meta_title,
-            'name_read_more': name_read_more,
+            'setting': setting,
         }
     )
 
