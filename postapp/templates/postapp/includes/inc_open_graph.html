@@ -1,0 +1,7 @@
+{% load staticfiles %}
+
+  <meta property="og:url" content= "{% url 'post_list' post.charter.slug %}" />
+  <meta property="og:title" content="{{ og.title }}"/>
+  <meta property="og:description" content="{{ og.description }}"/>
+  <meta property="og:image" content="/media/opengraph/post/{{ og.image }}"/>
+  <meta property="og:type" content="{{ og.type }}"/>

@@ -1,19 +1,14 @@
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '=f^2e4hm1g(r^s37=ndk-__z^4c19!r43g%@rbh#=b5-2-j59o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['krasnoarsk.ru', 'www.krasnoarsk.ru']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -66,16 +61,11 @@ WSGI_APPLICATION = 'newsproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'u0812926_tidings',
-        'USER': 'u0812926_default',
-        'PASSWORD': 'MsK_!zU1',
-        'HOST': 'localhost',
+        'OPTIONS': {
+            'read_default_file': '/home/pascal65536/git/my.cnf',
+        },
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -106,12 +96,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
-
 STATIC_URL = '/static/'
-STATIC_ROOT = 'static'
+if not DEBUG:
+    STATIC_ROOT = 'static'
+
+else:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static"),
+        '/home/pascal65536/git/tidings/newsproject/static',
+    ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")

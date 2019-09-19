@@ -50,6 +50,13 @@ def post_list(request, slug=None):
 
     meta_title = '%s | %s' % (post.charter.title, sitename)
 
+    og = {
+        'title': meta_title,
+        'description': post.charter.lead,
+        'image': post.charter.og_picture,
+        'type': 'website',
+    }
+
     return render(
         request, 'postapp/post_list.html',
         {
@@ -57,6 +64,7 @@ def post_list(request, slug=None):
             'post': post,  # Единственная запись, по которой определим рубрику
             'recent_post': recent_post,  # Колонка записей
             'charter': charter,  # Пункты меню
+            'og': og,  # Open Graph
             'meta_title': meta_title,
             'name_recent_post': name_recent_post,
             'name_read_more': name_read_more,
