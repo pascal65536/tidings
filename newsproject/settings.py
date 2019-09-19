@@ -66,10 +66,9 @@ WSGI_APPLICATION = 'newsproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'u0812926_tidings',
-        'USER': 'u0812926_default',
-        'PASSWORD': 'MsK_!zU1',
-        'HOST': 'localhost',
+        'OPTIONS': {
+            'read_default_file': '/var/www/u0812926/data/www/krasnoarsk.ru/my.cnf',
+        },
     }
 }
 
