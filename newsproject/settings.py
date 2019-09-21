@@ -1,14 +1,19 @@
 import os
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '=f^2e4hm1g(r^s37=ndk-__z^4c19!r43g%@rbh#=b5-2-j59o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['krasnoarsk.ru', 'www.krasnoarsk.ru']
 
 
 # Application definition
@@ -60,13 +65,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'newsproject.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': '/home/pascal65536/git/my.cnf',
-            # 'read_default_file': '/var/www/u0812926/data/www/krasnoarsk.ru/my.cnf',
+            'read_default_file': '/var/www/u0812926/data/www/krasnoarsk.ru/my.cnf',
         },
     }
 }
