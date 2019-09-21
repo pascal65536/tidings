@@ -13,6 +13,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+TEMPLATE_LOADERS = ('django.template.loaders.app_directories.Loader', )
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -20,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     'ckeditor',
     'autoslug',
     'taggit',

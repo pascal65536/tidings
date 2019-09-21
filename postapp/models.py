@@ -10,6 +10,7 @@ from PIL import Image, ImageDraw, ImageFont
 from taggit.managers import TaggableManager
 from newsproject.utils import cyr_lat
 from newsproject.settings import MEDIA_ROOT
+from django.contrib.sitemaps import Sitemap
 
 
 def latin_filename(instance, filename):
@@ -187,3 +188,17 @@ class Site(models.Model):
 
     def __str__(self):
         return self.value
+
+
+class BlogSitemap(Sitemap):
+    changefreq = 'hourly'
+    priority = 0.5
+
+    def items(self):
+        return Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')
+
+    def lastmod(self, obj):
+        return obj.date_post
+
+    def location(self, obj):
+        return "/blog/%d" % obj.pk
