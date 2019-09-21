@@ -3,8 +3,7 @@ from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
-
-from postapp.models import BlogSitemap
+from postapp.models import PostSitemap, PostFeed
 from postapp.views import post_index, post_detail, post_list, post_filter
 
 
@@ -14,7 +13,8 @@ urlpatterns = [
     url(r'^list/(?P<slug>\w+)/$', post_list, name='post_list'),
     url(r'^detail/(?P<pk>\d+)/$', post_detail, name='post_detail'),
     url(r'^filter/$', post_filter, name='post_filter'),
-    url(r'^sitemap\.xml$', sitemap, {'sitemaps': {'blog': BlogSitemap}}),
+    url(r'^sitemap\.xml$', sitemap, {'sitemaps': {'blog': PostSitemap}}),
+    url(r'^feed/$', PostFeed()),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

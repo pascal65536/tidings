@@ -3,6 +3,7 @@ import uuid
 import textwrap
 from autoslug import AutoSlugField
 from ckeditor.fields import RichTextField
+from django.contrib.syndication.views import Feed
 from django.db import models
 from django.db.models import TextField
 from django.db.models.functions import datetime
@@ -190,7 +191,7 @@ class Site(models.Model):
         return self.value
 
 
-class BlogSitemap(Sitemap):
+class PostSitemap(Sitemap):
     changefreq = 'hourly'
     priority = 0.5
 
@@ -201,4 +202,22 @@ class BlogSitemap(Sitemap):
         return obj.date_post
 
     def location(self, obj):
-        return "/blog/%d" % obj.pk
+        return "/detail/%d" % obj.pk
+
+
+class PostFeed(Feed):
+    title = "Красноярский Красноярск"
+    description = "Последние статьи сайта КрасноЯрск"
+    link = "/"
+
+    def items(self):
+        return Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')[:10]
+
+    def item_title(self, obj):
+        return obj.text
+
+    def item_description(self, obj):
+        return obj.lead
+
+    def item_link(self, obj):
+        return "/detail/%d" % obj.pk
