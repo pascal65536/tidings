@@ -214,7 +214,7 @@ class PostFeed(Feed):
         return Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')[:10]
 
     def item_title(self, obj):
-        return obj.text
+        return obj.title
 
     def item_description(self, obj):
         return obj.lead
