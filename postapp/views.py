@@ -2,7 +2,7 @@ import datetime
 from django.utils.timezone import localtime, now
 
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, render_to_response
 from django.db.models import Q
 from django.views.generic import TemplateView
 
@@ -221,3 +221,6 @@ class YandexDzenRss(YandexRss):
         response_kwargs['content_type'] = 'text/xml; charset=UTF-8'
         return super(YandexRss, self).render_to_response(context, **response_kwargs)
 
+
+def robots(request):
+    return render_to_response('robots.txt', content_type="text/plain")
