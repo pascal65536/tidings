@@ -4,6 +4,7 @@ from django.utils.timezone import localtime, now
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
+from django.views.generic import TemplateView
 
 from postapp.form import SearchForm
 from postapp.models import Post, Charter, Site
@@ -184,16 +185,14 @@ def post_filter(request):
     )
 
 
-from django.views.generic import TemplateView
-
-
 class YandexRss(TemplateView):
-    template_name = 'rss/rss.xml'
+    template_name = 'rss/yandex.xml'
     filter = {'deleted': None}
 
     def get_context_data(self, **kwargs):
         ctx = super(YandexRss, self).get_context_data(**kwargs)
-        qs = Post.objects.all().filter(**self.filter)
+        # qs = Post.objects.filter(**self.filter).order_by('-date_post')
+        qs = Post.objects.filter(date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:25]
         ctx['object_list'] = qs
         ctx['host'] = Site.objects.get(name='host')
         return ctx
@@ -204,5 +203,21 @@ class YandexRss(TemplateView):
 
 
 class YandexDzenRss(YandexRss):
-    template_name = 'rss/zen-rss.xml'
-    filter = {'zen': True}
+    template_name = 'rss/zen.xml'
+    filter = {
+        'deleted': None,
+        'charter': 1,
+    }
+
+    def get_context_data(self, **kwargs):
+        ctx = super(YandexRss, self).get_context_data(**kwargs)
+        qs = Post.objects.filter(**self.filter).order_by('-date_post')
+        # qs = Post.objects.filter(date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:25]
+        ctx['object_list'] = qs
+        ctx['host'] = Site.objects.get(name='host')
+        return ctx
+
+    def render_to_response(self, context, **response_kwargs):
+        response_kwargs['content_type'] = 'text/xml; charset=UTF-8'
+        return super(YandexRss, self).render_to_response(context, **response_kwargs)
+

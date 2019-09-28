@@ -1,3 +1,5 @@
+import datetime
+
 from django.conf.urls.static import static
 from django.conf import settings
 from django.conf.urls import url
@@ -14,10 +16,9 @@ urlpatterns = [
     url(r'^filter/$', post_filter, name='post_filter'),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {'blog': PostSitemap}}),
     url(r'^feed/$', PostFeed()),
-    url(r'^rss/$', YandexRss.as_view(), name='rss'),
-    url(r'^rss/zen$', YandexDzenRss.as_view(), name='zen'),
+    url(r'^feed/yandex/$', YandexRss.as_view(), name='rss'),
+    url(r'^feed/zen/$', YandexDzenRss.as_view(), name='zen'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
