@@ -6,7 +6,8 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from postapp.models import PostSitemap, PostFeed
-from postapp.views import post_index, post_detail, post_list, post_filter, YandexDzenRss, YandexRss, robots
+from postapp.views import post_index, post_detail, post_list, post_filter, YandexDzenRss, YandexRss, robots, \
+    YandexTurboRss
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -18,6 +19,7 @@ urlpatterns = [
     url(r'^feed/$', PostFeed()),
     url(r'^feed/yandex/$', YandexRss.as_view(), name='rss'),
     url(r'^feed/zen/$', YandexDzenRss.as_view(), name='zen'),
+    url(r'^feed/turbo/$', YandexTurboRss.as_view(), name='turbo'),
     url(r'^robots\.txt$', robots),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

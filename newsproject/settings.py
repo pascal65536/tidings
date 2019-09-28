@@ -100,20 +100,24 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
-if not DEBUG:
-    STATIC_ROOT = 'static'
+# STATIC_URL = '/static/'
+# if not DEBUG:
+#     STATIC_ROOT = 'static'
+#
+# else:
+#     STATICFILES_DIRS = [
+#         os.path.join(BASE_DIR, "static"),
+#         '/home/pascal65536/git/tidings/postapp/static',
+#     ]
 
-else:
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, "static"),
-        '/home/pascal65536/git/tidings/newsproject/static',
-    ]
+# All settings common to all environments
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 CKEDITOR_CONFIGS = {
     'default': {

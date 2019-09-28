@@ -185,6 +185,10 @@ def post_filter(request):
     )
 
 
+def robots(request):
+    return render_to_response('robots.txt', content_type="text/plain")
+
+
 class YandexRss(TemplateView):
     template_name = 'rss/yandex.xml'
     filter = {'deleted': None}
@@ -222,5 +226,20 @@ class YandexDzenRss(YandexRss):
         return super(YandexRss, self).render_to_response(context, **response_kwargs)
 
 
-def robots(request):
-    return render_to_response('robots.txt', content_type="text/plain")
+class YandexTurboRss(YandexRss):
+    template_name = 'rss/turbo.xml'
+    filter = {
+        'deleted': None,
+        'charter': 1,
+    }
+
+    def get_context_data(self, **kwargs):
+        ctx = super(YandexRss, self).get_context_data(**kwargs)
+        ctx['object_list'] = Post.objects.filter(**self.filter).order_by('-date_post')
+        ctx['host'] = Site.objects.get(name='host')
+        ctx['charter'] = Charter.objects.filter(order__gt=0).order_by('order')
+        return ctx
+
+    def render_to_response(self, context, **response_kwargs):
+        response_kwargs['content_type'] = 'text/xml; charset=UTF-8'
+        return super(YandexRss, self).render_to_response(context, **response_kwargs)
