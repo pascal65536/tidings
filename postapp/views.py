@@ -184,44 +184,25 @@ def post_filter(request):
     )
 
 
-"""
-class TaggableManager([verbose_name="Tags", help_text="A comma-separated list of tags.", through=None, blank=False])
-Parameters:	
-    verbose_name – The verbose_name for this field.
-    help_text – The help_text to be used in forms (including the admin).
-    through – The through model, see Customizing taggit for more information.
-    blank – Controls whether this field is required.
+from django.views.generic import TemplateView
 
-add(*tags)
-This adds tags to an object. The tags can be either Tag instances, or strings:
 
-apple.tags.all()
-[]
+class YandexRss(TemplateView):
+    template_name = 'rss/rss.xml'
+    filter = {'deleted': None}
 
-apple.tags.add("red", "green", "fruit")
+    def get_context_data(self, **kwargs):
+        ctx = super(YandexRss, self).get_context_data(**kwargs)
+        qs = Post.objects.all().filter(**self.filter)
+        ctx['object_list'] = qs
+        ctx['host'] = 'http://%s' % Site.objects.get(id=1)
+        return ctx
 
-remove(*tags)
-Removes a tag from an object. No exception is raised if the object doesn’t have that tag.
+    def render_to_response(self, context, **response_kwargs):
+        response_kwargs['content_type'] = 'text/xml; charset=UTF-8'
+        return super(YandexRss, self).render_to_response(context, **response_kwargs)
 
-clear()
-Removes all tags from an object.
 
-set(*tags, clear=False)
-If clear = True removes all the current tags and then adds the specified tags to the object. Otherwise sets the object’s tags to those specified, removing only the missing tags and adding only the new tags.
-
-similar_objects()
-Returns a list (not a lazy QuerySet) of other objects tagged similarly to this one, ordered with most similar first. Each object in the list is decorated with a similar_tags attribute, the number of tags it shares with this object.
-If the model is using generic tagging (the default), this method searches tagged objects from all classes. If you are querying on a model with its own tagging through table, only other instances of the same model will be returned.
-
-names()
-Convenience method, returning a ValuesListQuerySet (basically just an iterable) containing the name of each tag as a string:
-
-apple.tags.names()
-[u'green and juicy', u'red']
-
-slugs()
-Convenience method, returning a ValuesListQuerySet (basically just an iterable) containing the slug of each tag as a string:
-
-apple.tags.slugs()
-[u'green-and-juicy', u'red']
-"""
+class YandexDzenRss(YandexRss):
+    template_name = 'rss/zen-rss.xml'
+    filter = {'zen': True}

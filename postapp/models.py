@@ -100,6 +100,29 @@ class Post(models.Model):
         self.og_picture = opengraph(self)
         super(Post, self).save(*args, **kwargs)
 
+        if self.picture:
+            extension = str(self.picture.path).rsplit('.', 1)[1]
+            filename = str(self.picture.path).rsplit(os.sep, 1)[1].rsplit('.', 1)[0]
+            fullpath = str(self.picture.path).rsplit(os.sep, 1)[0]
+            if extension in ['jpg', 'jpeg', 'png']:
+                im = Image.open(str(self.picture.path))
+                pic_width = 800
+                pic_height = 600
+                (w, h) = im.size
+                if w/h < pic_width/pic_height:
+                    percent = pic_width/w
+                else:
+                    percent = pic_height/h
+                width = int(w * percent)
+                height = int(h * percent)
+                im = im.resize((width, height), Image.ANTIALIAS)
+                yc = int((height - pic_height)/2)
+                xc = 0
+                im = im.crop((xc, yc, xc + pic_width, yc + pic_height))
+                im.save('{}/{}.{}'.format(fullpath, filename, extension), format='JPEG', dpi=[72, 72])
+                super(Post, self).save(*args, **kwargs)
+            return
+
     class Meta:
         verbose_name = 'Запись в блог'
         verbose_name_plural = 'Записи в блог'
