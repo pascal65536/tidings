@@ -1,4 +1,9 @@
 User-agent: *
-Disallow: /
+Disallow: /archives/
+Disallow: /filter/
+Disallow: /admin/
+Disallow: /page/
+
+Sitemap: http://krasnoarsk.ru/sitemap.xml
 
 Host: http://krasnoarsk.ru/
