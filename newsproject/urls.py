@@ -16,9 +16,9 @@ urlpatterns = [
     url(r'^filter/$', post_filter, name='post_filter'),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {'blog': PostSitemap}}),
     url(r'^feed/$', PostFeed()),
-    url(r'^feed/yandex/$', YandexRss.as_view(), name='rss'),
-    url(r'^feed/zen/$', YandexDzenRss.as_view(), name='zen'),
-    url(r'^feed/turbo/$', YandexTurboRss.as_view(), name='turbo'),
+    url(r'^rss/yandex/$', YandexRss.as_view(), name='rss'),
+    url(r'^rss/zen/$', YandexDzenRss.as_view(), name='zen'),
+    url(r'^rss/turbo/$', YandexTurboRss.as_view(), name='turbo'),
     url(r'^robots\.txt$', robots),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
