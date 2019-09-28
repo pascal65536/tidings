@@ -2,16 +2,11 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '=f^2e4hm1g(r^s37=ndk-__z^4c19!r43g%@rbh#=b5-2-j59o'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
-# Application definition
 
 TEMPLATE_LOADERS = ('django.template.loaders.app_directories.Loader', )
 
@@ -60,13 +55,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'newsproject.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
             'read_default_file': '/home/pascal65536/git/my.cnf',
-            # 'read_default_file': '/var/www/u0812926/data/www/krasnoarsk.ru/my.cnf',
         },
     }
 }
@@ -86,10 +79,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
-
 LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'Asia/Krasnoyarsk'
@@ -100,24 +89,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-# STATIC_URL = '/static/'
-# if not DEBUG:
-#     STATIC_ROOT = 'static'
-#
-# else:
-#     STATICFILES_DIRS = [
-#         os.path.join(BASE_DIR, "static"),
-#         '/home/pascal65536/git/tidings/postapp/static',
-#     ]
-
-# All settings common to all environments
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
 
 CKEDITOR_CONFIGS = {
     'default': {

@@ -1,13 +1,12 @@
-import datetime
-
 from django.conf.urls.static import static
 from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from postapp.models import PostSitemap, PostFeed
-from postapp.views import post_index, post_detail, post_list, post_filter, YandexDzenRss, YandexRss, robots, \
-    YandexTurboRss
+from postapp.views import post_index, post_detail, post_list, post_filter, robots
+from postapp.views import YandexDzenRss, YandexRss, YandexTurboRss
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

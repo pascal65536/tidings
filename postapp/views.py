@@ -1,5 +1,4 @@
 import datetime
-from django.utils.timezone import localtime, now
 
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, render_to_response
@@ -206,7 +205,7 @@ class YandexRss(TemplateView):
         return super(YandexRss, self).render_to_response(context, **response_kwargs)
 
 
-class YandexDzenRss(YandexRss):
+class YandexDzenRss(TemplateView):
     template_name = 'rss/zen.xml'
     filter = {
         'deleted': None,
@@ -214,7 +213,7 @@ class YandexDzenRss(YandexRss):
     }
 
     def get_context_data(self, **kwargs):
-        ctx = super(YandexRss, self).get_context_data(**kwargs)
+        ctx = super(YandexDzenRss, self).get_context_data(**kwargs)
         qs = Post.objects.filter(**self.filter).order_by('-date_post')
         # qs = Post.objects.filter(date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:25]
         ctx['object_list'] = qs
@@ -223,10 +222,10 @@ class YandexDzenRss(YandexRss):
 
     def render_to_response(self, context, **response_kwargs):
         response_kwargs['content_type'] = 'text/xml; charset=UTF-8'
-        return super(YandexRss, self).render_to_response(context, **response_kwargs)
+        return super(YandexDzenRss, self).render_to_response(context, **response_kwargs)
 
 
-class YandexTurboRss(YandexRss):
+class YandexTurboRss(TemplateView):
     template_name = 'rss/turbo.xml'
     filter = {
         'deleted': None,
@@ -234,7 +233,7 @@ class YandexTurboRss(YandexRss):
     }
 
     def get_context_data(self, **kwargs):
-        ctx = super(YandexRss, self).get_context_data(**kwargs)
+        ctx = super(YandexTurboRss, self).get_context_data(**kwargs)
         ctx['object_list'] = Post.objects.filter(**self.filter).order_by('-date_post')
         ctx['host'] = Site.objects.get(name='host')
         ctx['charter'] = Charter.objects.filter(order__gt=0).order_by('order')
@@ -242,4 +241,4 @@ class YandexTurboRss(YandexRss):
 
     def render_to_response(self, context, **response_kwargs):
         response_kwargs['content_type'] = 'text/xml; charset=UTF-8'
-        return super(YandexRss, self).render_to_response(context, **response_kwargs)
+        return super(YandexTurboRss, self).render_to_response(context, **response_kwargs)

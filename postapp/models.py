@@ -234,7 +234,7 @@ class PostFeed(Feed):
     link = "/"
 
     def items(self):
-        return Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')[:10]
+        return Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:25]
 
     def item_title(self, obj):
         return obj.title

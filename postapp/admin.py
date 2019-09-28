@@ -49,9 +49,3 @@ class CharterAdmin(admin.ModelAdmin):
 @admin.register(Site)
 class SiteAdmin(admin.ModelAdmin):
     list_display = ('name', 'value', )
-
-# admin.site.register(Post, PostAdmin)
-# admin.site.register(Charter, PostAdmin)
-# admin.site.register(News, PostAdmin)
-# admin.site.register(Content, PostAdmin)
-# admin.site.register(Person, PostAdmin)
