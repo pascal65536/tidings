@@ -195,7 +195,7 @@ class YandexRss(TemplateView):
         ctx = super(YandexRss, self).get_context_data(**kwargs)
         qs = Post.objects.all().filter(**self.filter)
         ctx['object_list'] = qs
-        ctx['host'] = 'http://%s' % Site.objects.get(id=1)
+        ctx['host'] = Site.objects.get(name='host')
         return ctx
 
     def render_to_response(self, context, **response_kwargs):
