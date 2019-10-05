@@ -5,13 +5,17 @@ from django.shortcuts import render, get_object_or_404, render_to_response
 from django.db.models import Q
 from django.views.generic import TemplateView
 
-from postapp.form import SearchForm
+from postapp.form import SearchForm, PostForm
 from postapp.models import Post, Charter, Site
 from taggit.models import Tag
 
 
 def post_index(request):
-    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:3]
+    main_post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:4]
+    main_post_idx = set(main_post_queryset.values_list('id', flat=True))
+    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=main_post_idx).order_by('-date_post')[0:12]
+    post_idx = set(post_queryset.values_list('id', flat=True))
+    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=post_idx).exclude(id__in=main_post_idx).order_by('-date_post')[0:6]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
     meta_title = Site.objects.get(name='sitename')
 
@@ -31,7 +35,9 @@ def post_index(request):
     return render(
         request, 'postapp/post_index.html',
         {
+            'main_post_queryset': main_post_queryset,
             'post_queryset': post_queryset,  # Все выводимые записи
+            'recent_post': recent_post,
             'charter': charter,  # Пункты меню
             'setting': setting,
         }
@@ -180,6 +186,20 @@ def post_filter(request):
             'charter': charter,
             'head_name': head_name,
             'setting': setting,
+        }
+    )
+
+
+def post_edit(request, pk=None):
+    try:
+        post = Post.objects.get(pk=pk)
+    except Post.DoesNotExist:
+        raise Http404
+    form = PostForm(instance=post)
+    return render(
+        request, 'postapp/post_edit.html',
+        {
+            'form': form.as_table(),
         }
     )
 
