@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'taggit',
     'tagging',
     'postapp',
+    'uni_paginator',
 ]
 
 MIDDLEWARE = [
