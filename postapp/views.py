@@ -17,10 +17,11 @@ def post_index(request):
     post_idx = set(post_queryset.values_list('id', flat=True))
     recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=post_idx).exclude(id__in=main_post_idx).order_by('-date_post')[0:6]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
-    meta_title = Site.objects.get(name='sitename')
 
     setting = {
-        'meta_title': meta_title,
+        'meta_title': Site.objects.get(name='sitename'),
+        'keywords': Site.objects.get(name='keywords').value,
+        'description': Site.objects.get(name='description').value,
         'name_recent_post': Site.objects.get(name='name_recent_post').value,
         'name_read_more': Site.objects.get(name='name_read_more').value,
         'footer_text': Site.objects.get(name='footer_text').value,
@@ -74,6 +75,8 @@ def post_list(request, slug=None):
 
     setting = {
         'meta_title': meta_title,
+        'keywords': charter_slug.meta_keywords,
+        'description': charter_slug.meta_description,
         'name_recent_post': Site.objects.get(name='name_recent_post').value,
         'name_read_more': Site.objects.get(name='name_read_more').value,
         'footer_text': Site.objects.get(name='footer_text').value,
@@ -110,6 +113,8 @@ def post_detail(request, pk=None):
     charter = Charter.objects.filter(order__gt=0).order_by('order')
 
     meta_title = '%s | %s | %s' % (post.title, post.charter.title, sitename)
+    keywords = ', '.join(post.tags.names())
+    description = post.lead
 
     og = {
         'title': meta_title,
@@ -120,6 +125,8 @@ def post_detail(request, pk=None):
 
     setting = {
         'meta_title': meta_title,
+        'keywords': keywords,
+        'description': description,
         'name_recent_post': Site.objects.get(name='name_recent_post').value,
         'name_read_more': Site.objects.get(name='name_read_more').value,
         'footer_text': Site.objects.get(name='footer_text').value,
@@ -148,6 +155,8 @@ def post_filter(request):
     charter = Charter.objects.filter(order__gt=0).order_by('order')
     sitename = Site.objects.get(name='sitename')
     meta_title = sitename
+    keywords = ', '.join(post_queryset[0].tags.names())
+    description = post_queryset[0].lead
 
     head_name = None
     form = SearchForm(data=request.POST or None)
@@ -168,6 +177,8 @@ def post_filter(request):
 
     setting = {
         'meta_title': meta_title,
+        'keywords': keywords,
+        'description': description,
         'name_recent_post': Site.objects.get(name='name_recent_post').value,
         'name_read_more': Site.objects.get(name='name_read_more').value,
         'footer_text': Site.objects.get(name='footer_text').value,
