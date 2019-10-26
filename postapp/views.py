@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.db.models import Q
@@ -200,12 +201,26 @@ def post_filter(request):
     )
 
 
+@login_required
 def post_edit(request, pk=None):
-    try:
-        post = Post.objects.get(pk=pk)
-    except Post.DoesNotExist:
-        raise Http404
-    form = PostForm(instance=post)
+
+    form = PostForm(data=request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        cd = form.cleaned_data
+        if request.FILES:
+            cd.update({'picture': request.FILES.get('picture', None)})
+        try:
+            post, _ = Post.objects.update_or_create(id=pk, defaults=cd)
+            form = PostForm(instance=post)
+        except Post.MultipleObjectsReturned:
+            raise Http404
+
+    else:
+        try:
+            form = PostForm(instance=Post.objects.get(pk=pk))
+        except Post.DoesNotExist:
+            raise Http404
+
     return render(
         request, 'postapp/post_edit.html',
         {

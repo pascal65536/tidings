@@ -1,5 +1,13 @@
-<form method="post">
+{% extends 'postapp/base_edit.html' %}
+{% load tagging_tags staticfiles %}
+{% block content %}
+
+<form action="." method="post" enctype="multipart/form-data">
+    {% csrf_token %}
     <table>
         {{ form }}
     </table>
+    <button type="submit" class="btn btn-primary">Отправить на подтверждение</button>
 </form>
+
+{% endblock %}
