@@ -21,7 +21,7 @@
                     <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a>
                 </h4>
               <p>
-                    {{ post.lead|safe|escape }}
+                    {{ post.lead|safe|escape|truncatechars:190 }}
                 </p>
             </div>
             <span>
