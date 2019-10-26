@@ -56,7 +56,6 @@ def post_list(request, slug=None):
     len_recent_post = int(Site.objects.get(name='len_recent_post').value)
     sitename = Site.objects.get(name='sitename')
 
-    post_queryset = post_queryset.order_by('-date_post')[0:len_recent_post]
     post_idx = set(post_queryset.values_list('id', flat=True))
     recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
