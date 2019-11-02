@@ -1,11 +1,9 @@
 import datetime
-
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.db.models import Q
 from django.views.generic import TemplateView
-
 from postapp.form import SearchForm, PostForm
 from postapp.models import Post, Charter, Site
 from taggit.models import Tag

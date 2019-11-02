@@ -1,6 +1,6 @@
 from django import forms
-
 from postapp.models import Post
+from ckeditor.fields import RichTextFormField
 
 
 class SearchForm(forms.Form):
@@ -18,6 +18,7 @@ class PostForm(forms.ModelForm):
     """
     Форма редактирования
     """
+    text = RichTextFormField()
 
     class Meta:
         model = Post

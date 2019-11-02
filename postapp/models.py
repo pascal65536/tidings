@@ -46,8 +46,6 @@ def opengraph(instance):
     f_folder = os.path.join(MEDIA_ROOT, 'opengraph', 'post')
     date_post = datetime.datetime.now()
     salt = '{:%M%S}'.format(date_post)
-    # f_name = str(instance.id)
-    # f_name = utils.cyr_lat(instance.title)
     f_name = uuid.uuid4()
     f_ext = 'png'
     filename = '{}.{}'.format(f_name, f_ext)

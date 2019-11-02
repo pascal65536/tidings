@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from postapp.models import Post, Charter, Site
 
 
@@ -7,7 +6,6 @@ from postapp.models import Post, Charter, Site
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'date_post', 'deleted')
     list_filter = ('charter',)
-    # fields = ['title', 'lead', 'text', 'charter', 'tags', 'picture', 'og_picture', ('date_post', 'deleted')]
     fieldsets = (
         (None, {
             'fields': ('title', 'lead', 'text')
