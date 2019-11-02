@@ -11,15 +11,15 @@ from postapp.models import Post, Charter, Site
 from taggit.models import Tag
 
 
-def post_index(request):
-    main_post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:4]
-    main_post_idx = set(main_post_queryset.values_list('id', flat=True))
-    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=main_post_idx).order_by('-date_post')[0:12]
-    post_idx = set(post_queryset.values_list('id', flat=True))
-    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=post_idx).exclude(id__in=main_post_idx).order_by('-date_post')[0:6]
-    charter = Charter.objects.filter(order__gt=0).order_by('order')
-
-    setting = {
+def get_seo(type=None, post=None):
+    """
+    SEO штуки и настройки для каждой страницы
+    :param type: Тип страницы
+    :param post: instance поста
+    :return: Словарь с настройками
+    """
+    seo_dict = {
+        'sitename': Site.objects.get(name='sitename'),
         'meta_title': Site.objects.get(name='sitename'),
         'keywords': Site.objects.get(name='keywords').value,
         'description': Site.objects.get(name='description').value,
@@ -33,6 +33,51 @@ def post_index(request):
         'footer_right': Site.objects.get(name='footer_right').value,
         'footer_counter': Site.objects.get(name='footer_counter').value,
     }
+    if type == 'index':
+        return seo_dict
+
+    if type == 'list':
+        if post:
+            sitename = Site.objects.get(name='sitename')
+            seo_dict['meta_title'] = post.charter.meta_title or '%s | %s' % (post.charter.title, sitename)
+            seo_dict['keywords'] = post.charter.meta_keywords or post.meta_keywords or ', '.join(post.tags.names())
+            seo_dict['description'] = post.charter.meta_description or post.meta_description or post.lead
+        return seo_dict
+
+    if type == 'detail':
+        sitename = Site.objects.get(name='sitename')
+        meta_title = '%s | %s | %s' % (post.title, post.charter.title, sitename)
+        if post.meta_title:
+            meta_title = post.meta_title
+        seo_dict['meta_title'] = meta_title
+
+        keywords = ', '.join(post.tags.names())
+        if post.meta_keywords:
+            keywords = post.meta_keywords
+        seo_dict['keywords'] = keywords
+
+        description = post.lead
+        if post.meta_description:
+            description = post.meta_description
+        seo_dict['description'] = description
+
+        return seo_dict
+
+    if type == 'filter':
+        seo_dict['keywords'] = ', '.join(post.tags.names())
+        seo_dict['description'] = post.meta_description or post.lead
+        seo_dict['meta_title'] = post.meta_title or post.title
+
+    return seo_dict
+
+
+def post_index(request):
+    main_post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:4]
+    main_post_idx = set(main_post_queryset.values_list('id', flat=True))
+    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=main_post_idx).order_by('-date_post')[0:12]
+    post_idx = set(post_queryset.values_list('id', flat=True))
+    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=post_idx).exclude(id__in=main_post_idx).order_by('-date_post')[0:6]
+    charter = Charter.objects.filter(order__gt=0).order_by('order')
 
     return render(
         request, 'postapp/post_index.html',
@@ -41,7 +86,7 @@ def post_index(request):
             'post_queryset': post_queryset,  # Все выводимые записи
             'recent_post': recent_post,
             'charter': charter,  # Пункты меню
-            'setting': setting,
+            'setting': get_seo(type='index'),  # SEO штуки и настройки для сайта
         }
     )
 
@@ -55,8 +100,6 @@ def post_list(request, slug=None):
         raise Http404
 
     len_recent_post = int(Site.objects.get(name='len_recent_post').value)
-    sitename = Site.objects.get(name='sitename')
-
     post_idx = set(post_queryset.values_list('id', flat=True))
     recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
@@ -64,28 +107,14 @@ def post_list(request, slug=None):
     if len(post_queryset) > 0:
         post = post_queryset[0]
 
+    # Для opengrapf
+    sitename = Site.objects.get(name='sitename')
     meta_title = '%s | %s' % (post.charter.title, sitename)
-
     og = {
         'title': meta_title,
         'description': post.charter.lead,
         'image': post.charter.og_picture,
         'type': 'website',
-    }
-
-    setting = {
-        'meta_title': meta_title,
-        'keywords': charter_slug.meta_keywords,
-        'description': charter_slug.meta_description,
-        'name_recent_post': Site.objects.get(name='name_recent_post').value,
-        'name_read_more': Site.objects.get(name='name_read_more').value,
-        'footer_text': Site.objects.get(name='footer_text').value,
-        'footer_icons': Site.objects.get(name='footer_icons').value,
-        'footer_contacts': Site.objects.get(name='footer_contacts').value,
-        'footer_center': Site.objects.get(name='footer_center').value,
-        'footer_head': Site.objects.get(name='footer_head').value,
-        'footer_right': Site.objects.get(name='footer_right').value,
-        'footer_counter': Site.objects.get(name='footer_counter').value,
     }
 
     return render(
@@ -96,7 +125,7 @@ def post_list(request, slug=None):
             'recent_post': recent_post,  # Колонка записей
             'charter': charter,  # Пункты меню
             'og': og,  # Open Graph
-            'setting': setting,
+            'setting': get_seo(type='list', post=post),  # SEO штуки и настройки для сайта
         }
     )
 
@@ -108,34 +137,19 @@ def post_detail(request, pk=None):
         raise Http404
 
     len_recent_post = int(Site.objects.get(name='len_recent_post').value)
-    sitename = Site.objects.get(name='sitename')
     recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id=post.id).order_by('-date_post')[0:len_recent_post]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
 
+    # Для opengrapf
+    sitename = Site.objects.get(name='sitename')
     meta_title = '%s | %s | %s' % (post.title, post.charter.title, sitename)
-    keywords = ', '.join(post.tags.names())
-    description = post.lead
-
+    if post.meta_title:
+        meta_title = post.meta_title
     og = {
         'title': meta_title,
         'description': post.lead,
         'image': post.og_picture,
         'type': 'website',
-    }
-
-    setting = {
-        'meta_title': meta_title,
-        'keywords': keywords,
-        'description': description,
-        'name_recent_post': Site.objects.get(name='name_recent_post').value,
-        'name_read_more': Site.objects.get(name='name_read_more').value,
-        'footer_text': Site.objects.get(name='footer_text').value,
-        'footer_icons': Site.objects.get(name='footer_icons').value,
-        'footer_contacts': Site.objects.get(name='footer_contacts').value,
-        'footer_center': Site.objects.get(name='footer_center').value,
-        'footer_head': Site.objects.get(name='footer_head').value,
-        'footer_right': Site.objects.get(name='footer_right').value,
-        'footer_counter': Site.objects.get(name='footer_counter').value,
     }
 
     return render(
@@ -145,7 +159,7 @@ def post_detail(request, pk=None):
             'recent_post': recent_post,  # Колонка записей
             'charter': charter,  # Пункты меню
             'og': og,  # Open Graph
-            'setting': setting,
+            'setting': get_seo(type='detail', post=post),  # SEO штуки и настройки для сайта
         }
     )
 
@@ -153,12 +167,10 @@ def post_detail(request, pk=None):
 def post_filter(request):
     post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')
     charter = Charter.objects.filter(order__gt=0).order_by('order')
-    sitename = Site.objects.get(name='sitename')
-    meta_title = sitename
-    keywords = ', '.join(post_queryset[0].tags.names())
-    description = post_queryset[0].lead
 
+    sitename = Site.objects.get(name='sitename')
     head_name = None
+    meta_title = None
     form = SearchForm(data=request.POST or None)
     if form.is_valid():
         cd = form.cleaned_data
@@ -175,20 +187,9 @@ def post_filter(request):
         head_name = 'Все материалы по тегу «%s»:' % tag.name
         meta_title = 'Все материалы по тегу «%s» | %s' % (tag.name, sitename)
 
-    setting = {
-        'meta_title': meta_title,
-        'keywords': keywords,
-        'description': description,
-        'name_recent_post': Site.objects.get(name='name_recent_post').value,
-        'name_read_more': Site.objects.get(name='name_read_more').value,
-        'footer_text': Site.objects.get(name='footer_text').value,
-        'footer_icons': Site.objects.get(name='footer_icons').value,
-        'footer_contacts': Site.objects.get(name='footer_contacts').value,
-        'footer_center': Site.objects.get(name='footer_center').value,
-        'footer_head': Site.objects.get(name='footer_head').value,
-        'footer_right': Site.objects.get(name='footer_right').value,
-        'footer_counter': Site.objects.get(name='footer_counter').value,
-    }
+    setting = get_seo(type='filter', post=post_queryset[0])  # SEO штуки и настройки для сайта
+    if meta_title:
+        setting['meta_title'] = meta_title
 
     return render(
         request, 'postapp/post_filter.html',
@@ -209,6 +210,9 @@ def post_edit(request, pk=None):
         cd = form.cleaned_data
         if request.FILES:
             cd.update({'picture': request.FILES.get('picture', None)})
+        else:
+            cd['picture'] = Post.objects.get(id=pk).picture
+
         try:
             post, _ = Post.objects.update_or_create(id=pk, defaults=cd)
             form = PostForm(instance=post)
@@ -225,6 +229,7 @@ def post_edit(request, pk=None):
         request, 'postapp/post_edit.html',
         {
             'form': form.as_table(),
+            'pk': pk,
         }
     )
 
