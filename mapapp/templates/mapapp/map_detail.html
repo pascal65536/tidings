@@ -1,0 +1,99 @@
+{% extends 'mapapp/base_map.html' %}
+{% load tagging_tags staticfiles %}
+{% block content %}
+
+<form action="{% url 'map_detail' %}" method="POST">
+{% csrf_token %}
+    <input type="text" name="search" placeholder="Search...">
+    <button class="button" type="submit">
+        <i class="fa fa-search"></i>
+    </button>
+</form>
+
+{% if place_id %}
+  <ul>
+    <li><b>place_id:</b> <a href="{% url 'map_detail' %}?place={{ place_id }}">{{ place_id }}</a></li>
+    <li><b>formatted_address:</b> {{ formatted_address }}</li>
+  </ul>
+{% endif %}
+
+{% if google_json %}
+  <img src="{{ google_json.result.icon }}" />
+  <ol>
+    <li>{{ google_json.html_attributions }}</li>
+    <li>
+      <ol>
+      <li>
+        <ol>
+          {% for address_components in google_json.result.address_components %}
+            <li>
+              <ol>
+                <li>{{ address_components.long_name }}</li>
+                <li>{{ address_components.short_name }}</li>
+                <li>
+                  <ol>
+                    {% for type in address_components.types %}
+                      <li>{{ type }}</li>
+                    {% endfor %}
+                  </ol>
+                </li>
+              </ol>
+            </li>
+          {% endfor %}
+        </ol>
+      </li>
+      <li>{{ google_json.result.adr_address|safe }}</li>
+      <li>{{ google_json.result.formatted_address }}</li>
+      <ol>
+        <li>
+          <ol>
+            <li>{{ google_json.result.geometry.location.lat }}</li>
+            <li>{{ google_json.result.geometry.location.lng }}</li>
+          </ol>
+        </li>
+        <li>
+          <ol>
+            <li>
+              <ol>
+                <li>{{ google_json.result.geometry.viewport.northeast.lat }}</li>
+                <li>{{ google_json.result.geometry.viewport.northeast.lng }}</li>
+              </ol>
+            </li>
+            <li>
+              <ol>
+                <li>{{ google_json.result.geometry.viewport.southwest.lat }}</li>
+                <li>{{ google_json.result.geometry.viewport.southwest.lng }}</li>
+              </ol>
+            </li>
+          </ol>
+        </li>
+      </ol>
+      <li>{{ google_json.result.icon }}</li>
+      <li>{{ google_json.result.id }}</li>
+      <li>{{ google_json.result.name }}</li>
+      <li><a href="{% url 'map_detail' %}?place={{ google_json.result.place_id }}">{{ google_json.result.place_id }}</a></li>
+      <li>
+        <ol>
+          <li>{{ google_json.result.plus_code.compound_code }}</li>
+          <li>{{ google_json.result.plus_code.global_code }}</li>
+        </ol>
+      </li>
+      <li><a href="{% url 'map_detail' %}?place={{ google_json.result.reference }}">{{ google_json.result.reference }}</a></li>
+      <li>{{ google_json.result.scope }}</li>
+      <li>
+        <ol>
+          {% for type in google_json.result.types %}
+            <li>{{ type }}</li>
+          {% endfor %}
+        </ol>
+      </li>
+      <li><a href="{{ google_json.result.url }}" >{{ google_json.result.url }}</a></li>
+      <li>{{ google_json.result.utc_offset }}</li>
+      <li>{{ google_json.result.vicinity }}</li>
+    </ol>
+    </li>
+    <li>{{ google_json.status }}</li>
+  </ol>
+{% endif %}
+
+{% endblock %}
