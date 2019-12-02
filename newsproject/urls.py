@@ -4,7 +4,6 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 
-from mapapp.views import map_detail
 from postapp.models import PostSitemap, PostFeed
 from postapp.views import post_index, post_detail, post_list, post_filter, robots, post_edit
 from postapp.views import YandexDzenRss, YandexRss, YandexTurboRss
@@ -23,7 +22,6 @@ urlpatterns = [
     url(r'^rss/zen/$', YandexDzenRss.as_view(), name='zen'),
     url(r'^rss/turbo/$', YandexTurboRss.as_view(), name='turbo'),
     url(r'^robots\.txt$', robots),
-    url(r'^googlemaps/$', map_detail, name='map_detail'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
