@@ -227,8 +227,8 @@ class PostSitemap(Sitemap):
 
 
 class PostFeed(Feed):
-    title = "Красноярский Красноярск"
-    description = "Последние статьи сайта КрасноЯрск"
+    title = "Мелочи жизни"
+    description = "Последние статьи сайта Мелочи жизни"
     link = "/"
 
     def items(self):
