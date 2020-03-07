@@ -247,17 +247,20 @@ def delete_tags(value):
 
 class YandexRss(TemplateView):
     template_name = 'rss/yandex.xml'
-    filter = {'deleted': None}
+    filter = {
+        'deleted': None
+    }
 
     def get_context_data(self, **kwargs):
         ctx = super(YandexRss, self).get_context_data(**kwargs)
         post_qs = Post.objects.filter(date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:25]
         for post in post_qs:
             post.title = delete_tags(post.title)
-            post.lead = delete_tags(post.lead)
-            post.text = delete_tags(post.text)
+            post.lead = '<![CDATA[{}]]>'.format(delete_tags(post.lead))
+            post.text = '<![CDATA[{}]]>'.format(delete_tags(post.text))
         ctx['object_list'] = post_qs
         ctx['static'] = settings.STATIC_URL
+        ctx['media'] = settings.MEDIA_URL
         ctx['host'] = Site.objects.get(name='host')
         ctx['sitename'] = Site.objects.get(name='sitename')
         ctx['description'] = Site.objects.get(name='description')
@@ -272,15 +275,22 @@ class YandexDzenRss(TemplateView):
     template_name = 'rss/zen.xml'
     filter = {
         'deleted': None,
-        'charter': 1,
     }
 
     def get_context_data(self, **kwargs):
         ctx = super(YandexDzenRss, self).get_context_data(**kwargs)
-        qs = Post.objects.filter(**self.filter).order_by('-date_post')
-        # qs = Post.objects.filter(date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:25]
-        ctx['object_list'] = qs
+        post_qs = Post.objects.filter(date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:25]
+        for post in post_qs:
+            post.title = delete_tags(post.title)
+            post.lead = '<![CDATA[{}]]>'.format(delete_tags(post.lead))
+            post.text = '<![CDATA[{}]]>'.format(delete_tags(post.text))
+            print (post.text)
+        ctx['object_list'] = post_qs
+        ctx['static'] = settings.STATIC_URL
+        ctx['media'] = settings.MEDIA_URL
         ctx['host'] = Site.objects.get(name='host')
+        ctx['sitename'] = Site.objects.get(name='sitename')
+        ctx['description'] = Site.objects.get(name='description')
         return ctx
 
     def render_to_response(self, context, **response_kwargs):
