@@ -102,8 +102,8 @@ class Command(BaseCommand):
                     post.charter_id = 1
                     post.title = title
                     post.text = html
-                    post.date_post = datetime.datetime.now()
-                    post.deleted = datetime.datetime.now()
+                    post.date_post = timezone.now()
+                    post.deleted = timezone.now()
                     post.lead = lead
                     post.save()
 

@@ -10,6 +10,7 @@ from postapp.form import SearchForm, PostForm
 from postapp.models import Post, Charter, Site
 from taggit.models import Tag
 from django.conf import settings
+from django.utils import timezone
 
 
 def get_seo(type=None, post=None):
@@ -73,11 +74,11 @@ def get_seo(type=None, post=None):
 
 
 def post_index(request):
-    main_post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:4]
+    main_post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')[0:4]
     main_post_idx = set(main_post_queryset.values_list('id', flat=True))
-    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=main_post_idx).order_by('-date_post')[0:12]
+    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).exclude(id__in=main_post_idx).order_by('-date_post')[0:12]
     post_idx = set(post_queryset.values_list('id', flat=True))
-    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=post_idx).exclude(id__in=main_post_idx).order_by('-date_post')[0:6]
+    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).exclude(id__in=post_idx).exclude(id__in=main_post_idx).order_by('-date_post')[0:6]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
 
     return render(
@@ -93,7 +94,7 @@ def post_index(request):
 
 
 def post_list(request, slug=None):
-    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now())
+    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now())
     try:
         charter_slug = Charter.objects.get(slug=slug)
         post_queryset = post_queryset.filter(charter=charter_slug)
@@ -102,7 +103,7 @@ def post_list(request, slug=None):
 
     len_recent_post = int(Site.objects.get(name='len_recent_post').value)
     post_idx = set(post_queryset.values_list('id', flat=True))
-    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
+    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
     post = None
     if len(post_queryset) > 0:
@@ -138,7 +139,7 @@ def post_detail(request, pk=None):
         raise Http404
 
     len_recent_post = int(Site.objects.get(name='len_recent_post').value)
-    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).exclude(id=post.id).order_by('-date_post')[0:len_recent_post]
+    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).exclude(id=post.id).order_by('-date_post')[0:len_recent_post]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
 
     # Для opengrapf
@@ -166,7 +167,7 @@ def post_detail(request, pk=None):
 
 
 def post_filter(request):
-    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')
+    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')
     charter = Charter.objects.filter(order__gt=0).order_by('order')
 
     sitename = Site.objects.get(name='sitename')
@@ -253,7 +254,7 @@ class YandexRss(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(YandexRss, self).get_context_data(**kwargs)
-        post_qs = Post.objects.filter(date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:25]
+        post_qs = Post.objects.filter(date_post__lte=timezone.now()).order_by('-date_post')[0:25]
         for post in post_qs:
             post.title = delete_tags(post.title)
             post.lead = '<![CDATA[{}]]>'.format(delete_tags(post.lead))
@@ -279,12 +280,11 @@ class YandexDzenRss(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(YandexDzenRss, self).get_context_data(**kwargs)
-        post_qs = Post.objects.filter(date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:25]
+        post_qs = Post.objects.filter(date_post__lte=timezone.now()).order_by('-date_post')[0:25]
         for post in post_qs:
             post.title = delete_tags(post.title)
             post.lead = '<![CDATA[{}]]>'.format(delete_tags(post.lead))
             post.text = '<![CDATA[{}]]>'.format(delete_tags(post.text))
-            print (post.text)
         ctx['object_list'] = post_qs
         ctx['static'] = settings.STATIC_URL
         ctx['media'] = settings.MEDIA_URL
@@ -302,14 +302,21 @@ class YandexTurboRss(TemplateView):
     template_name = 'rss/turbo.xml'
     filter = {
         'deleted': None,
-        'charter': 1,
     }
 
     def get_context_data(self, **kwargs):
         ctx = super(YandexTurboRss, self).get_context_data(**kwargs)
-        ctx['object_list'] = Post.objects.filter(**self.filter).order_by('-date_post')
+        post_qs = Post.objects.filter(date_post__lte=timezone.now()).order_by('-date_post')[0:5]
+        for post in post_qs:
+            post.title = post.title
+            post.lead = '<![CDATA[{}]]>'.format(post.lead)
+            post.text = '<![CDATA[{}]]>'.format(post.text)
+        ctx['object_list'] = post_qs
+        ctx['static'] = settings.STATIC_URL
+        ctx['media'] = settings.MEDIA_URL
         ctx['host'] = Site.objects.get(name='host')
-        ctx['charter'] = Charter.objects.filter(order__gt=0).order_by('order')
+        ctx['sitename'] = Site.objects.get(name='sitename')
+        ctx['description'] = Site.objects.get(name='description')
         return ctx
 
     def render_to_response(self, context, **response_kwargs):

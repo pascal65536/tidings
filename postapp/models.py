@@ -13,10 +13,11 @@ from taggit.managers import TaggableManager
 from newsproject.utils import cyr_lat
 from django.conf import settings
 from django.contrib.sitemaps import Sitemap
+from django.utils import timezone
 
 
 def latin_filename(instance, filename):
-    date_post = datetime.datetime.now()
+    date_post = timezone.now()
     f_folder = os.path.join('{:%Y/%m/%d}'.format(date_post))
     salt = '{:%M%S}'.format(date_post)
     part_of_name = filename.split(".")
@@ -47,7 +48,7 @@ def opengraph(instance):
     directory = os.path.join(settings.MEDIA_ROOT, 'opengraph', 'post')
     if not os.path.exists(directory):
         os.makedirs(directory)
-    date_post = datetime.datetime.now()
+    date_post = timezone.now()
     filename = '{}.{}'.format(uuid.uuid4(), 'png')
     image.save('{}/{}'.format(directory, filename))
     return filename
@@ -95,13 +96,13 @@ class Post(models.Model):
     date_post = models.DateTimeField(verbose_name='Дата начала публикации')
     picture = models.ImageField(verbose_name='Картинка для привлечения внимания', upload_to=latin_filename, blank=True, null=True)
     og_picture = models.CharField(verbose_name='Картинка для соцсетей', max_length=255, blank=True)
-    tags = TaggableManager(verbose_name=u'Список тегов', blank=True)
-    created = models.DateTimeField(verbose_name=u'Начало публикации', auto_now_add=True)
-    changed = models.DateTimeField(verbose_name=u'Изменен', auto_now=True)
-    deleted = models.DateTimeField(verbose_name=u'Дата окончания публикации', blank=True, null=True)
-    meta_title = models.CharField(max_length=255, verbose_name=u'Title', null=True, blank=True)
-    meta_keywords = models.CharField(max_length=255, verbose_name=u'Keywords', null=True, blank=True)
-    meta_description = models.TextField(max_length=255, verbose_name=u'Description', null=True, blank=True)
+    tags = TaggableManager(verbose_name='Список тегов', blank=True)
+    created = models.DateTimeField(verbose_name='Начало публикации', auto_now_add=True)
+    changed = models.DateTimeField(verbose_name='Изменен', auto_now=True)
+    deleted = models.DateTimeField(verbose_name='Дата окончания публикации', blank=True, null=True)
+    meta_title = models.CharField(max_length=255, verbose_name='Title', null=True, blank=True)
+    meta_keywords = models.CharField(max_length=255, verbose_name='Keywords', null=True, blank=True)
+    meta_description = models.TextField(max_length=255, verbose_name='Description', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.og_picture = opengraph(self)
@@ -226,7 +227,7 @@ class PostSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')
+        return Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')
 
     def lastmod(self, obj):
         return obj.date_post
@@ -241,7 +242,7 @@ class PostFeed(Feed):
     link = "/"
 
     def items(self):
-        return Post.objects.filter(deleted__isnull=True, date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:25]
+        return Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')[0:25]
 
     def item_title(self, obj):
         return obj.title
