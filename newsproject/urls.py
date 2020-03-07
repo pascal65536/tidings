@@ -3,11 +3,10 @@ from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
+from postapp.views import post_index, post_detail, post_list, post_filter, robots, post_edit, YandexRss, YandexDzenRss, \
+    YandexTurboRss
 
-from postapp.models import PostSitemap, PostFeed
-from postapp.views import post_index, post_detail, post_list, post_filter, robots, post_edit
-from postapp.views import YandexDzenRss, YandexRss, YandexTurboRss
-
+from postapp.models import PostFeed, PostSitemap
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

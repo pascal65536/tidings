@@ -180,9 +180,7 @@ body {
 }
 
 ul {
-  list-style: outside none none;
-  margin: 0;
-  padding: 0;
+  margin: 10;
 }
 
 input, select, textarea, input[type="text"], input[type="date"], input[type="url"], input[type="email"], input[type="password"], input[type="tel"], button, button[type="submit"] {
