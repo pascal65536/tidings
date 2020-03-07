@@ -14,6 +14,7 @@ from newsproject.utils import cyr_lat
 from django.conf import settings
 from django.contrib.sitemaps import Sitemap
 from django.utils import timezone
+from django.urls import reverse
 
 
 def latin_filename(instance, filename):
@@ -103,6 +104,9 @@ class Post(models.Model):
     meta_title = models.CharField(max_length=255, verbose_name='Title', null=True, blank=True)
     meta_keywords = models.CharField(max_length=255, verbose_name='Keywords', null=True, blank=True)
     meta_description = models.TextField(max_length=255, verbose_name='Description', null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={'pk': self.pk})
 
     def save(self, *args, **kwargs):
         self.og_picture = opengraph(self)
