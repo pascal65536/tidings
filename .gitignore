@@ -12,4 +12,7 @@ db.sqlite3
 *.pyc
 *.xml
 
+Pipfile
+Pipfile.lock
+
 
