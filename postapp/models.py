@@ -2,7 +2,7 @@ import os
 import uuid
 import textwrap
 from autoslug import AutoSlugField
-from ckeditor.fields import RichTextField
+# from ckeditor.fields import RichTextField
 from django.contrib.syndication.views import Feed
 from django.db import models
 from django.db.models import TextField
@@ -10,7 +10,7 @@ from django.db.models.functions import datetime
 from PIL import Image, ImageDraw, ImageFont
 from taggit.managers import TaggableManager
 from newsproject.utils import cyr_lat
-from newsproject.settings import MEDIA_ROOT
+from django.conf import settings
 from django.contrib.sitemaps import Sitemap
 
 
@@ -43,22 +43,30 @@ def opengraph(instance):
     draw.text((text_left, text_top), unicode_text, font=unicode_font, fill=font_color)
 
     # Создадим путь и имя файла
-    f_folder = os.path.join(MEDIA_ROOT, 'opengraph', 'post')
+    directory = os.path.join(settings.MEDIA_ROOT, 'opengraph', 'post')
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     date_post = datetime.datetime.now()
-    salt = '{:%M%S}'.format(date_post)
-    f_name = uuid.uuid4()
-    f_ext = 'png'
-    filename = '{}.{}'.format(f_name, f_ext)
-    image.save('{}/{}'.format(f_folder, filename))
+    filename = '{}.{}'.format(uuid.uuid4(), 'png')
+    image.save('{}/{}'.format(directory, filename))
     return filename
 
 
+#     sidebar_cache = 'sidebar_cache.json'
+#     file_cache = os.path.join(directory, sidebar_cache)
+#     if not os.path.exists(directory):
+#         os.makedirs(directory)
+#
+#     if os.path.isfile(file_cache):
+#         with open(file_cache, 'r') as f:
+#             return json.load(f)
+
 class Charter(models.Model):
     title = models.CharField(verbose_name='Название', max_length=20)
-    lead = TextField(verbose_name='Лидер-абзац')
+    lead = models.TextField(verbose_name='Лидер-абзац')
     order = models.IntegerField(verbose_name='Сортировка', default=1)
     slug = AutoSlugField(populate_from='title')
-    text = RichTextField(verbose_name='Описание раздела', blank=True, null=True)
+    text = models.TextField(verbose_name='Описание раздела', blank=True, null=True)
     picture = models.ImageField(verbose_name='Картинка раздела', upload_to=latin_filename, blank=True, null=True)
     og_picture = models.CharField(verbose_name='Картинка для соцсетей', max_length=255, blank=True)
     meta_title = models.CharField(max_length=255, verbose_name=u'Title', null=True, blank=True)
@@ -81,7 +89,7 @@ class Charter(models.Model):
 class Post(models.Model):
     title = models.CharField(verbose_name='Заголовок поста', max_length=255)
     lead = models.TextField(verbose_name='Лидер-абзац', blank=True, null=True)
-    text = RichTextField(verbose_name='Тело поста')
+    text = models.TextField(verbose_name='Тело поста')
     charter = models.ForeignKey(Charter, blank=True, null=True, verbose_name='Раздел', on_delete=models.SET_NULL)
     date_post = models.DateTimeField(verbose_name='Дата начала публикации')
     picture = models.ImageField(verbose_name='Картинка для привлечения внимания', upload_to=latin_filename, blank=True, null=True)
@@ -133,7 +141,7 @@ class Post(models.Model):
 class News(models.Model):
     title = models.CharField(verbose_name='Заголовок', max_length=255, unique=True, null=False)
     lead = models.TextField(verbose_name='Лидер-абзац', blank=True, null=True)
-    text = RichTextField(null=True)
+    text = models.TextField(null=True)
     date_start = models.DateTimeField(verbose_name='Дата публикации')
     date_change = models.DateTimeField(verbose_name='Дата последней правки', blank=True, null=True)
     date_finish = models.DateTimeField(verbose_name='Снять с публикации', blank=True, null=True)
@@ -164,8 +172,8 @@ class Content(models.Model):
     txt_doc_id = models.IntegerField()
     txt_node_id = models.IntegerField()
     txt_title = models.CharField(max_length=255)
-    txt_lead = RichTextField(null=True)
-    txt_text = RichTextField(null=True)
+    txt_lead = models.TextField(null=True)
+    txt_text = models.TextField(null=True)
     txt_author = models.CharField(max_length=255, blank=True, null=False)
     txt_issue = models.IntegerField()
     txt_clean_url = models.CharField(max_length=255)
@@ -185,8 +193,8 @@ class Person(models.Model):
     person_name = models.CharField(max_length=200)
     person_last_name = models.CharField(max_length=200, blank=True, null=False)
     person_status = models.CharField(max_length=200)
-    person_bio = RichTextField(null=True)
-    person_bio_short = RichTextField(null=True)
+    person_bio = models.TextField(null=True)
+    person_bio_short = models.TextField(null=True)
     person_foto = models.CharField(max_length=200, blank=True, null=False)
     person_clean_url = models.CharField(max_length=200)
 

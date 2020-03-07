@@ -1,12 +1,15 @@
 import datetime
+import re
+
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.views.generic import TemplateView
 from postapp.form import SearchForm, PostForm
 from postapp.models import Post, Charter, Site
 from taggit.models import Tag
+from django.conf import settings
 
 
 def get_seo(type=None, post=None):
@@ -233,7 +236,13 @@ def post_edit(request, pk=None):
 
 
 def robots(request):
-    return render_to_response('robots.txt', content_type="text/plain")
+    return render(request, 'robots.txt', content_type="text/plain")
+
+
+def delete_tags(value):
+    value = re.sub(r'(\<(/?[^>]+)>)', '', value)
+    value = re.sub(r'&[a-z]*;', ' ', value)
+    return value
 
 
 class YandexRss(TemplateView):
@@ -242,10 +251,16 @@ class YandexRss(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(YandexRss, self).get_context_data(**kwargs)
-        # qs = Post.objects.filter(**self.filter).order_by('-date_post')
-        qs = Post.objects.filter(date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:25]
-        ctx['object_list'] = qs
+        post_qs = Post.objects.filter(date_post__lte=datetime.datetime.now()).order_by('-date_post')[0:25]
+        for post in post_qs:
+            post.title = delete_tags(post.title)
+            post.lead = delete_tags(post.lead)
+            post.text = delete_tags(post.text)
+        ctx['object_list'] = post_qs
+        ctx['static'] = settings.STATIC_URL
         ctx['host'] = Site.objects.get(name='host')
+        ctx['sitename'] = Site.objects.get(name='sitename')
+        ctx['description'] = Site.objects.get(name='description')
         return ctx
 
     def render_to_response(self, context, **response_kwargs):
