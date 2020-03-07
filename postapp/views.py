@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
-from django.views.generic import TemplateView
 from postapp.form import SearchForm, PostForm
 from postapp.models import Post, Charter, Site
 from taggit.models import Tag
@@ -238,87 +237,3 @@ def post_edit(request, pk=None):
 
 def robots(request):
     return render(request, 'robots.txt', content_type="text/plain")
-
-
-def delete_tags(value):
-    value = re.sub(r'(\<(/?[^>]+)>)', '', value)
-    value = re.sub(r'&[a-z]*;', ' ', value)
-    return value
-
-
-class YandexRss(TemplateView):
-    template_name = 'rss/yandex.xml'
-    filter = {
-        'deleted': None
-    }
-
-    def get_context_data(self, **kwargs):
-        ctx = super(YandexRss, self).get_context_data(**kwargs)
-        post_qs = Post.objects.filter(date_post__lte=timezone.now()).order_by('-date_post')[0:25]
-        for post in post_qs:
-            post.title = delete_tags(post.title)
-            post.lead = '<![CDATA[{}]]>'.format(delete_tags(post.lead))
-            post.text = '<![CDATA[{}]]>'.format(delete_tags(post.text))
-        ctx['object_list'] = post_qs
-        ctx['static'] = settings.STATIC_URL
-        ctx['media'] = settings.MEDIA_URL
-        ctx['host'] = Site.objects.get(name='host')
-        ctx['sitename'] = Site.objects.get(name='sitename')
-        ctx['description'] = Site.objects.get(name='description')
-        return ctx
-
-    def render_to_response(self, context, **response_kwargs):
-        response_kwargs['content_type'] = 'text/xml; charset=UTF-8'
-        return super(YandexRss, self).render_to_response(context, **response_kwargs)
-
-
-class YandexDzenRss(TemplateView):
-    template_name = 'rss/zen.xml'
-    filter = {
-        'deleted': None,
-    }
-
-    def get_context_data(self, **kwargs):
-        ctx = super(YandexDzenRss, self).get_context_data(**kwargs)
-        post_qs = Post.objects.filter(date_post__lte=timezone.now()).order_by('-date_post')[0:25]
-        for post in post_qs:
-            post.title = delete_tags(post.title)
-            post.lead = '<![CDATA[{}]]>'.format(delete_tags(post.lead))
-            post.text = '<![CDATA[{}]]>'.format(delete_tags(post.text))
-        ctx['object_list'] = post_qs
-        ctx['static'] = settings.STATIC_URL
-        ctx['media'] = settings.MEDIA_URL
-        ctx['host'] = Site.objects.get(name='host')
-        ctx['sitename'] = Site.objects.get(name='sitename')
-        ctx['description'] = Site.objects.get(name='description')
-        return ctx
-
-    def render_to_response(self, context, **response_kwargs):
-        response_kwargs['content_type'] = 'text/xml; charset=UTF-8'
-        return super(YandexDzenRss, self).render_to_response(context, **response_kwargs)
-
-
-class YandexTurboRss(TemplateView):
-    template_name = 'rss/turbo.xml'
-    filter = {
-        'deleted': None,
-    }
-
-    def get_context_data(self, **kwargs):
-        ctx = super(YandexTurboRss, self).get_context_data(**kwargs)
-        post_qs = Post.objects.filter(date_post__lte=timezone.now()).order_by('-date_post')[0:5]
-        for post in post_qs:
-            post.text = '<h1>{}</h1> <img src="/media/{}"> {}'.format(
-                post.title, post.picture, post.text,
-            )
-        ctx['object_list'] = post_qs
-        ctx['static'] = settings.STATIC_URL
-        ctx['media'] = settings.MEDIA_URL
-        ctx['host'] = Site.objects.get(name='host')
-        ctx['sitename'] = Site.objects.get(name='sitename')
-        ctx['description'] = Site.objects.get(name='description')
-        return ctx
-
-    def render_to_response(self, context, **response_kwargs):
-        response_kwargs['content_type'] = 'text/xml; charset=UTF-8'
-        return super(YandexTurboRss, self).render_to_response(context, **response_kwargs)

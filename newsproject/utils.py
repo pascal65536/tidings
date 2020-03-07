@@ -97,3 +97,9 @@ def cyr_lat(cyrillic):
         while cyrillic.count('__') > 1:
             cyrillic = cyrillic.replace('__', '_')
     return cyrillic
+
+
+def delete_tags(value):
+    value = re.sub(r'(\<(/?[^>]+)>)', '', value)
+    value = re.sub(r'&[a-z]*;', ' ', value)
+    return value
