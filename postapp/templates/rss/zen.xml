@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:media="http://search.yahoo.com/mrss/"
+    xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:georss="http://www.georss.org/georss">
+    <channel>
+        <title>{{ sitename }}</title>
+        <link>{{ host }}</link>
+        <description>{{ description }}</description>
+        <language>ru</language>
+        {% for item in object_list %}
+            <item>
+                <title>{{ item.title }}</title>
+                <link>{{ host }}{{ item.get_absolute_url }}</link>
+                <description>
+                   {{ item.lead }}
+                </description>
+                <media:rating scheme="urn:simple">nonadult</media:rating>
+                {% if item.author %}<author>{{ item.author.name }}</author>{% endif %}
+                {% if item.picture %}<enclosure url="{{ host }}{{ media }}{{ item.picture }}" type="image/jpeg" />{% endif %}
+                {% load i18n %}
+                {% language 'en' %}
+                <pubDate>{{ item.date_post|date:'r' }}</pubDate>
+                {% endlanguage %}
+                <category>{{ item.charter.title }}</category>
+                <content:encoded>
+                    {{ item.text }}
+                </content:encoded>
+            </item>
+        {% endfor %}
+    </channel>
+</rss>

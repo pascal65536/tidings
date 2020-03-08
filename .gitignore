@@ -10,7 +10,6 @@ __init__.py
 my.cnf
 db.sqlite3
 *.pyc
-*.xml
 
 Pipfile
 Pipfile.lock

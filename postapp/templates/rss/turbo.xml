@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:yandex="http://news.yandex.ru"
+     xmlns:media="http://search.yahoo.com/mrss/"
+     xmlns:turbo="http://turbo.yandex.ru"
+     version="2.0">
+    <channel>
+        {% for item in object_list %}
+            <item turbo="true">
+                <link>{{ host }}{{ item.get_absolute_url }}</link>
+                <turbo:content>
+                    {{ item.text }}
+                </turbo:content>
+            </item>
+        {% endfor %}
+    </channel>
+</rss>

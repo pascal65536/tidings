@@ -1,0 +1,29 @@
+<rss xmlns:yandex="http://news.yandex.ru"
+     xmlns:media="http://search.yahoo.com/mrss/"
+     version="2.0">
+    <channel>
+        <title>{{ sitename }}</title>
+        <link>{{ host }}</link>
+        <description>{{ description }}</description>
+        <image>
+            <url>{{ host }}{{ static }}img/apple-touch-icon.png</url>
+            <title>{{ sitename }}</title>
+            <link>{{ host }}</link>
+        </image>
+        <yandex:logo type="square">{{ host }}{{ static }}img/apple-touch-icon.png</yandex:logo>{% for item in object_list %}
+        <item>
+            <title>{{ item.name }}</title>
+            <link>{{ host }}/detail/{{ item.id }}</link>
+            <description>{{ item.lead }}</description>
+            <category>{{ item.charter.title }}</category>
+            {% if item.author %}<author>{{ item.author.name }}</author>{% endif %}
+            {% if item.picture %}<enclosure url="{{ host }}{{ media }}{{ item.picture }}" type="image/jpeg" />{% endif %}
+            {% load i18n %}
+            {% language 'en' %}
+            <pubDate>{{ item.date_post|date:'r' }}</pubDate>
+            {% endlanguage %}
+            <yandex:full-text>{{ item.text }}</yandex:full-text>
+        <yandex:genre>message</yandex:genre>
+        </item>{% endfor %}
+    </channel>
+</rss>
