@@ -320,10 +320,6 @@ class YandexTurboRss(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super(YandexTurboRss, self).get_context_data(**kwargs)
         post_qs = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('date_post')[0:3]
-        # for post in post_qs:
-        #     post.text = '<h1>{}</h1> <img src="/media/{}"> {}'.format(
-        #         post.title, post.picture, post.text,
-        #     )
         ctx['object_list'] = post_qs
         ctx['static'] = settings.STATIC_URL
         ctx['media'] = settings.MEDIA_URL

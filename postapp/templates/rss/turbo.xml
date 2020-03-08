@@ -10,7 +10,9 @@
                 <turbo:content>
                     <h1>{{ item.title }}</h1>
                     <img src='/media/{{ item.picture }}' />
-                    {{ item.text }}
+                    <p>
+                        {{ item.text }}
+                    </p>
                 </turbo:content>
                 {% load i18n %}
                 {% language 'en' %}
