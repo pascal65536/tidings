@@ -8,8 +8,14 @@
             <item turbo="true">
                 <link>{{ host }}{{ item.get_absolute_url }}</link>
                 <turbo:content>
+                    <h1>{{ item.title }}</h1>
+                    <img src='/media/{{ item.picture }}' />
                     {{ item.text }}
                 </turbo:content>
+                {% load i18n %}
+                {% language 'en' %}
+                    <pubDate>{{ item.date_post|date:'r' }}</pubDate>
+                {% endlanguage %}
             </item>
         {% endfor %}
     </channel>
