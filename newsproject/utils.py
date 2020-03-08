@@ -1,3 +1,5 @@
+import re
+
 cyr2lat = {
     'а': 'a',
     'б': 'b',

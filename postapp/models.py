@@ -267,7 +267,7 @@ class YandexRss(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(YandexRss, self).get_context_data(**kwargs)
-        post_qs = Post.objects.filter(date_post__lte=timezone.now()).order_by('-date_post')[0:25]
+        post_qs = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')[0:25]
         for post in post_qs:
             post.title = delete_tags(post.title)
             post.lead = '<![CDATA[{}]]>'.format(delete_tags(post.lead))
@@ -293,7 +293,7 @@ class YandexDzenRss(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(YandexDzenRss, self).get_context_data(**kwargs)
-        post_qs = Post.objects.filter(date_post__lte=timezone.now()).order_by('-date_post')[0:25]
+        post_qs = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')[0:25]
         for post in post_qs:
             post.title = delete_tags(post.title)
             post.lead = '<![CDATA[{}]]>'.format(delete_tags(post.lead))
@@ -319,7 +319,7 @@ class YandexTurboRss(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(YandexTurboRss, self).get_context_data(**kwargs)
-        post_qs = Post.objects.filter(date_post__lte=timezone.now()).order_by('-date_post')[0:5]
+        post_qs = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('date_post')[0:3]
         for post in post_qs:
             post.text = '<h1>{}</h1> <img src="/media/{}"> {}'.format(
                 post.title, post.picture, post.text,

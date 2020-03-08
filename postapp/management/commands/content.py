@@ -1,7 +1,6 @@
 import requests
 from django.core.management import BaseCommand
 from newsproject import settings
-
 from postapp.models import Post
 
 
