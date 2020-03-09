@@ -205,13 +205,13 @@ class Person(models.Model):
     person_foto = models.CharField(max_length=200, blank=True, null=False)
     person_clean_url = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.person_status
+
     class Meta:
         verbose_name = 'person_status'
         verbose_name_plural = 'person_status'
         ordering = ['person_last_name']
-
-    def __str__(self):
-        return self.person_status
 
 
 class Site(models.Model):
