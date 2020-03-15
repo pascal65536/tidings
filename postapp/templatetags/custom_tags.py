@@ -12,7 +12,6 @@ def get_tags():
         deleted__isnull=True, date_post__lte=timezone.now()).values_list(
         'tags__name', 'tags__slug')
     tag_dct = cache.get('tag', {})
-    print(tag_dct)
     for tag in tag_typle:
         if tag[1] and '0' not in tag[1]:
             dct = tag_dct.setdefault(tag[1], {'name': tag[0], 'count': 0})
