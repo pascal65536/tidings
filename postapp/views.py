@@ -153,6 +153,12 @@ def post_detail(request, pk=None):
         'type': 'website',
     }
 
+    # import tomd
+    # from markdown import markdown
+    # md = tomd.convert(post.text)
+    # print(md)
+    # post.text = markdown(md)
+
     return render(
         request, 'postapp/post_detail.html',
         {
