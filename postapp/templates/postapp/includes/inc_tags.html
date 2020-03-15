@@ -1,33 +1,17 @@
-{% load static %}
+{% load custom_tags static %}
+{% get_tags as tags %}
 
 <div class="left-tags blog-tags">
   <div class="popular-tag left-side-tags left-blog">
-    <h4>popular tags</h4>
+    <h4>Популярные теги</h4>
     <ul>
-      <li>
-        <a href="#">Portfolio</a>
-      </li>
-      <li>
-        <a href="#">Project</a>
-      </li>
-      <li>
-        <a href="#">Design</a>
-      </li>
-      <li>
-        <a href="#">Website</a>
-      </li>
-      <li>
-        <a href="#">Joomla</a>
-      </li>
-      <li>
-        <a href="#">Html</a>
-      </li>
-      <li>
-        <a href="#">wordpress</a>
-      </li>
-      <li>
-        <a href="#">Masonry</a>
-      </li>
+      {% for slug, dct in tags.items  %}
+        {% if dct.count > 1 %}
+          <li>
+            <a href="{% url 'post_filter' %}?tag={{ slug }}">{{ dct.name }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
     </ul>
   </div>
 </div>

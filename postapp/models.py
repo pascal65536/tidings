@@ -1,59 +1,17 @@
 # coding=utf-8
 import os
-import uuid
-import textwrap
 from autoslug import AutoSlugField
-# from ckeditor.fields import RichTextField
+from ckeditor.fields import RichTextField
 from django.contrib.syndication.views import Feed
 from django.db import models
-from django.db.models import TextField
-from django.db.models.functions import datetime
 from PIL import Image, ImageDraw, ImageFont
 from taggit.managers import TaggableManager
-from newsproject.utils import cyr_lat, delete_tags
+from newsproject.utils import cyr_lat, delete_tags, latin_filename, opengraph
 from django.conf import settings
 from django.contrib.sitemaps import Sitemap
 from django.utils import timezone
 from django.urls import reverse
 from django.views.generic import TemplateView
-
-
-def latin_filename(instance, filename):
-    date_post = timezone.now()
-    f_folder = os.path.join('{:%Y/%m/%d}'.format(date_post))
-    salt = '{:%M%S}'.format(date_post)
-    part_of_name = filename.split(".")
-    f_name = cyr_lat(instance.title)
-    f_ext = cyr_lat(part_of_name[-1])
-    return format('{}/{}/{}_{}.{}'.format('blog_picture', f_folder, f_name, salt, f_ext))
-
-
-def opengraph(instance):
-    font_size = 36
-    height = 480
-    width = 640
-    background_color = (255, 255, 255)
-    font_color = (0, 0, 0)
-    text = instance.title
-    unicode_text = "\n".join(textwrap.wrap(text, width=30))
-    image = Image.new("RGB", (width, height), background_color)
-    draw = ImageDraw.Draw(image)
-    unicode_font = ImageFont.truetype("DejaVuSans.ttf", font_size)
-
-    text_width, text_height = draw.textsize(unicode_text, font=unicode_font)
-    text_top = (height - text_height) // 2
-    text_left = (width - text_width) // 2
-
-    draw.text((text_left, text_top), unicode_text, font=unicode_font, fill=font_color)
-
-    # Создадим путь и имя файла
-    directory = os.path.join(settings.MEDIA_ROOT, 'opengraph', 'post')
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    date_post = timezone.now()
-    filename = '{}.{}'.format(uuid.uuid4(), 'png')
-    image.save('{}/{}'.format(directory, filename))
-    return filename
 
 
 #     sidebar_cache = 'sidebar_cache.json'
@@ -93,7 +51,7 @@ class Charter(models.Model):
 class Post(models.Model):
     title = models.CharField(verbose_name='Заголовок поста', max_length=255)
     lead = models.TextField(verbose_name='Лидер-абзац', blank=True, null=True)
-    text = models.TextField(verbose_name='Тело поста')
+    text = RichTextField(config_name='default')
     charter = models.ForeignKey(Charter, blank=True, null=True, verbose_name='Раздел', on_delete=models.SET_NULL)
     date_post = models.DateTimeField(verbose_name='Дата начала публикации')
     picture = models.ImageField(verbose_name='Картинка для привлечения внимания', upload_to=latin_filename, blank=True, null=True)
