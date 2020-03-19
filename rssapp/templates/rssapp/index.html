@@ -1,0 +1,134 @@
+{% extends 'rssapp/base.html' %}
+{% load static %}
+{% load thumbnail %}
+
+{% block content %}
+<div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@l uk-grid-small uk-grid-divider" uk-height-match=".uk-card-body" uk-grid="">
+    {% for content in article_qs %}
+        <div class="uk-grid-margin {% if forloop.first %}uk-first-column{% endif %}" >
+            <div class="uk-card uk-card-primary uk-card-small">
+                <div class="uk-card-media-top">
+                    <img src="{{ content.pic|thumbnail_url:'horizontal' }}"
+                         data-src="{{ content.pic|thumbnail_url:'horizontal' }}"
+                         width="640" height="480" uk-img>
+                </div>
+                <div class="uk-card-body">
+                    <h3 class="uk-card-title">{{ content.title }}</h3>
+                    <p>{{ content.body }}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+    <div class="uk-section uk-section-secondary">
+        <div class="uk-container uk-container-small">
+            content.photo = ThumbnailerImageField.open(img_path)
+        </div>
+    </div>
+
+    <div class="uk-card uk-card-primary uk-card-small">
+        <div class="uk-card-media-top">
+            <img src="{{ content.pic|thumbnail_url:'horizontal' }}">
+        </div>
+        <div class="uk-card-body">
+            <h3 class="uk-card-title">{{ content.title }}</h3>
+            <p>{{ content.body }}</p>
+        </div>
+    </div>
+
+    <div class="uk-card-footer">
+        <a class="uk-button uk-button-default " href="#">Ссылка</a>
+    </div>
+
+    <div class="uk-first-column">
+        <div class="uk-card uk-card-default">
+            <div class="uk-card-media-top">
+                <img data-src="/images/light-s.jpg" data-width="1000" data-height="667" alt="UIkit cards" uk-img="" src="https://3uikit.ru/images/light-s.jpg">
+            </div>
+            <div class="uk-card-body">
+                <h3 class="uk-card-title">Заголовок</h3>
+                <p>Есть много вариантов Lorem Ipsum, но большинство из них имеет не всегда приемлемые модификации, например, юмористические вставки или слова, которые даже отдалённо не напоминают латынь.</p>
+
+            </div>
+            <div class="uk-card-footer">
+                <a class="uk-button uk-button-default " href="#">Ссылка</a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="uk-card uk-card-default">
+            <div class="uk-card-media-top">
+                <img data-src="/images/light-s.jpg" data-width="1000" data-height="667" alt="UIkit cards" uk-img="" src="https://3uikit.ru/images/light-s.jpg">
+            </div>
+            <div class="uk-card-body" style="min-height: 245.6px;">
+                <h3 class="uk-card-title">Заголовок</h3>
+                <p>Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться.</p>
+
+            </div>
+            <div class="uk-card-footer">
+                <a class="uk-button uk-button-default " href="#">Ссылка</a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="uk-card uk-card-default">
+            <div class="uk-card-media-top">
+                <img data-src="/images/light-s.jpg" data-width="1000" data-height="667" alt="UIkit cards" uk-img="" src="https://3uikit.ru/images/light-s.jpg">
+            </div>
+            <div class="uk-card-body" style="min-height: 245.6px;">
+                <h3 class="uk-card-title">Заголовок</h3>
+                <p>Системы неслыханно быстрые ошибаются неслыханно быстро.</p>
+
+            </div>
+            <div class="uk-card-footer">
+                <a class="uk-button uk-button-default " href="#">Ссылка</a>
+            </div>
+        </div>
+    </div>
+    <div class="uk-grid-margin uk-first-column">
+        <div class="uk-card uk-card-default">
+            <div class="uk-card-media-top">
+                <img data-src="/images/light-s.jpg" data-width="1000" data-height="667" alt="UIkit cards" uk-img="" src="https://3uikit.ru/images/light-s.jpg">
+            </div>
+            <div class="uk-card-body">
+                <h3 class="uk-card-title">Заголовок</h3>
+                <p>Есть много вариантов Lorem Ipsum, но большинство из них имеет не всегда приемлемые модификации, например, юмористические вставки или слова, которые даже отдалённо не напоминают латынь.</p>
+
+            </div>
+            <div class="uk-card-footer">
+                <a class="uk-button uk-button-default " href="#">Ссылка</a>
+            </div>
+        </div>
+    </div>
+    <div class="uk-grid-margin">
+        <div class="uk-card uk-card-default">
+            <div class="uk-card-media-top">
+                <img data-src="/images/light-s.jpg" data-width="1000" data-height="667" alt="UIkit cards" uk-img="" src="https://3uikit.ru/images/light-s.jpg">
+            </div>
+            <div class="uk-card-body" style="min-height: 245.6px;">
+                <h3 class="uk-card-title">Заголовок</h3>
+                <p>Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться.</p>
+
+            </div>
+            <div class="uk-card-footer">
+                <a class="uk-button uk-button-default " href="#">Ссылка</a>
+            </div>
+        </div>
+    </div>
+    <div class="uk-grid-margin">
+        <div class="uk-card uk-card-default">
+            <div class="uk-card-media-top">
+                <img data-src="/images/light-s.jpg" data-width="1000" data-height="667" alt="UIkit cards" uk-img="" src="https://3uikit.ru/images/light-s.jpg">
+            </div>
+            <div class="uk-card-body" style="min-height: 245.6px;">
+                <h3 class="uk-card-title">Заголовок</h3>
+                <p>Системы неслыханно быстрые ошибаются неслыханно быстро.</p>
+
+            </div>
+            <div class="uk-card-footer">
+                <a class="uk-button uk-button-default " href="#">Ссылка</a>
+            </div>
+        </div>
+    </div>
