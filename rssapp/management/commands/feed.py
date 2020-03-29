@@ -48,6 +48,12 @@ def get_pic(text):
 class Command(BaseCommand):
     def handle(self, *args, **options):
         feed_lst = [
+            'https://www.sparkfun.com/feeds/news',
+            'https://hackaday.com/blog/feed/',
+            'https://www.open-electronics.org/feed/rss/',
+            'https://feeds2.feedburner.com/EmbeddedProjectsFromAroundTheWeb',
+            'https://blog.adafruit.com/feed/',
+            'https://blog.arduino.cc/feed/',
             'https://www.techradar.com/rss',
             'https://technabob.com/blog/feed',
             'https://kotaku.com/rss',
