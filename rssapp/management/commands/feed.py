@@ -15,23 +15,8 @@ def get_clean_text(details):
     """
     Очистим html от тегов
     """
-    soup = BeautifulSoup(details)
+    soup = BeautifulSoup(details, features="lxml")
     return soup.get_text().strip()
-
-
-def dehtmlify(body):
-    """
-    HTML в MarkDown внезапно
-    """
-    html = html2text.HTML2Text()
-    html.body_width = 0
-
-    try:
-        body = html.handle(body.replace("\r\n", "<br/>"))
-        body = re.sub(r"^(\s*\n){2,}", "\n", body, flags=re.MULTILINE)
-    except:
-        pass
-    return body
 
 
 def get_pic(text):
