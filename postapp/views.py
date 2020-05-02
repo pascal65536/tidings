@@ -1,9 +1,10 @@
 import datetime
 import re
+import requests
 
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from postapp.form import SearchForm, PostForm
 from postapp.models import Post, Charter, Site
@@ -133,7 +134,10 @@ def post_list(request, slug=None):
 
 def post_detail(request, pk=None):
     try:
-        post = Post.objects.get(pk=pk)
+        fields = {'pk': pk}
+        if not request.user.is_staff:
+            fields.update({'deleted__isnull': True, 'date_post__lte': timezone.now()})
+        post = Post.objects.get(**fields)
     except Post.DoesNotExist:
         raise Http404
 
@@ -245,3 +249,23 @@ def post_edit(request, pk=None):
 
 def robots(request):
     return render(request, 'robots.txt', content_type="text/plain")
+
+
+@login_required
+def post_content(request, pk=None):
+    post = get_object_or_404(Post, pk=pk)
+    text = post.text
+    url = 'https://content-watch.ru/public/api/'
+
+    data = {
+        'action': 'CHECK_TEXT',
+        'key': settings.API_KEY,
+        'test': 0,
+        'text': text
+    }
+    req = requests.post(url, data=data)
+    req.encoding = 'utf-8'
+    result_dct = req.json()
+    post.title = f"{post.title}|{result_dct.get('percent')}"
+    post.save()
+    return redirect(post_detail, post.pk)

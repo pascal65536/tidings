@@ -4,7 +4,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 
-from postapp.views import post_index, post_detail, post_list, post_filter, robots, post_edit
+from postapp.views import post_index, post_detail, post_list, post_filter, robots, post_edit, post_content
 from postapp.models import PostFeed, PostSitemap, YandexRss, YandexDzenRss, YandexTurboRss
 
 from rssapp.views import show_content, news_detail
@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^list/(?P<slug>\w+)/$', post_list, name='post_list'),
     url(r'^edit/(?P<pk>\d+)/$', post_edit, name='post_edit'),
     url(r'^detail/(?P<pk>\d+)/$', post_detail, name='post_detail'),
+    url(r'^content/(?P<pk>\d+)/$', post_content, name='post_content'),
     url(r'^filter/$', post_filter, name='post_filter'),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {'blog': PostSitemap}}),
     url(r'^feed/$', PostFeed()),
