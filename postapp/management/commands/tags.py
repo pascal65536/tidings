@@ -26,16 +26,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         plain_list = set()
-        with open('/home/pascal65536/Загрузки/word_rus.txt', 'r') as fl:
+        with open('_dictionary/word_rus.txt', 'r') as fl:
             for line in fl:
                 plain_list.add(line.strip().upper())
-
-        exclude_word = ['ТОЙ']
-
         alphabet = 'йцукенгшщзхъёфывапролджэячсмитьбю'
         backspase = ['    ', '   ', '  ']
         post_qs = Post.objects.all().exclude(
-            title__startswith='.').exclude(deleted=None)
+            title__startswith='.').exclude(deleted=None)[0:1]
         for post in post_qs:
             text = get_clean_text(post.text)
             new_text = ''
