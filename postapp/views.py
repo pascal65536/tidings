@@ -176,7 +176,8 @@ def post_detail(request, pk=None):
 
 
 def post_filter(request):
-    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')
+    post_queryset = Post.objects.filter(
+        deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')
     if request.user.is_staff:
         post_queryset = Post.objects.filter().order_by('-date_post')
     charter = Charter.objects.filter(order__gt=0).order_by('order')
@@ -199,6 +200,12 @@ def post_filter(request):
         post_queryset = post_queryset.filter(tags__in=[tag])
         head_name = 'Все материалы по тегу «%s»:' % tag.name
         meta_title = 'Все материалы по тегу «%s» | %s' % (tag.name, sitename)
+
+    date = request.GET.get('date', None)
+    if date:
+        post_queryset = post_queryset.filter(date_post__startswith=date)
+        head_name = 'Все материалы за дату «%s»:' % date
+        meta_title = 'Все материалы за дату «%s» | %s' % (date, sitename)
 
     setting = get_seo(type='filter', post=post_queryset[0])  # SEO штуки и настройки для сайта
     if meta_title:

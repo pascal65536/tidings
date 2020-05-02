@@ -6,7 +6,7 @@
     <h4>Популярные теги</h4>
     <ul>
       {% for slug, dct in tags.items  %}
-        {% if dct.count > 1 %}
+        {% if dct.count > 2 %}
           <li>
             <a href="{% url 'post_filter' %}?tag={{ slug }}">{{ dct.name }}</a>
           </li>
