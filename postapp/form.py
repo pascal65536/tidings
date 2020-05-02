@@ -18,11 +18,6 @@ class PostForm(forms.ModelForm):
     """
     Форма редактирования
     """
-    # text = RichTextFormField()
-
     class Meta:
         model = Post
-        fields = [
-            'title', 'lead', 'text', 'charter', 'date_post', 'picture', 'og_picture',
-            'tags', 'deleted',  'meta_title', 'meta_keywords', 'meta_description',
-                  ]
+        exclude = []

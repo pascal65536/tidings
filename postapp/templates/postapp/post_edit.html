@@ -1,12 +1,12 @@
 {% extends 'postapp/base_edit.html' %}
 {% load tagging_tags static %}
+{% load bootstrap %}
+
 {% block content %}
 
 <form action="." method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <table>
-        {{ form }}
-    </table>
+    {{ form }}
     <button type="submit" class="btn btn-primary">Сохранить</button>
 </form>
 

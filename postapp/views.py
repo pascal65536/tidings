@@ -173,6 +173,8 @@ def post_detail(request, pk=None):
 
 def post_filter(request):
     post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')
+    if request.user.is_staff:
+        post_queryset = Post.objects.filter().order_by('-date_post')
     charter = Charter.objects.filter(order__gt=0).order_by('order')
 
     sitename = Site.objects.get(name='sitename')
