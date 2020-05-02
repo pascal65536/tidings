@@ -31,8 +31,9 @@ class Command(BaseCommand):
                 plain_list.add(line.strip().upper())
         alphabet = 'йцукенгшщзхъёфывапролджэячсмитьбю'
         backspase = ['    ', '   ', '  ']
-        post_qs = Post.objects.all().exclude(
-            title__startswith='.').exclude(deleted=None)[0:1]
+        post_qs = Post.objects.all().order_by('-id')
+        # post_qs = Post.objects.all().exclude(
+        #     title__startswith='.').exclude(deleted=None)[0:1]
         for post in post_qs:
             text = get_clean_text(post.text)
             new_text = ''
