@@ -153,6 +153,7 @@ def post_list(request, slug=None):
             'post_queryset': post_queryset,  # Все выводимые записи
             'post': post,  # Единственная запись, по которой определим рубрику
             'charter': charter,  # Пункты меню
+            'recent_post': get_recent_post(post_queryset.values_list('id', flat=True)),
             'og': og,  # Open Graph
             'setting': get_seo(type='list', post=post),  # SEO штуки и настройки для сайта
         }
