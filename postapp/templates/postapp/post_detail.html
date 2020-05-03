@@ -5,22 +5,54 @@
 <div class="blog-page area-padding">
     <div class="container">
       <div class="row">
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-          <div class="page-head-blog">
-            <div class="single-blog-page">
-              {% include 'postapp/includes/inc_search.html' %}
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="accordion">
+          <div class="card">
+              <div class="page-head-blog">
+                  <div class="single-blog-page">
+                    {% include 'postapp/includes/inc_search.html' %}
+                  </div>
+              </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                 <h4>{{ setting.name_recent_post }}</h4>
+                </button>
+              </h5>
             </div>
-            <div class="single-blog-page">
-              {% include 'postapp/includes/inc_recent.html' %}
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+              <div class="card-body">
+                {% include 'postapp/includes/inc_recent.html' %}
+              </div>
             </div>
-            <div class="single-blog-page">
-{#              {% include 'postapp/includes/inc_categories.html' %} #}
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    <h4>Архив публикаций</h4>
+                </button>
+              </h5>
             </div>
-            <div class="single-blog-page">
-               {% include 'postapp/includes/inc_archive.html' %}
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+              <div class="card-body">
+                {% include 'postapp/includes/inc_archive.html' %}
+              </div>
             </div>
-            <div class="single-blog-page">
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingThree">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    <h4>Популярные теги</h4>
+                </button>
+              </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
                 {% include 'postapp/includes/inc_tags.html' %}
+              </div>
             </div>
           </div>
         </div>

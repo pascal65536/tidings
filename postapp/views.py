@@ -185,6 +185,7 @@ def post_filter(request):
     sitename = Site.objects.get(name='sitename')
     head_name = None
     meta_title = None
+
     form = SearchForm(data=request.POST or None)
     if form.is_valid():
         cd = form.cleaned_data
@@ -207,9 +208,11 @@ def post_filter(request):
         head_name = 'Все материалы за дату «%s»:' % date
         meta_title = 'Все материалы за дату «%s» | %s' % (date, sitename)
 
-    setting = get_seo(type='filter', post=post_queryset[0])  # SEO штуки и настройки для сайта
-    if meta_title:
-        setting['meta_title'] = meta_title
+    setting = get_seo()
+    if post_queryset:
+        setting = get_seo(type='filter', post=post_queryset[0])  # SEO штуки и настройки для сайта
+        if meta_title:
+            setting['meta_title'] = meta_title
 
     return render(
         request, 'postapp/post_filter.html',
