@@ -32,5 +32,3 @@ def get_calendar():
         date_dct.setdefault(date_post_slug, {'name': date_post, 'count': 0})
         date_dct[date_post_slug]['count'] += 1
     return date_dct
-
-

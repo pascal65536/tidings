@@ -73,12 +73,43 @@ def get_seo(type=None, post=None):
     return seo_dict
 
 
+def get_recent_post(exclude_post_idx, post_id=None, user=None):
+    len_recent_post = int(Site.objects.get(name='len_recent_post').value)
+    recent_post = Post.objects.filter(
+        deleted__isnull=True, date_post__lte=timezone.now())
+
+    if post_id:
+        recent_post = recent_post.exclude(
+            id__in=[post_id]).order_by('-date_post')[0:len_recent_post]
+        if user and user.is_staff:
+            post_view = Post.objects.get(id=post_id)
+            post_dct = dict()
+            for tag in post_view.tags.all():
+                post_idx = Post.objects.filter(tags__in=[tag]).values_list('id', flat=True)
+                for pst in post_idx:
+                    post_dct.setdefault(pst, 0)
+                    post_dct[pst] += 1
+
+            idx_lst = list()
+            for k, v in post_dct.items():
+                if not k == post_id and v in sorted(post_dct.values())[-3:]:
+                    idx_lst.append(k)
+
+            recent_post = Post.objects.filter(id__in=idx_lst)
+            return recent_post
+
+        return recent_post
+
+    recent_post = recent_post.exclude(
+        id__in=exclude_post_idx).order_by('-date_post')[0:len_recent_post]
+    return recent_post
+
+
 def post_index(request):
     main_post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')[0:4]
     main_post_idx = set(main_post_queryset.values_list('id', flat=True))
     post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).exclude(id__in=main_post_idx).order_by('-date_post')[0:12]
-    post_idx = set(post_queryset.values_list('id', flat=True))
-    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).exclude(id__in=post_idx).exclude(id__in=main_post_idx).order_by('-date_post')[0:6]
+    exclude_post_idx = set(post_queryset.values_list('id', flat=True)) | main_post_idx
     charter = Charter.objects.filter(order__gt=0).order_by('order')
 
     return render(
@@ -86,7 +117,7 @@ def post_index(request):
         {
             'main_post_queryset': main_post_queryset,
             'post_queryset': post_queryset,  # Все выводимые записи
-            'recent_post': recent_post,
+            'recent_post': get_recent_post(exclude_post_idx),
             'charter': charter,  # Пункты меню
             'setting': get_seo(type='index'),  # SEO штуки и настройки для сайта
         }
@@ -101,9 +132,6 @@ def post_list(request, slug=None):
     except Charter.DoesNotExist:
         raise Http404
 
-    len_recent_post = int(Site.objects.get(name='len_recent_post').value)
-    post_idx = set(post_queryset.values_list('id', flat=True))
-    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).exclude(id__in=post_idx).order_by('-date_post')[0:len_recent_post]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
     post = None
     if len(post_queryset) > 0:
@@ -124,7 +152,6 @@ def post_list(request, slug=None):
         {
             'post_queryset': post_queryset,  # Все выводимые записи
             'post': post,  # Единственная запись, по которой определим рубрику
-            'recent_post': recent_post,  # Колонка записей
             'charter': charter,  # Пункты меню
             'og': og,  # Open Graph
             'setting': get_seo(type='list', post=post),  # SEO штуки и настройки для сайта
@@ -141,8 +168,6 @@ def post_detail(request, pk=None):
     except Post.DoesNotExist:
         raise Http404
 
-    len_recent_post = int(Site.objects.get(name='len_recent_post').value)
-    recent_post = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).exclude(id=post.id).order_by('-date_post')[0:len_recent_post]
     charter = Charter.objects.filter(order__gt=0).order_by('order')
 
     # Для opengrapf
@@ -167,7 +192,7 @@ def post_detail(request, pk=None):
         request, 'postapp/post_detail.html',
         {
             'post': post,  # Единственная запись
-            'recent_post': recent_post,  # Колонка записей
+            'recent_post': get_recent_post(set(), post_id=post.id, user=request.user),
             'charter': charter,  # Пункты меню
             'og': og,  # Open Graph
             'setting': get_seo(type='detail', post=post),  # SEO штуки и настройки для сайта
