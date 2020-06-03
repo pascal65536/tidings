@@ -3,8 +3,10 @@ import re
 import textwrap
 from django.conf import settings
 from PIL import Image, ImageDraw, ImageFont
+from django.template import RequestContext
 from django.utils import timezone
 import uuid
+from rssapp.management.commands.feed import get_clean_text
 
 
 cyr2lat = {
@@ -150,3 +152,50 @@ def opengraph(instance):
     filename = '{}.{}'.format(uuid.uuid4(), 'png')
     image.save('{}/{}'.format(directory, filename))
     return filename
+
+
+def save_file(obj):
+    file_uid = str(uuid.uuid4())
+    relative_paths = os.path.join(settings.MEDIA_URL, file_uid)
+
+    file_obj = os.path.join(relative_paths, obj.name)
+
+    if not os.path.exists(relative_paths):
+        os.makedirs(relative_paths)
+
+    obj.seek(0)
+    with open(file_obj, 'wb') as open_file:
+        bufsize = 1024 * 1024  # 1 Мб
+        while True:
+            buf = obj.read(bufsize)
+            if not buf:
+                break
+            open_file.write(buf)
+
+    file_name = ''
+    return file_name
+
+
+def get_tags(post_qs):
+    tags_lst = list()
+    plain_list = set()
+    with open('_dictionary/word_rus.txt', 'r') as fl:
+        for line in fl:
+            plain_list.add(line.strip().upper())
+    alphabet = 'йцукенгшщзхъёфывапролджэячсмитьбю'
+    backspase = ['    ', '   ', '  ']
+    for post in post_qs:
+        text = get_clean_text(post.text)
+        new_text = ''
+        for t in text:
+            new_text += t if t in alphabet or t in alphabet.upper() else ' '
+
+        for bs in backspase:
+            new_text = new_text.replace(bs, ' ')
+
+        tags = plain_list & set(new_text.upper().split(' '))
+
+        for tag in tags:
+            tags_lst.append(tag.capitalize())
+
+    return tags_lst

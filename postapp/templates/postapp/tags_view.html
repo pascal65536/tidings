@@ -1,0 +1,41 @@
+{% extends "base_admin.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <div class="container">
+        {% pages tags_qs 50 'tags_paged' %}
+        {% if message %}
+            <h2>
+            {{ message }}
+            </h2>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    {% for tags in tags_paged %}
+    <div class="mb-4 media border rounded-0">
+        <div class="media-body">
+            <h5 class="mt-0">
+                <a href="{% url 'post_filter' %}?tag={{ tags.slug }}">
+                    {{ tags.name }}
+                </a>
+                <span class="btn-sm">{{ tags.slug }}</span>
+            </h5>
+
+            <p>
+                <a class="btn btn-secondary btn-sm" href="{% url 'tags_edit' tags.id %}" role="button">Edit &raquo;</a>
+            </p>
+      </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="jumbotron">
+    <div class="container">
+        {% pages tags_qs 50 'tags_paged' %}
+    </div>
+</div>
+
+{% endblock %}

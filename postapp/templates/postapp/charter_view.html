@@ -1,0 +1,49 @@
+{% extends "base_admin.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <div class="container">
+        {% pages charter_qs 50 'charter_paged' %}
+        {% if message %}
+            <h2>
+            {{ message }}
+            </h2>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    {% for charter in charter_paged %}
+    <div class="mb-4 media border {% if charter.deleted %}border-danger{% endif %} rounded-0">
+        {% if charter.picture %}
+        <img width="200px" src="//krasnoarsk.ru/media/{{ charter.picture }}" alt="{{ charter.title }}" class="align-self-start mr-3" />
+        {% endif %}
+        <div class="media-body">
+            <h5 class="mt-0">
+                <a href="{% url 'post_list' charter.slug %}" target="_blank">
+                    {{ charter.title }}
+                    <span class="fa-stack">
+                        <span class="far fa-circle fa-stack-2x"></span>
+                        <strong class="fa-stack-1x">
+                            {{ charter.order }}
+                        </strong>
+                    </span>
+                </a>
+            </h5>
+            <p>{{ charter.lead }}</p>
+            <p>
+                <a class="btn btn-secondary btn-sm" href="{% url 'charter_edit' charter.id %}" role="button">Edit &raquo;</a>
+            </p>
+      </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="jumbotron">
+    <div class="container">
+        {% pages charter_qs 50 'charter_paged' %}
+    </div>
+</div>
+
+{% endblock %}

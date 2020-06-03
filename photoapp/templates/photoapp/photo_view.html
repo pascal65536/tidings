@@ -1,0 +1,48 @@
+{% extends "base_admin.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <div class="container">
+        {% pages photo_qs 50 'photo_paged' %}
+        {% if message %}
+            <h2>
+            {{ message }}
+            </h2>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-4">
+    {% for photo in photo_paged %}
+    <div class="col mb-3">
+        <div class="card h-100">
+            <img src="//krasnoarsk.ru/media/{{ photo.picture }}" alt="{{ photo.title }}" class="card-img-top" />
+            <br>
+            <img src="/media/{{ photo.picture }}" alt="{{ photo.title }}" class="card-img-top" />
+            <div class="card-body">
+                <h5 class="card-title">{{ photo.title }}</h5>
+                {% if photo.description %}
+                    <p>{{ photo.description }}</p>
+                {% endif %}
+                <p>
+                    {% for tag in photo.tags.all %}
+                        <a href="{% url 'photo_view' %}?tag={{ tag.slug }}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-secondary btn-sm" href="{% url 'photo_edit' photo.id %}" role="button">Edit &raquo;</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="jumbotron">
+    <div class="container">
+        {% pages photo_qs 50 'photo_paged' %}
+    </div>
+</div>
+
+{% endblock %}

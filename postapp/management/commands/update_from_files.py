@@ -57,8 +57,6 @@ def convert_rtf(file_name):
             continue
         else:
             ret += '<p><b>%s</b></p>' % clean_pl
-
-    # import ipdb; ipdb.set_trace()
     return title, lead, ret
 
 
@@ -83,10 +81,6 @@ class Command(BaseCommand):
                         if esc in pth:
                             pth.remove(esc)
                     path = '%s/%s' % (tr[0], txt)
-                    print(path)
-                    print('=' * 80)
-
-                    # import ipdb; ipdb.set_trace()
 
                     title, lead, html = convert_rtf(path)
 
@@ -109,12 +103,5 @@ class Command(BaseCommand):
 
                     for tags in pth:
                         post.tags.add(tags)
-                    print(pth)
-                    print(title)
-                    print(lead)
-                    print('-' * 80)
-
-                    # import ipdb; ipdb.set_trace()
                     count += 1
-
         print(count)

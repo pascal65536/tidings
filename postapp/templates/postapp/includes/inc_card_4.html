@@ -8,8 +8,8 @@
           <div class="single-blog">
             <div class="single-blog-img">
                 <a href="{% url 'post_detail' post.id %}">
-                    {% if post.picture %}
-                    <img src="/media/{{ post.picture }}" alt="{{ post.title }}" />
+                    {% if post.photo.picture %}
+                    <img src="//krasnoarsk.ru/media/{{ post.photo_picture }}" alt="{{ post.title }}" />
                     {% endif %}
                 </a>
             </div>

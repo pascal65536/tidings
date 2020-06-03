@@ -64,7 +64,7 @@
               <!-- single-blog start -->
               <article class="blog-post-wrapper">
                 <div class="post-thumbnail">
-                  <img src="/media/{{ post.picture }}" alt="{{ post.title }}" />
+                  <img src="//krasnoarsk.ru/media/{{ post.photo.picture }}" alt="{{ post.title }}" />
                 </div>
                 <div class="post-information">
                     <h2>
@@ -87,6 +87,7 @@
                         <span>
                             {% if request.user.is_staff %}
                                 <a href="/admin/postapp/post/{{ post.id }}/change/"><i class="fas fa-file-alt"></i></a>&nbsp;
+                                <a href="{% url 'post_edit' post.id %}"><i class="fas fa-file-alt"></i></a>&nbsp;
                                 <a href="{% url 'post_content' post.id %}"><i class="fas fa-check-circle"></i></a>
                             {% endif %}
                         </span>

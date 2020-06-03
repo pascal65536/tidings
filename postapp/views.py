@@ -1,12 +1,17 @@
 import datetime
 import re
 import requests
+from django.contrib.admin.views.decorators import staff_member_required
 
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
-from postapp.form import SearchForm, PostForm
+from django.template import loader, Context
+
+from newsproject.utils import get_tags, cyr_lat
+from photoapp.models import Photo
+from postapp.form import SearchForm, PostForm, CharterForm, TagForm
 from postapp.models import Post, Charter, Site
 from taggit.models import Tag
 from django.conf import settings
@@ -115,9 +120,9 @@ def post_index(request):
     return render(
         request, 'postapp/post_index.html',
         {
-            'main_post_queryset': main_post_queryset,
-            'post_queryset': post_queryset,  # Все выводимые записи
-            'recent_post': get_recent_post(exclude_post_idx),
+            'main_post_queryset': Post.update_qs(main_post_queryset),
+            'post_queryset': Post.update_qs(post_queryset),  # Все выводимые записи
+            'recent_post': Post.update_qs(get_recent_post(exclude_post_idx)),
             'charter': charter,  # Пункты меню
             'setting': get_seo(type='index'),  # SEO штуки и настройки для сайта
         }
@@ -127,7 +132,10 @@ def post_index(request):
 def post_list(request, slug=None):
     post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now())
     try:
-        charter_slug = Charter.objects.get(slug=slug)
+        charter_qs = Charter.objects.filter(slug=slug)
+        if len(charter_qs) != 1:
+            raise Http404
+        charter_slug = charter_qs[0]
         post_queryset = post_queryset.filter(charter=charter_slug)
     except Charter.DoesNotExist:
         raise Http404
@@ -139,11 +147,18 @@ def post_list(request, slug=None):
 
     # Для opengrapf
     sitename = Site.objects.get(name='sitename')
-    meta_title = '%s | %s' % (post.charter.title, sitename)
+    meta_title = None
+    description = None
+    image = None
+    if post and post.charter:
+        meta_title = '%s | %s' % (post.charter.title, sitename)
+        description = post.charter.lead
+        image = post.charter.og_picture
+
     og = {
         'title': meta_title,
-        'description': post.charter.lead,
-        'image': post.charter.og_picture,
+        'description': description,
+        'image': image,
         'type': 'website',
     }
 
@@ -183,17 +198,11 @@ def post_detail(request, pk=None):
         'type': 'website',
     }
 
-    # import tomd
-    # from markdown import markdown
-    # md = tomd.convert(post.text)
-    # print(md)
-    # post.text = markdown(md)
-
     return render(
         request, 'postapp/post_detail.html',
         {
             'post': post,  # Единственная запись
-            'recent_post': get_recent_post(set(), post_id=post.id, user=request.user),
+            'recent_post': Post.update_qs(get_recent_post(set(), post_id=post.id, user=request.user)),
             'charter': charter,  # Пункты меню
             'og': og,  # Open Graph
             'setting': get_seo(type='detail', post=post),  # SEO штуки и настройки для сайта
@@ -243,7 +252,7 @@ def post_filter(request):
     return render(
         request, 'postapp/post_filter.html',
         {
-            'post_queryset': post_queryset,  # Все выводимые записи
+            'post_queryset': Post.update_qs(post_queryset),  # Все выводимые записи
             'charter': charter,
             'head_name': head_name,
             'setting': setting,
@@ -251,36 +260,122 @@ def post_filter(request):
     )
 
 
-@login_required
-def post_edit(request, pk=None):
+def get_images(post):
+    tags_set = set(post.tags.all().values_list('slug', flat=True))
+    photo_qs = Photo.objects.filter(tags__slug__in=tags_set)
+    photo_dct = dict()
+    for photo in photo_qs:
+        photo_set = set(photo.tags.all().values_list('name', flat=True))
+        post_set = set(post.tags.all().values_list('name', flat=True))
+        if len(photo_set & post_set) > 2:
+            pd = photo_dct.setdefault(photo, {})
+            pd.update({
+                'len': len(photo_set & post_set),
+                'set': photo_set & post_set,
+            })
 
-    form = PostForm(data=request.POST or None)
+    list_of_sorted_pairs = list()
+    for photo in photo_dct:
+
+        list_of_sorted_pairs.append((photo.id, photo, photo_dct[photo]['set']))
+
+    return list_of_sorted_pairs
+
+
+@login_required(login_url='/login/')
+@staff_member_required
+def post_edit(request, pk=None):
+    """
+    Редактирование поста
+    """
+    instance = None
+    if pk:
+        instance = get_object_or_404(Post, pk=pk)
+        post_qs = Post.objects.filter(pk=instance.id)
+        tags_lst = get_tags(post_qs)
+        for tags in tags_lst:
+            instance.tags.add(tags)
+        instance = get_object_or_404(Post, pk=pk)
+
+    images_list = [('', '---')]
+    if instance:
+        picture = None
+        if instance.photo and instance.photo.picture and instance.photo.picture.name:
+            picture = instance.photo.picture.name
+        photo_obj = Photo.objects.filter(picture=picture)
+        if photo_obj.count() == 1:
+            images_list.append((photo_obj[0].id, photo_obj[0].title),)
+        photo_qs = Photo.objects.all().exclude(picture=picture).order_by('-changed')[:10]
+        for photo in photo_qs:
+            images_list.append((photo.id, photo.title), )
+
+    form = PostForm(data=request.POST or None, files=request.FILES or None, instance=instance, images_list=images_list)
     if request.method == 'POST' and form.is_valid():
         cd = form.cleaned_data
-        if request.FILES:
-            cd.update({'picture': request.FILES.get('picture', None)})
-        else:
-            cd['picture'] = Post.objects.get(id=pk).picture
+        post = form.save(commit=False)
+        post.picture = None
+        post.save()
+        # Нельзя добавить теги к несуществующему объекту.
+        post.tags.clear()
+        for tags in cd.get('tags'):
+            post.tags.add(tags)
 
-        try:
-            post, _ = Post.objects.update_or_create(id=pk, defaults=cd)
-            form = PostForm(instance=post)
-        except Post.MultipleObjectsReturned:
-            raise Http404
+        return redirect(post_view)
 
-    else:
-        try:
-            form = PostForm(instance=Post.objects.get(pk=pk))
-        except Post.DoesNotExist:
-            raise Http404
+    return render(request, "postapp/post_edit.html", {
+        'form': form,
+        'instance': instance,
+        'active': 'post',
+    })
 
-    return render(
-        request, 'postapp/post_edit.html',
-        {
-            'form': form.as_table(),
-            'pk': pk,
-        }
-    )
+
+@login_required(login_url='/login/')
+@staff_member_required
+def post_view(request):
+    """
+    Галерея постов
+    """
+    message = None
+    filter_dct = dict()
+    slug_tag = request.GET.get('tag')
+    if slug_tag:
+        filter_dct.update(
+            {'tags__slug': slug_tag}
+        )
+        tag_obj = get_object_or_404(Tag, slug=slug_tag)
+        message = f'Все посты по тегу "{tag_obj}"'
+
+    slug = request.GET.get('charter')
+    if slug:
+        charter = Charter.objects.get(slug=slug)
+        filter_dct.update(
+            {'charter': charter}
+        )
+        message = f'Все посты в категории "{charter.title}"'
+
+    date = request.GET.get('date')
+    if date:
+        filter_dct.update(
+            {'date_post__startswith': date}
+        )
+        message = f'Все материалы за дату "{date}"'
+
+    post_qs = Post.objects.filter(**filter_dct)
+    query = request.GET.get('query')
+    if query:
+        query = query.strip()
+        post_qs = post_qs.filter(
+            Q(title__icontains=query) |
+            Q(text__icontains=query) |
+            Q(lead__icontains=query)
+        )
+        message = f'Все посты по поиску "{query}"'
+
+    return render(request, "postapp/post_view.html", {
+        'post_qs': post_qs.order_by('deleted', '-changed'),
+        'active': 'post',
+        'message': message,
+    })
 
 
 def robots(request):
@@ -305,3 +400,100 @@ def post_content(request, pk=None):
     post.title = f"{post.title}|{result_dct.get('percent')}"
     post.save()
     return redirect(post_detail, post.pk)
+
+
+@login_required(login_url='/login/')
+@staff_member_required
+def charter_view(request):
+    """
+    Галерея категорий
+    """
+    message = None
+    filter_dct = dict()
+    charter_qs = Charter.objects.filter(**filter_dct)
+    query = request.GET.get('query')
+    if query:
+        query = query.strip()
+        charter_qs = charter_qs.filter(
+            Q(title__icontains=query) |
+            Q(lead__icontains=query)
+        )
+        message = f'Все категории по поиску "{query}"'
+
+    return render(request, "postapp/charter_view.html", {
+        'charter_qs': charter_qs.order_by('-order'),
+        'active': 'charter',
+        'message': message,
+    })
+
+
+@login_required(login_url='/login/')
+@staff_member_required
+def charter_edit(request, pk=None):
+    instance = None
+    if pk:
+        instance = get_object_or_404(Charter, pk=pk)
+    form = CharterForm(data=request.POST or None, files=request.FILES or None, instance=instance)
+    if request.method == 'POST' and form.is_valid():
+        cd = form.cleaned_data
+        charter = form.save(commit=False)
+        charter.slug = cyr_lat(cd['title'])
+        charter.save()
+        return redirect(charter_view)
+
+    return render(request, "postapp/charter_edit.html", {
+        'form': form,
+        'instance': instance,
+        'active': 'charter',
+    })
+
+
+def error404(request):
+    template = loader.get_template('404.htm')
+    context = Context({
+        'message': 'All: %s' % request,
+        })
+    return HttpResponse(content=template.render(context), content_type='text/html; charset=utf-8', status=404)
+
+
+@login_required(login_url='/login/')
+@staff_member_required
+def tags_view(request):
+    message = None
+    tags_qs = Tag.objects.all()
+    query = request.GET.get('query')
+    if query:
+        query = query.strip()
+        tags_qs = tags_qs.filter(
+            Q(name__icontains=query) |
+            Q(slug__icontains=query)
+        )
+        message = f'Все теги по поиску "{query}"'
+
+    return render(request, "postapp/tags_view.html", {
+        'tags_qs': tags_qs,
+        'active': 'tags',
+        'message': message,
+    })
+
+
+@login_required(login_url='/login/')
+@staff_member_required
+def tags_edit(request, pk=None):
+    """
+    Добавить или отредактировать баннер
+    """
+    tag = None
+    if pk:
+        tag = get_object_or_404(Tag, pk=pk)
+    form = TagForm(data=request.POST or None, files=request.FILES or None, instance=tag)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect(tags_view)
+
+    return render(request, "postapp/tags_edit.html", {
+        'form': form,
+        'tag': tag,
+        'active': 'tags',
+    })

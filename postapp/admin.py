@@ -14,7 +14,7 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ('charter', 'tags')
         }),
         ('Изображения', {
-            'fields': ('picture', )
+            'fields': ('picture', 'photo')
         }),
         ('Даты', {
             'fields': ('date_post', 'deleted')

@@ -1,0 +1,84 @@
+{% load bootstrap %}
+
+{# {% if field.errors %} error{% endif %}{% if field.field.required %} required{% endif %} #}
+    {% if field|is_hidden %}
+        {{ field }}
+    {% elif field|is_checkbox %}
+        <div class="form-group form-check">
+            {{ field }}
+            <label class="form-check-label" for="{{ field.auto_id }}">
+                {% if field.label %}<strong><small>{{ field.label }}</small></strong>{% endif %}
+            </label>
+
+            {% for error in field.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+
+            {% if field.help_text %}
+                <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+            {% endif %}
+        </div>
+    {% elif field|is_radio %}
+        {% if field.auto_id %}
+            <label class="" for="{{ field.auto_id }}">
+                {{ field.field.required|yesno:'<b>,'|safe }}
+                {{ field.label }}
+                {{ field.field.required|yesno:'* </b>,'|safe }}
+            </label>
+        {% endif %}
+
+        <div class="form-group">
+            {% for choice in field %}
+                <label class="radio">
+                    {{ choice.tag }}
+                    {{ choice.choice_label }}
+                </label>
+            {% endfor %}
+
+            {% for error in field.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+
+            {% if field.help_text %}
+                <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+            {% endif %}
+        </div>
+    {% elif field|is_textarea %}
+      <div class="form-group">
+            {% if field.auto_id %}
+                <label class="" for="{{ field.auto_id }}">
+                    {{ field.field.required|yesno:'<b>,'|safe }}
+                    {{ field.label }}
+                    {{ field.field.required|yesno:'* </b>,'|safe }}
+                </label>
+            {% endif %}
+            {{ field }}
+            {% for error in field.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+            {% if field.help_text %}
+                <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+            {% endif %}
+
+      </div>
+    {% else %}
+        {% if field.label %}
+            <label class="{% if field.errors %} text-danger {% endif %}" for="{{ field.auto_id }}">
+                {{ field.field.required|yesno:'<b>,'|safe }}
+                {{ field.label }}:
+                {{ field.field.required|yesno:'* </b>,'|safe }}
+            </label>
+        {% endif %}
+
+        <div class="form-group">
+            {{ field }}
+
+            {% for error in field.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+
+            {% if field.help_text %}
+                <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+            {% endif %}
+        </div>
+    {% endif %}
