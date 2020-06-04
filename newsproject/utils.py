@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import textwrap
@@ -178,23 +179,26 @@ def save_file(obj):
 def get_tags(post_qs):
     tags_lst = list()
     plain_list = set()
-    with open('dictionary/word_rus.txt', 'r') as fl:
-        for line in fl:
-            plain_list.add(line.strip().upper())
-    alphabet = 'йцукенгшщзхъёфывапролджэячсмитьбю'
-    backspase = ['    ', '   ', '  ']
-    for post in post_qs:
-        text = get_clean_text(post.text)
-        new_text = ''
-        for t in text:
-            new_text += t if t in alphabet or t in alphabet.upper() else ' '
-
-        for bs in backspase:
-            new_text = new_text.replace(bs, ' ')
-
-        tags = plain_list & set(new_text.upper().split(' '))
-
-        for tag in tags:
-            tags_lst.append(tag.capitalize())
+    category_lst = dict()
+    with open('dictionary/file_cache.json', 'w') as f:
+        json.dump(category_lst, f)
+    # with open('dictionary/word_rus.txt', 'r') as fl:
+    #     for line in fl:
+    #         plain_list.add(line.strip().upper())
+    # alphabet = 'йцукенгшщзхъёфывапролджэячсмитьбю'
+    # backspase = ['    ', '   ', '  ']
+    # for post in post_qs:
+    #     text = get_clean_text(post.text)
+    #     new_text = ''
+    #     for t in text:
+    #         new_text += t if t in alphabet or t in alphabet.upper() else ' '
+    #
+    #     for bs in backspase:
+    #         new_text = new_text.replace(bs, ' ')
+    #
+    #     tags = plain_list & set(new_text.upper().split(' '))
+    #
+    #     for tag in tags:
+    #         tags_lst.append(tag.capitalize())
 
     return tags_lst
