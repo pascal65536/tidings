@@ -18,8 +18,6 @@
     <div class="mb-4 media border {% if post.deleted %}border-danger{% endif %} rounded-0">
         {% if post.photo_picture %}
         <img width="200px" src="//krasnoarsk.ru/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="align-self-start mr-3" />
-        {% else %}
-        <img width="200px" src="//gornovosti.ru/static/weather/scattered_clouds_d.svg" class="align-self-start mr-3" />
         {% endif %}
         <div class="media-body">
             <h6>
