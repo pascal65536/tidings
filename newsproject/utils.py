@@ -178,7 +178,7 @@ def save_file(obj):
 def get_tags(post_qs):
     tags_lst = list()
     plain_list = set()
-    with open('_dictionary/word_rus.txt', 'r') as fl:
+    with open('dictionary/word_rus.txt', 'r') as fl:
         for line in fl:
             plain_list.add(line.strip().upper())
     alphabet = 'йцукенгшщзхъёфывапролджэячсмитьбю'
