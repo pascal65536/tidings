@@ -177,6 +177,8 @@ def save_file(obj):
 
 
 def get_tags(post_qs):
+    if not os.path.exists('dictionary'):
+        os.makedirs('dictionary')
     tags_lst = list()
     plain_list = set()
     category_lst = dict()
