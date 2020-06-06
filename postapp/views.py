@@ -382,7 +382,8 @@ def robots(request):
     return render(request, 'robots.txt', content_type="text/plain")
 
 
-@login_required
+@login_required(login_url='/login/')
+@staff_member_required
 def post_content(request, pk=None):
     post = get_object_or_404(Post, pk=pk)
     text = post.text
