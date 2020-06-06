@@ -17,7 +17,7 @@
     {% for charter in charter_paged %}
     <div class="mb-4 media border {% if charter.deleted %}border-danger{% endif %} rounded-0">
         {% if charter.picture %}
-        <img width="200px" src="//krasnoarsk.ru/media/{{ charter.picture }}" alt="{{ charter.title }}" class="align-self-start mr-3" />
+        <img width="200px" src="/media/{{ charter.picture }}" alt="{{ charter.title }}" class="align-self-start mr-3" />
         {% endif %}
         <div class="media-body">
             <h5 class="mt-0">

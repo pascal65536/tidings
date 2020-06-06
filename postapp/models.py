@@ -1,12 +1,8 @@
-# coding=utf-8
-import os
 from autoslug import AutoSlugField
 from django.contrib.syndication.views import Feed
 from django.db import models
-from PIL import Image
-from froala_editor.fields import FroalaField
 from taggit.managers import TaggableManager
-from newsproject.utils import cyr_lat, delete_tags, latin_filename, opengraph
+from newsproject.utils import delete_tags, latin_filename, opengraph
 from django.conf import settings
 from django.contrib.sitemaps import Sitemap
 from django.utils import timezone
@@ -29,7 +25,6 @@ class Charter(models.Model):
     lead = models.TextField(verbose_name='Лидер-абзац')
     order = models.IntegerField(verbose_name='Сортировка', default=1)
     slug = AutoSlugField(populate_from='title')
-    # text = models.TextField(verbose_name='Описание раздела', blank=True, null=True)
     picture = models.ImageField(verbose_name='Картинка раздела', upload_to=latin_filename, blank=True, null=True)
     og_picture = models.CharField(verbose_name='Картинка для соцсетей', max_length=255, blank=True)
     meta_title = models.CharField(max_length=255, verbose_name=u'Title', null=True, blank=True)
@@ -52,7 +47,7 @@ class Charter(models.Model):
 class Post(models.Model):
     title = models.CharField(verbose_name='Заголовок поста', max_length=255)
     lead = models.TextField(verbose_name='Лидер-абзац', blank=True, null=True)
-    text = FroalaField(verbose_name='Текст поста', options={'toolbarInline': True})
+    text = models.TextField(verbose_name='Текст поста', blank=True, null=True)
     charter = models.ForeignKey(Charter, blank=True, null=True, verbose_name='Раздел', on_delete=models.SET_NULL)
     photo = models.ForeignKey(Photo, blank=True, null=True, verbose_name='Фото', on_delete=models.SET_NULL)
     date_post = models.DateTimeField(verbose_name='Дата публикации')
@@ -68,33 +63,6 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'pk': self.pk})
-
-    # def save(self, *args, **kwargs):
-    #     self.og_picture = opengraph(self)
-    #     super(Post, self).save(*args, **kwargs)
-    #
-    #     if self.picture:
-    #         extension = str(self.picture.path).rsplit('.', 1)[1]
-    #         filename = str(self.picture.path).rsplit(os.sep, 1)[1].rsplit('.', 1)[0]
-    #         fullpath = str(self.picture.path).rsplit(os.sep, 1)[0]
-    #         if extension in ['jpg', 'jpeg', 'png']:
-    #             im = Image.open(str(self.picture.path))
-    #             pic_width = 800
-    #             pic_height = 600
-    #             (w, h) = im.size
-    #             if w/h < pic_width/pic_height:
-    #                 percent = pic_width/w
-    #             else:
-    #                 percent = pic_height/h
-    #             width = int(w * percent)
-    #             height = int(h * percent)
-    #             im = im.resize((width, height), Image.ANTIALIAS)
-    #             yc = int((height - pic_height)/2)
-    #             xc = 0
-    #             im = im.crop((xc, yc, xc + pic_width, yc + pic_height))
-    #             im.save('{}/{}.{}'.format(fullpath, filename, extension), format='JPEG', dpi=[72, 72])
-    #             super(Post, self).save(*args, **kwargs)
-    #         return
 
     @classmethod
     def update_qs(cls, news_qs):
@@ -126,75 +94,6 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
-
-
-# class News(models.Model):
-#     title = models.CharField(verbose_name='Заголовок', max_length=255, unique=True, null=False)
-#     lead = models.TextField(verbose_name='Лидер-абзац', blank=True, null=True)
-#     text = models.TextField(null=True)
-#     date_start = models.DateTimeField(verbose_name='Дата публикации')
-#     date_change = models.DateTimeField(verbose_name='Дата последней правки', blank=True, null=True)
-#     date_finish = models.DateTimeField(verbose_name='Снять с публикации', blank=True, null=True)
-#     slug = AutoSlugField(populate_from='title')
-#     user_id = models.IntegerField(verbose_name='Порядковый номер пользователя', blank=True, null=True)
-#     picture = models.ImageField(verbose_name='Картинка к новости 450x258', upload_to=latin_filename, blank=True, null=True)
-#     is_hide = models.BooleanField(verbose_name='Скрыть с главной', default=False)
-#     is_rss = models.BooleanField(verbose_name='Отправить в rss', default=False)
-#     is_zen = models.BooleanField(verbose_name='Отправить в zen', default=False)
-#     is_delete = models.BooleanField(verbose_name='Новость удалена', default=False)
-#     is_video = models.BooleanField(verbose_name='Видеоновость', default=False)
-#     is_hold = models.BooleanField(verbose_name='Закреплена в рубрике', default=False)
-#     is_auto_delete = models.BooleanField(verbose_name='Автоуничтожение', default=False)
-#     is_main = models.BooleanField(verbose_name='Закреплена на главной', default=False)
-#     is_blog = models.BooleanField(verbose_name='Запись в блог', default=False)
-#     is_advert = models.BooleanField(verbose_name='Не показывать рекламу', default=False)
-#
-#     class Meta:
-#         verbose_name = 'Новость'
-#         verbose_name_plural = 'Новости'
-#         ordering = ['-date_start']
-#
-#     def __str__(self):
-#         return self.title
-
-
-# class Content(models.Model):
-#     txt_doc_id = models.IntegerField()
-#     txt_node_id = models.IntegerField()
-#     txt_title = models.CharField(max_length=255)
-#     txt_lead = models.TextField(null=True)
-#     txt_text = models.TextField(null=True)
-#     txt_author = models.CharField(max_length=255, blank=True, null=False)
-#     txt_issue = models.IntegerField()
-#     txt_clean_url = models.CharField(max_length=255)
-#     txt_publish_start = models.DateTimeField()
-#     txt_tags = models.CharField(max_length=1000, blank=True, null=False)
-#
-#     class Meta:
-#         verbose_name = 'txt_title'
-#         verbose_name_plural = 'txt_title'
-#         ordering = ['-txt_publish_start']
-#
-#     def __str__(self):
-#         return self.txt_title
-
-
-# class Person(models.Model):
-#     person_name = models.CharField(max_length=200)
-#     person_last_name = models.CharField(max_length=200, blank=True, null=False)
-#     person_status = models.CharField(max_length=200)
-#     person_bio = models.TextField(null=True)
-#     person_bio_short = models.TextField(null=True)
-#     person_foto = models.CharField(max_length=200, blank=True, null=False)
-#     person_clean_url = models.CharField(max_length=200)
-#
-#     def __str__(self):
-#         return self.person_status
-#
-#     class Meta:
-#         verbose_name = 'person_status'
-#         verbose_name_plural = 'person_status'
-#         ordering = ['person_last_name']
 
 
 class Site(models.Model):

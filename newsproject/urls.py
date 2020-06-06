@@ -3,6 +3,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views
 from django.contrib.sitemaps.views import sitemap
+from django.urls import include
 
 from photoapp.views import photo_view, photo_edit
 from postapp.views import post_index, post_detail, post_list, post_filter, robots, post_edit, post_content, post_view, \
@@ -13,6 +14,7 @@ from rssapp.views import show_content, news_detail
 from django.conf import settings
 
 urlpatterns = [
+    url(r'^tinymce/', include('tinymce.urls')),
     url(r'login/$', views.LoginView.as_view(), name='login'),
     url(r'logout/$', views.LogoutView.as_view(), name='logout'),
     url(r'^admin/', admin.site.urls),

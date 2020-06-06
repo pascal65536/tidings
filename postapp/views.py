@@ -168,7 +168,7 @@ def post_list(request, slug=None):
             'post_queryset': post_queryset,  # Все выводимые записи
             'post': post,  # Единственная запись, по которой определим рубрику
             'charter': charter,  # Пункты меню
-            'recent_post': get_recent_post(post_queryset.values_list('id', flat=True)),
+            'recent_post': Post.update_qs(get_recent_post(post_queryset.values_list('id', flat=True))),
             'og': og,  # Open Graph
             'setting': get_seo(type='list', post=post),  # SEO штуки и настройки для сайта
         }
@@ -471,7 +471,7 @@ def tags_view(request):
         message = f'Все теги по поиску "{query}"'
 
     return render(request, "postapp/tags_view.html", {
-        'tags_qs': tags_qs,
+        'tags_qs': tags_qs.order_by('name'),
         'active': 'tags',
         'message': message,
     })

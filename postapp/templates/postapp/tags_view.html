@@ -21,7 +21,7 @@
                 <a href="{% url 'post_filter' %}?tag={{ tags.slug }}">
                     {{ tags.name }}
                 </a>
-                <span class="btn-sm">{{ tags.slug }}</span>
+                <span class="btn-sm">{{ tags.slug }}/{{ tags.id }}</span>
             </h5>
 
             <p>
