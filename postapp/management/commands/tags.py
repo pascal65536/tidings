@@ -3,7 +3,7 @@ import re
 import html2text
 from django.core.management import BaseCommand
 from postapp.models import Post
-from rssapp.management.commands.feed import get_clean_text
+from postapp.management.commands.feed import get_clean_text
 
 
 def dehtmlify(body):

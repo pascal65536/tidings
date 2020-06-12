@@ -1,4 +1,3 @@
-import json
 import os
 import re
 import textwrap
@@ -6,7 +5,7 @@ from django.conf import settings
 from PIL import Image, ImageDraw, ImageFont
 from django.utils import timezone
 import uuid
-from rssapp.management.commands.feed import get_clean_text
+from postapp.management.commands.feed import get_clean_text
 
 
 cyr2lat = {
@@ -201,3 +200,25 @@ def get_tags(post_qs):
             tags_lst.append(tag.capitalize())
 
     return tags_lst
+
+
+def get_recent_for_tags(post, user):
+    """
+    Найдём похожие посты по тегам
+    """
+    from postapp.models import Post
+    from collections import OrderedDict
+    tags_set = set(post.tags.all().values_list('slug', flat=True))
+    post_dct = dict()
+    post_qs = Post.objects.for_user(user).exclude(id=post.id).filter(tags__slug__in=tags_set)
+    for post in post_qs:
+        post_dct.setdefault(post, 0)
+        post_dct[post] += 1
+
+    recent_for_tags = []
+    post_dct_sorted_by_value = OrderedDict(sorted(post_dct.items(), key=lambda x: x[1], reverse=True))
+    for kk, vv in post_dct_sorted_by_value.items():
+        if vv > 3:
+            recent_for_tags.append(kk.id)
+
+    return recent_for_tags

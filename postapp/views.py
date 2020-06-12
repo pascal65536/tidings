@@ -260,28 +260,6 @@ def post_filter(request):
     )
 
 
-def get_images(post):
-    tags_set = set(post.tags.all().values_list('slug', flat=True))
-    photo_qs = Photo.objects.filter(tags__slug__in=tags_set)
-    photo_dct = dict()
-    for photo in photo_qs:
-        photo_set = set(photo.tags.all().values_list('name', flat=True))
-        post_set = set(post.tags.all().values_list('name', flat=True))
-        if len(photo_set & post_set) > 2:
-            pd = photo_dct.setdefault(photo, {})
-            pd.update({
-                'len': len(photo_set & post_set),
-                'set': photo_set & post_set,
-            })
-
-    list_of_sorted_pairs = list()
-    for photo in photo_dct:
-
-        list_of_sorted_pairs.append((photo.id, photo, photo_dct[photo]['set']))
-
-    return list_of_sorted_pairs
-
-
 @login_required(login_url='/login/')
 @staff_member_required
 def post_edit(request, pk=None):
@@ -385,6 +363,9 @@ def robots(request):
 @login_required(login_url='/login/')
 @staff_member_required
 def post_content(request, pk=None):
+    """
+    Проверка на плагиат
+    """
     post = get_object_or_404(Post, pk=pk)
     text = post.text
     url = 'https://content-watch.ru/public/api/'
@@ -482,7 +463,7 @@ def tags_view(request):
 @staff_member_required
 def tags_edit(request, pk=None):
     """
-    Добавить или отредактировать баннер
+    Добавить или отредактировать тег
     """
     tag = None
     if pk:

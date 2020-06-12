@@ -19,6 +19,8 @@ from photoapp.models import Photo
 #     if os.path.isfile(file_cache):
 #         with open(file_cache, 'r') as f:
 #             return json.load(f)
+from postapp.managers import PostManager
+
 
 class Charter(models.Model):
     title = models.CharField(verbose_name='Название', max_length=20)
@@ -60,6 +62,8 @@ class Post(models.Model):
     meta_title = models.CharField(max_length=255, verbose_name='Title', null=True, blank=True)
     meta_keywords = models.CharField(max_length=255, verbose_name='Keywords', null=True, blank=True)
     meta_description = models.TextField(max_length=255, verbose_name='Description', null=True, blank=True)
+
+    objects = PostManager()
 
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'pk': self.pk})

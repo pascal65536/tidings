@@ -2,6 +2,7 @@ import datetime
 import os
 import uuid
 from django.core.management import BaseCommand
+from django.utils import timezone
 
 from postapp.models import Post
 

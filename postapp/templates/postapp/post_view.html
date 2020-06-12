@@ -27,7 +27,7 @@
             </h6>
             {% if post.deleted %}<del>{% endif %}
             <h5 class="mt-0">
-                <a href="{% url 'post_detail' post.id %}" target="_blank">
+                <a href="{% url 'news_detail' post.id %}" target="_blank">
                     {{ post.title }}
                 </a>
             </h5>
