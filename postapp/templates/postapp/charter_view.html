@@ -21,7 +21,7 @@
         {% endif %}
         <div class="media-body">
             <h5 class="mt-0">
-                <a href="{% url 'post_list' charter.slug %}" target="_blank">
+                <a href="{% url 'post_view' %}?charter={{ charter.slug }}" target="_blank">
                     {{ charter.title }}
                     <span class="fa-stack">
                         <span class="far fa-circle fa-stack-2x"></span>

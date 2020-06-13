@@ -18,7 +18,8 @@
     <div class="mb-4 media border rounded-0">
         <div class="media-body">
             <h5 class="mt-0">
-                <a href="{% url 'post_filter' %}?tag={{ tags.slug }}">
+                <a href="{% url 'post_view' %}?tag={{ tags.slug }}">
+
                     {{ tags.name }}
                 </a>
                 <span class="btn-sm">{{ tags.slug }}/{{ tags.id }}</span>
