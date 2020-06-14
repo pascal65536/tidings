@@ -3,7 +3,8 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from taggit.models import Tag
 
-from newsproject.utils import get_recent_for_tags
+from newsproject.defaults import SEO
+from newsproject.utils import get_recent_for_tags, process_text
 from postapp.models import Charter, Post
 
 
@@ -61,6 +62,7 @@ def news_view(request):
         'main_qs': Post.update_qs(main_qs),
         'recent_qs': recent_qs,
         'message': message,
+        'seo': SEO,
     })
 
 
@@ -69,6 +71,7 @@ def news_detail(request, pk=None):
     Детали поста
     """
     instance = Post.objects.get(pk=pk)
+    instance.text = process_text(instance.text)
     recent_post_idx = get_recent_for_tags(instance, request.user)
     recent_qs = Post.objects.filter(id__in=recent_post_idx)
     return render(request, "newsapp/news_detail.html", {

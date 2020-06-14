@@ -222,3 +222,14 @@ def get_recent_for_tags(post, user):
             recent_for_tags.append(kk.id)
 
     return recent_for_tags
+
+
+def process_text(text):
+    """
+    Обработка текста. Будем искать картинку и вставлять класс.
+    """
+    img_lst = re.findall(r'<img[A-Za-z0-9 =\/\":._%;]*>', text)
+    for img in img_lst:
+        img_new = re.sub(r'style=\"[A-Za-z0-9 =\/:._%;]*\"', 'class="card-img"', img)
+        text = text.replace(img, img_new)
+    return text

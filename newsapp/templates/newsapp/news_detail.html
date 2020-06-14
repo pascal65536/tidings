@@ -1,6 +1,10 @@
 {% extends "base_news.html" %}
 {% load menu_tags %}
 
+{% block seo_title %}{{ instance.meta.title }}{% endblock %}
+{% block seo_keywords %}{{ instance.meta.keywords }}{% endblock %}
+{% block seo_description %}{{ instance.meta.description }}{% endblock %}
+
 {% block content %}
 
 <div class="container">

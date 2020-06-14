@@ -2,6 +2,8 @@ from autoslug import AutoSlugField
 from django.contrib.syndication.views import Feed
 from django.db import models
 from taggit.managers import TaggableManager
+
+from newsproject.defaults import SEO
 from newsproject.utils import delete_tags, latin_filename, opengraph
 from django.conf import settings
 from django.contrib.sitemaps import Sitemap
@@ -9,16 +11,6 @@ from django.utils import timezone
 from django.urls import reverse
 from django.views.generic import TemplateView
 from photoapp.models import Photo
-
-
-#     sidebar_cache = 'sidebar_cache.json'
-#     file_cache = os.path.join(directory, sidebar_cache)
-#     if not os.path.exists(directory):
-#         os.makedirs(directory)
-#
-#     if os.path.isfile(file_cache):
-#         with open(file_cache, 'r') as f:
-#             return json.load(f)
 from postapp.managers import PostManager
 
 
@@ -91,13 +83,26 @@ class Post(models.Model):
                 news.charter_slug = charters[news.charter_id].slug
         return news_qs
 
+    @property
+    def meta(self):
+        meta_keywords_lst = list()
+        for tags in self.tags.all():
+            meta_keywords_lst.append(tags.name)
+        meta_keywords = ', '.join(meta_keywords_lst)
+
+        return {
+            'title': f'{self.meta_title or self.title} » {SEO.get("title")}',
+            'keywords': self.meta_keywords or meta_keywords,
+            'description': self.meta_description or self.lead,
+        }
+
+    def __str__(self):
+        return self.title
+
     class Meta:
         verbose_name = 'Запись в блог'
         verbose_name_plural = 'Записи в блог'
         ordering = ['-date_post']
-
-    def __str__(self):
-        return self.title
 
 
 class Site(models.Model):
