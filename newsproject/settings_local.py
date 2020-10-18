@@ -9,6 +9,9 @@ DATABASES = {
     }
 }
 
+API_KEY = '6SihZS1stC0zXRC'
+TRANSLATE_KEY = 'trnsl.1.1.20200222T042837Z.d901d885cef54f41.7244720a0768f55075cfcea73c00fc59d70c58a1'
+
 from .settings import DEBUG
 if DEBUG:
     from .settings import INSTALLED_APPS, MIDDLEWARE

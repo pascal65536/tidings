@@ -19,6 +19,7 @@ def get_main_menu(context):
 		active = context.request.GET.get(get_keys[0], None)
 
 	return {
+		'user': context.request.user,
 		'active': active,
 		'main_menu': RACK.get('main_menu', None),
 		'site_name': RACK.get('site_name', None),
@@ -38,19 +39,29 @@ def get_footer(context):
 @register.inclusion_tag('inc/tags.html', takes_context=True)
 def get_tags(context):
 	user = None
-	show_count = False
 	user_qs = User.objects.filter(username=context.get('user'))
 	if user_qs.count() == 1:
 		user = user_qs[0]
-		show_count = user.is_staff
+
 	tag_typle = Post.objects.for_user(user).values_list('tags__name', 'tags__slug')
 	tag_dct = dict()
 	for tag in tag_typle:
 		if tag[1] and '0' not in tag[1]:
 			tag_dct.setdefault(tag[1], {'name': tag[0], 'count': 0})
 			tag_dct[tag[1]]['count'] += 1
+
+	if user and user.is_staff:
+		show_count = True
+		tag_dct_show = tag_dct
+	else:
+		show_count = False
+		tag_dct_show = dict()
+		for tag, count_dct in tag_dct.items():
+			if count_dct['count'] > 15 and len(tag_dct_show) < 50:
+				tag_dct_show.setdefault(tag, {'name': count_dct['name'].capitalize(), 'count': count_dct['count']})
+
 	return {
-		'tag_dct': tag_dct,
+		'tag_dct': tag_dct_show,
 		'show_count': show_count,
 	}
 
