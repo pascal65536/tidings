@@ -5,6 +5,7 @@ from django.conf import settings
 from PIL import Image, ImageDraw, ImageFont
 from django.utils import timezone
 import uuid
+from postapp.management.commands.feed import get_clean_text
 
 
 cyr2lat = {
@@ -150,3 +151,85 @@ def opengraph(instance):
     filename = '{}.{}'.format(uuid.uuid4(), 'png')
     image.save('{}/{}'.format(directory, filename))
     return filename
+
+
+def save_file(obj):
+    file_uid = str(uuid.uuid4())
+    relative_paths = os.path.join(settings.MEDIA_URL, file_uid)
+
+    file_obj = os.path.join(relative_paths, obj.name)
+
+    if not os.path.exists(relative_paths):
+        os.makedirs(relative_paths)
+
+    obj.seek(0)
+    with open(file_obj, 'wb') as open_file:
+        bufsize = 1024 * 1024  # 1 Мб
+        while True:
+            buf = obj.read(bufsize)
+            if not buf:
+                break
+            open_file.write(buf)
+
+    file_name = ''
+    return file_name
+
+
+def get_tags(post_qs):
+    if not os.path.exists('dictionary'):
+        os.makedirs('dictionary')
+    tags_lst = list()
+    plain_list = set()
+    with open('dictionary/word_rus.txt', 'r') as fl:
+        for line in fl:
+            plain_list.add(line.strip().upper())
+    alphabet = 'йцукенгшщзхъёфывапролджэячсмитьбю'
+    backspase = ['    ', '   ', '  ']
+    for post in post_qs:
+        text = get_clean_text(post.text)
+        new_text = ''
+        for t in text:
+            new_text += t if t in alphabet or t in alphabet.upper() else ' '
+
+        for bs in backspase:
+            new_text = new_text.replace(bs, ' ')
+
+        tags = plain_list & set(new_text.upper().split(' '))
+
+        for tag in tags:
+            tags_lst.append(tag.capitalize())
+
+    return tags_lst
+
+
+def get_recent_for_tags(post, user):
+    """
+    Найдём похожие посты по тегам
+    """
+    from postapp.models import Post
+    from collections import OrderedDict
+    tags_set = set(post.tags.all().values_list('slug', flat=True))
+    post_dct = dict()
+    post_qs = Post.objects.for_user(user).exclude(id=post.id).filter(tags__slug__in=tags_set)
+    for post in post_qs:
+        post_dct.setdefault(post, 0)
+        post_dct[post] += 1
+
+    recent_for_tags = []
+    post_dct_sorted_by_value = OrderedDict(sorted(post_dct.items(), key=lambda x: x[1], reverse=True))
+    for kk, vv in post_dct_sorted_by_value.items():
+        if vv > 3:
+            recent_for_tags.append(kk.id)
+
+    return recent_for_tags
+
+
+def process_text(text):
+    """
+    Обработка текста. Будем искать картинку и вставлять класс.
+    """
+    img_lst = re.findall(r'<img[A-Za-z0-9 =\/\":._%;]*>', text)
+    for img in img_lst:
+        img_new = re.sub(r'style=\"[A-Za-z0-9 =\/:._%;]*\"', 'class="card-img"', img)
+        text = text.replace(img, img_new)
+    return text

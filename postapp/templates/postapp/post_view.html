@@ -1,0 +1,58 @@
+{% extends "base_admin.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <div class="container">
+        {% pages post_qs 50 'post_paged' %}
+        {% if message %}
+            <h2>
+            {{ message }}
+            </h2>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    {% for post in post_paged %}
+    <div class="mb-4 media border {% if post.deleted %}border-danger{% endif %} rounded-0">
+        {% if post.photo_picture %}
+        <img width="200px" src="//krasnoarsk.ru/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="align-self-start mr-3" />
+        {% endif %}
+        <div class="media-body">
+            <h6>
+                <a href="{% url 'post_view' %}?charter={{ post.charter_slug }}">{{ post.charter }}</a>
+                /
+                <a href="{% url 'post_view' %}?date={{ post.date_post|date:'Y-m' }}">{{ post.date_post }}</a>
+            </h6>
+            {% if post.deleted %}<del>{% endif %}
+            <h5 class="mt-0">
+                <a href="{% url 'news_detail' post.id %}" target="_blank">
+                    {{ post.title }}
+                </a>
+            </h5>
+            {% if post.deleted %}</del>{% endif %}
+
+            <p>
+                {% for tag in post.tags.all %}
+                <a href="{% url 'post_view' %}?tag={{ tag.slug }}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+
+            <p>
+                <a class="btn btn-primary btn-sm" href="/admin/postapp/post/{{ post.id }}/change/" role="button">Admin &raquo;</a>
+                <a class="btn btn-secondary btn-sm" href="{% url 'post_edit' post.id %}" role="button">Edit &raquo;</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'news_detail' post.id %}" role="button">Content &raquo;</a>
+            </p>
+      </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="jumbotron">
+    <div class="container">
+        {% pages post_qs 50 'post_paged' %}
+    </div>
+</div>
+
+{% endblock %}

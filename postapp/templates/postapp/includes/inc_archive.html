@@ -1,22 +1,12 @@
-{% load static %}
+{% load postapp_custom_tags static %}
+{% get_calendar as archives %}
 
 <div class="left-blog">
-                <h4>archive</h4>
-                <ul>
-                  <li>
-                    <a href="#">07 July 2016</a>
-                  </li>
-                  <li>
-                    <a href="#">29 June 2016</a>
-                  </li>
-                  <li>
-                    <a href="#">13 May 2016</a>
-                  </li>
-                  <li>
-                    <a href="#">20 March 2016</a>
-                  </li>
-                  <li>
-                    <a href="#">09 Fabruary 2016</a>
-                  </li>
-                </ul>
-              </div>
+    <ul>
+      {% for slug, dct in archives.items  %}
+          <li>
+            <a href="{% url 'post_filter' %}?date={{ slug }}">{{ dct.name }} ({{ dct.count }})</a>
+          </li>
+      {% endfor %}
+    </ul>
+</div>

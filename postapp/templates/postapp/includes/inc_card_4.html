@@ -8,7 +8,9 @@
           <div class="single-blog">
             <div class="single-blog-img">
                 <a href="{% url 'post_detail' post.id %}">
-                  <img src="/media/{{ post.picture }}" alt="{{ post.title }}" />
+                    {% if post.photo.picture %}
+                    <img src="//krasnoarsk.ru/media/{{ post.photo_picture }}" alt="{{ post.title }}" />
+                    {% endif %}
                 </a>
             </div>
             <div class="blog-meta">
@@ -18,11 +20,13 @@
             </div>
             <div class="blog-text">
               <h4>
-                    <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a>
-                </h4>
-              <p>
-                    {{ post.lead|safe|escape|truncatechars:190 }}
-                </p>
+                    <a href="{% url 'post_detail' post.id %}">
+                        {% if post.deleted %}<del>{% endif %}
+                        {{ post.title }}
+                        {% if post.deleted %}</del>{% endif %}
+                    </a>
+              </h4>
+              <p>{{ post.lead|safe|escape|truncatechars:190 }}</p>
             </div>
             <span>
                 <a href="{% url 'post_detail' post.id %}" class="ready-btn">{{ setting.name_read_more }}</a>

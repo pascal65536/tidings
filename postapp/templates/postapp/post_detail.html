@@ -5,22 +5,54 @@
 <div class="blog-page area-padding">
     <div class="container">
       <div class="row">
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-          <div class="page-head-blog">
-            <div class="single-blog-page">
-              {% include 'postapp/includes/inc_search.html' %}
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="accordion">
+          <div class="card">
+              <div class="page-head-blog">
+                  <div class="single-blog-page">
+                    {% include 'postapp/includes/inc_search.html' %}
+                  </div>
+              </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                 <h4>{{ setting.name_recent_post }}</h4>
+                </button>
+              </h5>
             </div>
-            <div class="single-blog-page">
-              {% include 'postapp/includes/inc_recent.html' %}
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+              <div class="card-body">
+                {% include 'postapp/includes/inc_recent.html' %}
+              </div>
             </div>
-            <div class="single-blog-page">
-{#              {% include 'postapp/includes/inc_categories.html' %} #}
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    <h4>Архив публикаций</h4>
+                </button>
+              </h5>
             </div>
-            <div class="single-blog-page">
-{#              {% include 'postapp/includes/inc_archive.html' %} #}
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+              <div class="card-body">
+                {% include 'postapp/includes/inc_archive.html' %}
+              </div>
             </div>
-            <div class="single-blog-page">
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingThree">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    <h4>Популярные теги</h4>
+                </button>
+              </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
                 {% include 'postapp/includes/inc_tags.html' %}
+              </div>
             </div>
           </div>
         </div>
@@ -32,24 +64,33 @@
               <!-- single-blog start -->
               <article class="blog-post-wrapper">
                 <div class="post-thumbnail">
-                  <img src="/media/{{ post.picture }}" alt="{{ post.title }}" />
+                  <img src="//krasnoarsk.ru/media/{{ post.photo.picture }}" alt="{{ post.title }}" />
                 </div>
                 <div class="post-information">
-                  <h2>{{ post.title }}</h2>
+                    <h2>
+                        {% if post.deleted %}<del>{% endif %}
+                        {{ post.title }}
+                        {% if post.deleted %}</del>{% endif %}
+                    </h2>
                   <div class="entry-meta">
-                      <span><div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,twitter,whatsapp,telegram"></div></span>
-{#                    <span class="author-meta"><i class="fa fa-user"></i> <a href="#">admin</a></span> #}
-                    <span><i class="far fa-clock"></i> {{ post.date_post }}</span>
-{#                    <span class="tag-meta"><i class="fa fa-folder-o"></i><a href="#">painting</a>,<a href="#">work</a></span> #}
-                    <span><i class="fas fa-tags"></i>
-                        {% for tag in post.tags.all %}
-                            <a href="{% url 'post_filter' %}?tag={{ tag.slug }}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </span>
-{#                    <span><i class="fa fa-comments-o"></i> <a href="#">6 comments</a></span> #}
-                    <span>
-                        {% if request.user.is_staff %}<a href="{% url 'post_edit' post.id %}"><i class="fas fa-file-alt"></i></a>{% endif %}
-                    </span>
+                        <span><div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,twitter,whatsapp,telegram"></div></span>
+{#                      <span class="author-meta"><i class="fa fa-user"></i> <a href="#">admin</a></span> #}
+                        <span><i class="far fa-clock"></i> {{ post.date_post }}</span>
+                        <span class="tag-meta"><i class="fas fa-tags"></i>
+                            {% for tag in post.tags.all%}
+                                {% if request.user.is_staff or forloop.counter < 19 %}
+                                    <a href="{% url 'post_filter' %}?tag={{ tag.slug }}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+{#                      <span><i class="fa fa-comments-o"></i> <a href="#">6 comments</a></span> #}
+                        <span>
+                            {% if request.user.is_staff %}
+                                <a href="/admin/postapp/post/{{ post.id }}/change/"><i class="fas fa-file-alt"></i></a>&nbsp;
+                                <a href="{% url 'post_edit' post.id %}"><i class="fas fa-file-alt"></i></a>&nbsp;
+                                <a href="{% url 'post_content' post.id %}"><i class="fas fa-check-circle"></i></a>
+                            {% endif %}
+                        </span>
                   </div>
                   <div class="entry-content">
 					  {{ post.text|safe|escape }}

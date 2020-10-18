@@ -1,0 +1,15 @@
+{% for post in recent_qs %}
+    <div class="card mb-4">
+        <img src="//krasnoarsk.ru/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="card-img-top" />
+        <div class="card-body">
+            <p>
+                <small>
+                    <a href="{% url 'news_view' %}?charter={{ post.charter_slug }}">{{ post.charter_title }}</a> / {{ post.date_post }}
+                </small>
+            </p>
+            <p class="card-title">
+                <a href="{% url 'news_detail' post.id %}">{{ post.title }}</a>
+            </p>
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,30 @@
+{% extends 'base_admin.html' %}
+{% load bootstrap %}
+
+
+{% block content %}
+<div class="jumbotron">
+    <div class="container">
+
+    </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col align-self-start">
+    </div>
+    <div class="col align-self-center">
+            <h4>Войдите в свой аккаунт</h4>
+            <form method="post">{% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                {{ form|bootstrap }}
+                <button type="submit" class="btn btn-dark btn-block">Log in</button>
+            </form>
+    </div>
+    <div class="col align-self-end">
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

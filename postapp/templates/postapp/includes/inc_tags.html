@@ -3,10 +3,9 @@
 
 <div class="left-tags blog-tags">
   <div class="popular-tag left-side-tags left-blog">
-    <h4>Популярные теги</h4>
     <ul>
       {% for slug, dct in tags.items  %}
-        {% if dct.count > 1 %}
+        {% if dct.count > 3 %}
           <li>
             <a href="{% url 'post_filter' %}?tag={{ slug }}">{{ dct.name }}</a>
           </li>

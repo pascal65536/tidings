@@ -1,0 +1,77 @@
+{% extends "base_news.html" %}
+{% load menu_tags %}
+
+{% block seo_title %}{{ instance.meta.title }}{% endblock %}
+{% block seo_keywords %}{{ instance.meta.keywords }}{% endblock %}
+{% block seo_description %}{{ instance.meta.description }}{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            <div class="container">
+                {% if instance %}
+                <div class="card">
+                    <div class="card-header">
+                        <img class="card-img" src="//krasnoarsk.ru/media/{{ instance.picture }}" alt="{{ instance.title }}" />
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><h1 class="card-title">{{ instance.title }}</h1></li>
+                        <li class="list-group-item text-muted">{{ instance.date_post }}</li>
+                        <li class="list-group-item">
+                            {% for tag in instance.tags.all %}
+                                <a href="{% url 'news_view' %}?tag={{ tag.slug }}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </li>
+                    </ul>
+                    <div class="card-body">
+                        {{ instance.text|safe }}
+                    </div>
+                    {% if request.user.is_staff %}
+                    <div class="card-footer">
+                        <a class="btn btn-secondary btn-sm" href="{% url 'post_edit' instance.id %}" role="button">Edit &raquo;</a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-3">
+            {% get_tags %}
+            <br>
+            {% get_calendar %}
+            <br>
+            {# get_recent #}
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<div class="container">
+    {% pages recent_qs 12 'post_qs' %}
+    <div class="row row-cols-1 row-cols-md-4">
+        {% for post in post_qs %}
+        <div class="col mb-4">
+            <div class="card h-100">
+                <img src="//krasnoarsk.ru/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="card-img-top" />
+                <div class="card-body">
+                    <p>
+                        <small>
+                            <a href="{% url 'news_view' %}?charter={{ post.charter_slug }}">{{ post.charter_title }}</a> / {{ post.date_post }}
+                        </small>
+                    </p>
+                    <h5 class="card-title">
+                        <a href="{% url 'news_detail' post.id %}">{{ post.title }}</a>
+                    </h5>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% pages recent_qs 12 'post_qs' %}
+</div>
+
+{% endblock %}
+

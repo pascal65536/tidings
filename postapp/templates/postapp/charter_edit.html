@@ -1,0 +1,42 @@
+{% extends "base_admin.html" %}
+{% load bootstrap %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-10">
+                <div class="card border-primary mb-3" >
+                    <div class="card-header bg-transparent border-primary">
+                        {% if instance %}
+                        <h5 class="card-title">Редактировать {{ active }}</h5>
+                        <div class="text-center">
+                            <img src="//krasnoarsk.ru/media/{{ instance.picture }}" alt="{{ instance.title }}" />
+                        </div>
+                        {% else %}
+                        <h5 class="card-title">Создать {{ active }}</h5>
+                        {% endif %}
+                    </div>
+                    <form action="." method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="card-body text-primary">
+                            {{ form|bootstrap }}
+                        </div>
+                        <div class="card-footer bg-transparent border-primary">
+                            {% if instance %}
+                            <a href="{% url 'charter_view' %}" class="btn btn-primary fox text-center"><i class="fas fa-undo"></i>&nbsp;Отменить</a>
+                            {% endif %}
+                            <button type="submit" class="btn btn-primary fox float-right"><i class="far fa-newspaper"></i>&nbsp;Сохранить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-2">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

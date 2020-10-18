@@ -1,0 +1,33 @@
+{% load bootstrap %}
+
+{% if field|is_checkbox %}
+    <label class="checkbox">
+        {{ field }} {% if field.label %}<span>{{ field.label }}</span>{% endif %}
+    </label>
+
+    {% for error in field.errors %}
+        <span class="help-inline">{{ error }}</span>
+    {% endfor %}
+
+    {% if field.help_text %}
+        <p class="help-block">{{ field.help_text|safe }}</p>
+    {% endif %}
+{% else %}
+    {% if field.label %}
+        <label class="control-label" for="{{ field.auto_id }}">
+            {{ field.field.required|yesno:'<b>,'|safe }}
+            {{ field.label }}:
+            {{ field.field.required|yesno:'</b>,'|safe }}
+        </label>
+    {% endif %}
+
+    {{ field }}
+
+    {% for error in field.errors %}
+        <span class="help-inline">{{ error }}</span>
+    {% endfor %}
+
+    {% if field.help_text %}
+        <p class="help-block">{{ field.help_text|safe }}</p>
+    {% endif %}
+{% endif %}

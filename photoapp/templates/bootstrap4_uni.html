@@ -1,0 +1,26 @@
+{# displaing boxes with page number #}
+{% load uni_paginator %}
+
+{% if query.paginator.num_pages > 1 %}
+    <nav aria-label="Навигация по страницам">
+        {% make_range query.number query.paginator.num_pages 'pages_number_list' %}
+        <ul class="pagination justify-content-center fox">
+        {% if query.has_previous %}
+            <li class="page-item"><a href="?page=1{% preserve_get get_param 'page' %}" title="На первую" class="page-link">« Первая</a></li>
+            <li class="page-item"><a href="?page={{ query.previous_page_number }}{% preserve_get get_param 'page' %}" title="Предыдущая" class="page-link"><strong>«</strong></a></li>
+        {% endif %}
+        {% for i in pages_number_list %}
+            {% ifequal i query.number %}
+                <li class="page-item active"><a href="#" class="page-link">{{ query.number }}</a></li>
+            {% else %}
+                <li class="page-item"><a href="?page={{ i }}{% preserve_get get_param 'page' %}" class="page-link">{{ i }}</a></li>
+            {% endifequal %}
+        {% endfor %}
+
+        {% if query.has_next %}
+            <li class="page-item"><a href="?page={{ query.next_page_number }}{% preserve_get get_param 'page' %}" title="Следующая" class="page-link"><strong>»</strong></a></li>
+            <li class="page-item"><a href="?page={{ query.paginator.num_pages }}{% preserve_get get_param 'page' %}" title="На последнюю" class="page-link">Последняя »</a></li>
+        {% endif %}
+        </ul>
+    </nav>
+{% endif %}

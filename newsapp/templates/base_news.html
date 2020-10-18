@@ -1,0 +1,40 @@
+{% load static %}
+{% load menu_tags %}
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>{% block seo_title %}{{ seo.title }}{% endblock %}</title>
+	<meta name="keywords" content="{% block seo_keywords %}{{ seo.keywords }}{% endblock %}">
+	<meta name="description" content="{% block seo_description %}{{ seo.description }}{% endblock %}">
+
+	{% block opengraph %}{% endblock %}
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css" rel="stylesheet">
+	<link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  </head>
+  <body>
+      {% get_main_menu %}
+      <main role="main">
+        <br class="mt-5">
+        {% block content %}
+        {% endblock %}
+        <br class="mt-5">
+      </main>
+      {% get_footer %}
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  </body>
+</html>
+
+
+
+
+
+
+

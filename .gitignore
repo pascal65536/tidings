@@ -1,4 +1,5 @@
 settings.py
+settings_local.py
 media/
 migrations/
 venv/
