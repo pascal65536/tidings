@@ -95,7 +95,7 @@ def get_recent(context):
 	user_qs = User.objects.filter(username=context.get('user'))
 	if user_qs.count() == 1:
 		user = user_qs[0]
-	recent_qs = Post.objects.for_user(user)[0:5]
+	recent_qs = Post.objects.for_user(user).exclude(photo=None)[5:12]
 	return {
 		'recent_qs': Post.update_qs(recent_qs),
 	}

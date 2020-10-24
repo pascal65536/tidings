@@ -1,7 +1,3 @@
-<div class="card">
-  <div class="card-header">
-      {% for date, dct in date_dct.items  %}
-            <a href="{% url 'news_view' %}?date={{ date }}" >{{ dct.name }}</a><br>
-      {% endfor %}
-  </div>
-</div>
+{% for date, dct in date_dct.items  %}
+    <a href="{% url 'news_view' %}?date={{ date }}" >{{ dct.name }}</a><br>
+{% endfor %}

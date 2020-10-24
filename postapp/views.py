@@ -1,12 +1,10 @@
-import datetime
-import re
 import requests
 from django.contrib.admin.views.decorators import staff_member_required
 
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.template import loader, Context
 
 from newsproject.utils import get_tags, cyr_lat
@@ -390,9 +388,11 @@ def charter_view(request):
     """
     Галерея категорий
     """
+    user = None
     message = None
     filter_dct = dict()
     charter_qs = Charter.objects.filter(**filter_dct)
+
     query = request.GET.get('query')
     if query:
         query = query.strip()
@@ -401,9 +401,13 @@ def charter_view(request):
             Q(lead__icontains=query)
         )
         message = f'Все категории по поиску "{query}"'
+    user = request.user
+    charter_dct = dict(Post.objects.for_user(user).order_by().values_list('charter_id').annotate(count=Count('id')))
+    for charter in charter_qs:
+        charter.count = charter_dct.get(charter.id, None)
 
     return render(request, "postapp/charter_view.html", {
-        'charter_qs': charter_qs.order_by('-order'),
+        'charter_qs': charter_qs,
         'active': 'charter',
         'message': message,
     })

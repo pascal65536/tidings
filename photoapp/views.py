@@ -1,9 +1,10 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
 from taggit.models import Tag
-
+import os
 from newsproject.utils import get_tags
 from photoapp.forms import PhotoForm
 from photoapp.models import Photo

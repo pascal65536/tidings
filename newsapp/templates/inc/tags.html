@@ -1,11 +1,7 @@
-<div class="card">
-  <div class="card-header">
-      {% for slug, dct in tag_dct.items  %}
-        {% if dct.count > 10 %}
-            <a href="{% url 'news_view' %}?tag={{ slug }}" >{{ dct.name }}
-                {% if show_count %}{{ dct.count }}{% endif %}
-            </a>
-        {% endif %}
-      {% endfor %}
-  </div>
-</div>
+{% for slug, dct in tag_dct.items  %}
+    {% if dct.count > 10 %}
+        <a href="{% url 'news_view' %}?tag={{ slug }}" >{{ dct.name }}
+            {% if show_count %}{{ dct.count }}{% endif %}
+        </a>
+    {% endif %}
+{% endfor %}

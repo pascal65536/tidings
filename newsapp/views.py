@@ -55,7 +55,7 @@ def news_view(request):
     )
 
     post_qs = post_qs.filter(**filter_dct)
-    main_qs = post_qs.order_by('-date_post')[0:4]
+    main_qs = post_qs.order_by('-date_post')[0:6]
     main_idx = set(main_qs.values_list('id', flat=True))
     recent_qs = post_qs.exclude(id__in=main_idx).order_by('-date_post')
     return render(request, "newsapp/news_view.html", {
