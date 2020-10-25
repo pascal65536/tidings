@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from taggit.models import Tag
@@ -26,7 +27,7 @@ def news_view(request):
 
     slug = request.GET.get('charter')
     if slug:
-        charter = Charter.objects.get(slug=slug)
+        charter = get_object_or_404(Charter, slug=slug)
         filter_dct.update(
             {'charter': charter}
         )
@@ -70,12 +71,17 @@ def news_detail(request, pk=None):
     """
     Детали поста
     """
-    instance = Post.objects.get(pk=pk)
+    post_qs = Post.objects.for_user(request.user)
+    try:
+        instance_qs = post_qs.filter(pk=pk)
+        if len(instance_qs) != 1:
+            raise Http404
+        instance = instance_qs[0]
+    except Charter.DoesNotExist:
+        raise Http404
     instance.text = process_text(instance.text)
     recent_post_idx = get_recent_for_tags(instance, request.user)
-    recent_qs = Post.objects.filter(id__in=recent_post_idx)
     return render(request, "newsapp/news_detail.html", {
         'instance': instance,
-        'recent_qs': recent_qs,
         'active': instance.charter.slug,
     })

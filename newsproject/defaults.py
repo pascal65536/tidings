@@ -4,7 +4,7 @@ from newsproject.settings import BASE_DIR
 RACK = {
     'site_name': 'Мелочи жизни',
     'main_menu': [
-        ('Общество', 'defaults', ),
+        ('Общество', 'obshchestvo', ),
         ('Право', 'pravo', ),
         ('Дача', 'dacha', ),
         ('Здоровье', 'zdorove', ),
