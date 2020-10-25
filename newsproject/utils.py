@@ -144,11 +144,12 @@ def opengraph(instance):
     draw.text((text_left, text_top), unicode_text, font=unicode_font, fill=font_color)
 
     # Создадим путь и имя файла
+    date_post = timezone.now()
+    salt = '{:%Y/%m/%d}'.format(date_post)
     directory = os.path.join(settings.MEDIA_ROOT, 'opengraph', 'post')
     if not os.path.exists(directory):
         os.makedirs(directory)
-    date_post = timezone.now()
-    filename = '{}.{}'.format(uuid.uuid4(), 'png')
+    filename = '{}/{}.{}'.format(salt, uuid.uuid4(), 'png')
     image.save('{}/{}'.format(directory, filename))
     return filename
 

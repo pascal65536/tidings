@@ -11,3 +11,7 @@
     font-weight: 600;
     font-color: #000000;
 }
+
+p img {
+    width: 100%;
+}

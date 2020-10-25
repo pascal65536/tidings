@@ -1,6 +1,18 @@
 {% extends "base_news.html" %}
 {% load menu_tags %}
 
+{% block opengraph %}
+    {% if instance %}
+    <meta property="og:url" content="//krasnoarsk.ru{{ instance.get_absolute_url }}" />
+    <meta property="og:title" content="{{ instance.meta.title }}" />
+    <meta property="og:locale" content="ru-RU" />
+    <meta property="og:type" content="news"/>
+    <meta property="og:description" content="{{ instance.meta.description }}" />
+    <meta property="og:image" content="//krasnoarsk.ru/media/opengraph/post/{{ instance.og_picture }}" />
+    <meta property="og:image:type" content="image/jpeg" />
+    {% endif %}
+{% endblock %}
+
 {% block seo_title %}{{ instance.meta.title }}{% endblock %}
 {% block seo_keywords %}{{ instance.meta.keywords }}{% endblock %}
 {% block seo_description %}{{ instance.meta.description }}{% endblock %}
@@ -19,6 +31,7 @@
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><h1 class="card-title">{{ instance.title }}</h1></li>
+                            <li class="list-group-item text-muted">{{ instance.lead }}</li>
                             <li class="list-group-item text-muted">{{ instance.date_post }}</li>
                             <li class="list-group-item">
                                 {% for tag in instance.tags.all %}

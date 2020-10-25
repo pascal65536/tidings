@@ -3,7 +3,7 @@ from django.contrib.syndication.views import Feed
 from django.db import models
 from taggit.managers import TaggableManager
 
-from newsproject.defaults import SEO
+from newsproject.defaults import SEO, RACK
 from newsproject.utils import delete_tags, latin_filename, opengraph
 from django.conf import settings
 from django.contrib.sitemaps import Sitemap
@@ -58,7 +58,7 @@ class Post(models.Model):
     objects = PostManager()
 
     def get_absolute_url(self):
-        return reverse('post_detail', kwargs={'pk': self.pk})
+        return reverse('news_detail', kwargs={'pk': self.pk})
 
     @classmethod
     def update_qs(cls, news_qs):
@@ -83,6 +83,10 @@ class Post(models.Model):
                 news.charter_slug = charters[news.charter_id].slug
         return news_qs
 
+    def save(self, *args, **kwargs):
+        self.og_picture = opengraph(self)
+        super(Post, self).save(*args, **kwargs)
+
     @property
     def meta(self):
         meta_keywords_lst = list()
@@ -91,7 +95,7 @@ class Post(models.Model):
         meta_keywords = ', '.join(meta_keywords_lst)
 
         return {
-            'title': f'{self.meta_title or self.title} » {SEO.get("title")}',
+            'title': f'{self.meta_title or self.title} » {self.charter.title} « {SEO.get("title")}',
             'keywords': self.meta_keywords or meta_keywords,
             'description': self.meta_description or self.lead,
         }
