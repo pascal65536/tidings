@@ -16,21 +16,25 @@
                     <div class="card-header">
                         <img class="card-img" src="//krasnoarsk.ru/media/{{ instance.picture }}" alt="{{ instance.title }}" />
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><h1 class="card-title">{{ instance.title }}</h1></li>
-                        <li class="list-group-item text-muted">{{ instance.date_post }}</li>
-                        <li class="list-group-item">
-                            {% for tag in instance.tags.all %}
-                                <a href="{% url 'news_view' %}?tag={{ tag.slug }}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        </li>
-                    </ul>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><h1 class="card-title">{{ instance.title }}</h1></li>
+                            <li class="list-group-item text-muted">{{ instance.date_post }}</li>
+                            <li class="list-group-item">
+                                {% for tag in instance.tags.all %}
+                                    <a href="{% url 'news_view' %}?tag={{ tag.slug }}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </li>
+                        </ul>
+                    </div>
                     <div class="card-body">
                         {{ instance.text|safe }}
                     </div>
                     {% if request.user.is_staff %}
                     <div class="card-footer">
-                        <a class="btn btn-secondary btn-sm" href="{% url 'post_edit' instance.id %}" role="button">Edit &raquo;</a>
+                        <a class="btn btn-danger btn-sm" href="{% url 'post_content' instance.id %}" role="button">Check &raquo;</a>
+                        <a class="btn btn-warning btn-sm" href="{% url 'post_edit' instance.id %}" role="button">Edit &raquo;</a>
+                        <a class="btn btn-success btn-sm" href="/admin/postapp/post/{{ instance.id }}/change/" role="button">Admin &raquo;</a>
                     </div>
                     {% endif %}
                 </div>
