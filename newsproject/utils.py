@@ -146,10 +146,10 @@ def opengraph(instance):
     # Создадим путь и имя файла
     date_post = timezone.now()
     salt = '{:%Y/%m/%d}'.format(date_post)
-    directory = os.path.join(settings.MEDIA_ROOT, 'opengraph', 'post')
+    directory = os.path.join(settings.MEDIA_ROOT, 'opengraph', 'post', salt)
     if not os.path.exists(directory):
         os.makedirs(directory)
-    filename = '{}/{}.{}'.format(salt, uuid.uuid4(), 'png')
+    filename = '{}.{}'.format(uuid.uuid4(), 'png')
     image.save('{}/{}'.format(directory, filename))
     return filename
 
