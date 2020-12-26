@@ -1,4 +1,5 @@
 from autoslug import AutoSlugField
+from ckeditor.fields import RichTextField
 from django.contrib.syndication.views import Feed
 from django.db import models
 from taggit.managers import TaggableManager
@@ -17,6 +18,7 @@ from postapp.managers import PostManager
 class Charter(models.Model):
     title = models.CharField(verbose_name='Название', max_length=20)
     lead = models.TextField(verbose_name='Лидер-абзац')
+    # lead = RichTextField(config_name='awesome_ckeditor')
     order = models.IntegerField(verbose_name='Сортировка', default=1)
     slug = AutoSlugField(populate_from='title')
     picture = models.ImageField(verbose_name='Картинка раздела', upload_to=latin_filename, blank=True, null=True)
@@ -41,7 +43,9 @@ class Charter(models.Model):
 class Post(models.Model):
     title = models.CharField(verbose_name='Заголовок поста', max_length=255)
     lead = models.TextField(verbose_name='Лидер-абзац', blank=True, null=True)
-    text = models.TextField(verbose_name='Текст поста', blank=True, null=True)
+    # text = models.TextField(verbose_name='Текст поста', blank=True, null=True)
+    text = RichTextField(verbose_name='Текст поста', blank=True, null=True)
+
     charter = models.ForeignKey(Charter, blank=True, null=True, verbose_name='Раздел', on_delete=models.SET_NULL)
     photo = models.ForeignKey(Photo, blank=True, null=True, verbose_name='Фото', on_delete=models.SET_NULL)
     date_post = models.DateTimeField(verbose_name='Дата публикации')
@@ -122,18 +126,18 @@ class Site(models.Model):
         return self.value
 
 
-class PostSitemap(Sitemap):
-    changefreq = 'hourly'
-    priority = 0.5
-
-    def items(self):
-        return Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')
-
-    def lastmod(self, obj):
-        return obj.date_post
-
-    def location(self, obj):
-        return "/detail/%d" % obj.pk
+# class PostSitemap(Sitemap):
+#     changefreq = 'hourly'
+#     priority = 0.5
+#
+#     def items(self):
+#         return Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')
+#
+#     def lastmod(self, obj):
+#         return obj.date_post
+#
+#     def location(self, obj):
+#         return "/detail/%d" % obj.pk
 
 
 class PostFeed(Feed):

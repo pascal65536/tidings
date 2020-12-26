@@ -8,6 +8,10 @@ import uuid
 from postapp.management.commands.feed import get_clean_text
 
 
+def get_filename(filename, request):
+    return filename.upper()
+
+
 cyr2lat = {
     'а': 'a',
     'б': 'b',

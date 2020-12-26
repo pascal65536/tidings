@@ -106,27 +106,21 @@
 <hr>
 
 <div class="container">
-    {% pages recent_qs 12 'post_qs' %}
     <div class="row row-cols-1 row-cols-md-4">
-        {% for post in post_qs %}
+        {% for recent_post in recent_post_qs %}
         <div class="col mb-4">
             <div class="card h-100">
-                <img src="//krasnoarsk.ru/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="card-img-top" />
-                <div class="card-body">
-                    <p>
-                        <small>
-                            <a href="{% url 'news_view' %}?charter={{ post.charter_slug }}">{{ post.charter_title }}</a> / {{ post.date_post }}
-                        </small>
-                    </p>
-                    <h5 class="card-title">
-                        <a href="{% url 'news_detail' post.id %}">{{ post.title }}</a>
-                    </h5>
-                </div>
+              <img class="card-img" src="//krasnoarsk.ru/media/{{ recent_post.picture }}" alt="{{ recent_post.title }}" />
+              <div class="card-body">
+                  <h5 class="card-title">
+                      <a href="{% url 'news_detail' recent_post.id  %}">{{ recent_post.title }}</a>
+                  </h5>
+              </div>
             </div>
         </div>
         {% endfor %}
     </div>
-    {% pages recent_qs 12 'post_qs' %}
+    {# pages recent_post_qs 2 'post_qs' #}
 </div>
 
 {% endblock %}

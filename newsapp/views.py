@@ -81,7 +81,10 @@ def news_detail(request, pk=None):
         raise Http404
     instance.text = process_text(instance.text)
     recent_post_idx = get_recent_for_tags(instance, request.user)
+    recent_post_qs = Post.objects.filter(id__in=recent_post_idx[0:12])
+
     return render(request, "newsapp/news_detail.html", {
         'instance': instance,
         'active': instance.charter.slug,
+        'recent_post_qs': recent_post_qs,
     })

@@ -2,12 +2,12 @@ from django.conf.urls.static import static
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views
-from django.contrib.sitemaps.views import sitemap
+from django.views.generic import TemplateView
 
 from newsapp.views import news_view, news_detail
 from photoapp.views import photo_view, photo_edit
-from postapp.views import post_list, post_filter, robots, post_edit, post_content, post_view, charter_view, charter_edit, tags_view, tags_edit
-from postapp.models import PostFeed, PostSitemap, YandexRss, YandexDzenRss, YandexTurboRss
+from postapp.views import robots, post_edit, post_content, post_view, charter_view, charter_edit, tags_view, tags_edit
+from postapp.models import PostFeed, YandexRss, YandexDzenRss, YandexTurboRss
 from django.conf import settings
 
 urlpatterns = [
@@ -16,7 +16,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', news_view, name='news_view'),
 
-    url(r'^list/(?P<slug>\w+)/$', post_list, name='post_list'),
+    # url(r'^list/(?P<slug>\w+)/$', post_list, name='post_list'),
     url(r'^photo/$', photo_view, name='photo_view'),
     url(r'^photo/add/', photo_edit, name='photo_add'),
     url(r'^photo/(?P<pk>\d+)/edit/', photo_edit, name='photo_edit'),
@@ -34,9 +34,11 @@ urlpatterns = [
     url(r'tags/(?P<pk>\d+)/edit/$', tags_edit, name='tags_edit'),
 
     url(r'^detail/(?P<pk>\d+)/$', news_detail, name='news_detail'),
+
     url(r'^content/(?P<pk>\d+)/$', post_content, name='post_content'),
-    url(r'^filter/$', post_filter, name='post_filter'),
-    url(r'^sitemap\.xml$', sitemap, {'sitemaps': {'blog': PostSitemap}}),
+
+    # url(r'^filter/$', post_filter, name='post_filter'),
+    # url(r'^sitemap\.xml$', sitemap, {'sitemaps': {'blog': PostSitemap}}),
     url(r'^feed/$', PostFeed()),
     url(r'^rss/yandex/$', YandexRss.as_view(), name='rss'),
     url(r'^rss/zen/$', YandexDzenRss.as_view(), name='zen'),

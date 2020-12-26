@@ -127,52 +127,6 @@ def post_index(request):
     )
 
 
-def post_list(request, slug=None):
-    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now())
-    try:
-        charter_qs = Charter.objects.filter(slug=slug)
-        if len(charter_qs) != 1:
-            raise Http404
-        charter_slug = charter_qs[0]
-        post_queryset = post_queryset.filter(charter=charter_slug)
-    except Charter.DoesNotExist:
-        raise Http404
-
-    charter = Charter.objects.filter(order__gt=0).order_by('order')
-    post = None
-    if len(post_queryset) > 0:
-        post = post_queryset[0]
-
-    # Для opengrapf
-    sitename = Site.objects.get(name='sitename')
-    meta_title = None
-    description = None
-    image = None
-    if post and post.charter:
-        meta_title = '%s | %s' % (post.charter.title, sitename)
-        description = post.charter.lead
-        image = post.charter.og_picture
-
-    og = {
-        'title': meta_title,
-        'description': description,
-        'image': image,
-        'type': 'website',
-    }
-
-    return render(
-        request, 'postapp/post_list.html',
-        {
-            'post_queryset': post_queryset,  # Все выводимые записи
-            'post': post,  # Единственная запись, по которой определим рубрику
-            'charter': charter,  # Пункты меню
-            'recent_post': Post.update_qs(get_recent_post(post_queryset.values_list('id', flat=True))),
-            'og': og,  # Open Graph
-            'setting': get_seo(type='list', post=post),  # SEO штуки и настройки для сайта
-        }
-    )
-
-
 def post_detail(request, pk=None):
     try:
         fields = {'pk': pk}
@@ -204,56 +158,6 @@ def post_detail(request, pk=None):
             'charter': charter,  # Пункты меню
             'og': og,  # Open Graph
             'setting': get_seo(type='detail', post=post),  # SEO штуки и настройки для сайта
-        }
-    )
-
-
-def post_filter(request):
-    post_queryset = Post.objects.filter(
-        deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')
-    if request.user.is_staff:
-        post_queryset = Post.objects.filter().order_by('-date_post')
-    charter = Charter.objects.filter(order__gt=0).order_by('order')
-
-    sitename = Site.objects.get(name='sitename')
-    head_name = None
-    meta_title = None
-
-    form = SearchForm(data=request.POST or None)
-    if form.is_valid():
-        cd = form.cleaned_data
-        search_string = cd.get('search')
-        post_queryset = post_queryset.filter(
-            Q(title__icontains=search_string) | Q(lead__icontains=search_string) | Q(text__icontains=search_string))
-        head_name = 'Все материалы по поиску «%s»:' % search_string
-        meta_title = 'Все материалы по поиску «%s» | %s' % (search_string, sitename)
-
-    slug_tag = request.GET.get('tag', None)
-    if slug_tag:
-        tag = get_object_or_404(Tag, slug=slug_tag)
-        post_queryset = post_queryset.filter(tags__in=[tag])
-        head_name = 'Все материалы по тегу «%s»:' % tag.name
-        meta_title = 'Все материалы по тегу «%s» | %s' % (tag.name, sitename)
-
-    date = request.GET.get('date', None)
-    if date:
-        post_queryset = post_queryset.filter(date_post__startswith=date)
-        head_name = 'Все материалы за дату «%s»:' % date
-        meta_title = 'Все материалы за дату «%s» | %s' % (date, sitename)
-
-    setting = get_seo()
-    if post_queryset:
-        setting = get_seo(type='filter', post=post_queryset[0])  # SEO штуки и настройки для сайта
-        if meta_title:
-            setting['meta_title'] = meta_title
-
-    return render(
-        request, 'postapp/post_filter.html',
-        {
-            'post_queryset': Post.update_qs(post_queryset),  # Все выводимые записи
-            'charter': charter,
-            'head_name': head_name,
-            'setting': setting,
         }
     )
 
