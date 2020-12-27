@@ -1,7 +1,7 @@
 <ul class="list-unstyled">
 {% for post in recent_qs %}
   <li class="media">
-    <img src="//krasnoarsk.ru/media/{{ post.photo_picture }}"
+    <img src="/media/{{ post.photo_picture }}"
          class="mr-3 img-thumbnail img-fluid" style="width: 9rem;"
          alt="{{ post.title }}">
     <div class="media-body">
@@ -12,4 +12,4 @@
 {% endfor %}
 </ul>
 
-{# <img src="http://krasnoarsk.ru/media/blog_picture/2020/10/12/hristofor_kolumb_4946.jpg" #}
+{# <img src="http:/media/blog_picture/2020/10/12/hristofor_kolumb_4946.jpg" #}

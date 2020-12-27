@@ -3,7 +3,7 @@
     <meta property="og:url" content= "{% url 'post_list' post.charter.slug %}" />
     <meta property="og:title" content="{{ og.title }}" />
     <meta property="og:description" content="{{ og.description }}" />
-    <meta property="og:image" content="http://krasnoarsk.ru/media/opengraph/post/{{ og.image }}" />
+    <meta property="og:image" content="http:/media/opengraph/post/{{ og.image }}" />
     <meta property="og:type" content="{{ og.type }}"/>
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -12,6 +12,6 @@
     <meta name="twitter:url" content="{% url 'post_list' post.charter.slug %}">
     <meta name="twitter:title" content="{{ og.title }}" />
     <meta name="twitter:description" content="{{ og.description }}" />
-    <meta name="twitter:image" content="http://krasnoarsk.ru/media/{{ post.photo_picture }}" />
+    <meta name="twitter:image" content="http:/media/{{ post.photo_picture }}" />
     <meta name="twitter:domain" content="krasnoarsk.ru" />
   {% endif %}

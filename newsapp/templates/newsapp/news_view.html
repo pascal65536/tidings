@@ -11,7 +11,7 @@
                     {% for post in main_qs %}
                     <div class="col mb-4">
                         <div class="card h-100">
-                            <img src="//krasnoarsk.ru/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="card-img-top" />
+                            <img src="/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="card-img-top" />
                             <div class="card-body">
                                 <p>
                                     <small>
@@ -89,7 +89,7 @@
         {% for post in post_qs %}
         <div class="col mb-4">
             <div class="card h-100">
-                <img src="//krasnoarsk.ru/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="card-img-top" />
+                <img src="/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="card-img-top" />
                 <div class="card-body">
                     <p>
                         <small>

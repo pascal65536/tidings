@@ -9,7 +9,7 @@
             <div class="single-blog-img">
                 <a href="{% url 'post_detail' post.id %}">
                     {% if post.photo.picture %}
-                    <img src="//krasnoarsk.ru/media/{{ post.photo_picture }}" alt="{{ post.title }}" />
+                    <img src="/media/{{ post.photo_picture }}" alt="{{ post.title }}" />
                     {% endif %}
                 </a>
             </div>
