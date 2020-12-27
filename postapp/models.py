@@ -141,8 +141,8 @@ class Site(models.Model):
 
 
 class PostFeed(Feed):
-    title = "Мелочи жизни"
-    description = "Последние статьи сайта Мелочи жизни"
+    title = "Компоблог"
+    description = "Последние статьи сайта Компоблог"
     link = "/"
 
     def items(self):

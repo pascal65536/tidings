@@ -1,14 +1,15 @@
 from django.conf.urls.static import static
 from django.conf.urls import url
-from django.contrib import admin
+from django.conf import settings
+from django.contrib.sitemaps.views import sitemap
 from django.contrib.auth import views
-from django.views.generic import TemplateView
+from django.contrib import admin
 
 from newsapp.views import news_view, news_detail
 from photoapp.views import photo_view, photo_edit
 from postapp.views import robots, post_edit, post_content, post_view, charter_view, charter_edit, tags_view, tags_edit
 from postapp.models import PostFeed, YandexRss, YandexDzenRss, YandexTurboRss
-from django.conf import settings
+
 
 urlpatterns = [
     url(r'login/$', views.LoginView.as_view(), name='login'),
