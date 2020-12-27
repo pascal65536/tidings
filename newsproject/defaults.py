@@ -2,14 +2,10 @@ import os
 from newsproject.settings import BASE_DIR
 
 RACK = {
-    'site_name': 'Мелочи жизни',
+    'site_name': 'Компоблог',
     'main_menu': [
-        ('Общество', 'obshchestvo', ),
-        ('Право', 'pravo', ),
-        ('Дача', 'dacha', ),
-        ('Здоровье', 'zdorovie', ),
-        ('Потребитель', 'potrebiteli', ),
-        ('Семья', 'semia', ),
+        ('SEO', 'seo', ),
+        ('Программирование', 'programmirovanie', ),
     ],
 }
 
