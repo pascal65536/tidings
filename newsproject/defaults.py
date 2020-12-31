@@ -6,6 +6,7 @@ RACK = {
     'main_menu': [
         ('SEO', 'seo', ),
         ('Программирование', 'programmirovanie', ),
+        ('ПО', 'po', ),
     ],
 }
 

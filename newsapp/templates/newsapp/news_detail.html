@@ -21,7 +21,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-8">
+        <div class="col-12 col-sm-12 col-md-8 col-lg-8">
             <div class="container">
                 {% if instance %}
                 <div class="card">
@@ -54,50 +54,52 @@
                 {% endif %}
             </div>
         </div>
-        <div class="col-4">
-            <div class="accordion" id="accordionExample">
-              <div class="card">
-                <div class="card-header" id="headingOne">
-                  <h2 class="mb-0">
-                    <button class="btn btn-link btn-block accordion_column" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Рекомендуем
-                    </button>
-                  </h2>
-                </div>
-                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                    {% get_recent %}
-                </div>
-              </div>
-              {% if request.user.is_authenticated %}
-              <div class="card">
-                <div class="card-header" id="headingTwo">
-                  <h2 class="mb-0">
-                    <button class="btn btn-link btn-block collapsed accordion_column" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                      Теги
-                    </button>
-                  </h2>
-                </div>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                  <div class="card-body">
-                      {% get_tags %}
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+            <div class="container">
+                <div class="accordion" id="accordionExample">
+                  <div class="card">
+                    <div class="card-header" id="headingOne">
+                      <h2 class="mb-0">
+                        <button class="btn btn-link btn-block accordion_column" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          Рекомендуем
+                        </button>
+                      </h2>
+                    </div>
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                        {% get_recent %}
+                    </div>
+                  </div>
+                  {% if request.user.is_authenticated %}
+                  <div class="card">
+                    <div class="card-header" id="headingTwo">
+                      <h2 class="mb-0">
+                        <button class="btn btn-link btn-block collapsed accordion_column" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          Теги
+                        </button>
+                      </h2>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                      <div class="card-body">
+                          {% get_tags %}
+                      </div>
+                    </div>
+                  </div>
+                  {% endif %}
+                  <div class="card">
+                    <div class="card-header" id="headingThree">
+                      <h2 class="mb-0">
+                        <button class="btn btn-link btn-block collapsed accordion_column" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                          Календарь
+                        </button>
+                      </h2>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                      <div class="card-body">
+                        {% get_calendar %}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              {% endif %}
-              <div class="card">
-                <div class="card-header" id="headingThree">
-                  <h2 class="mb-0">
-                    <button class="btn btn-link btn-block collapsed accordion_column" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                      Календарь
-                    </button>
-                  </h2>
-                </div>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                  <div class="card-body">
-                    {% get_calendar %}
-                  </div>
-                </div>
-              </div>
             </div>
         </div>
     </div>
@@ -120,8 +122,6 @@
         </div>
         {% endfor %}
     </div>
-    {# pages recent_post_qs 2 'post_qs' #}
 </div>
 
 {% endblock %}
-
