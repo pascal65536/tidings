@@ -8,6 +8,7 @@ from newsproject import settings
 from newsproject.defaults import SEO
 from newsproject.utils import get_recent_for_tags, process_text
 from postapp.models import Charter, Post
+from django.contrib.sitemaps import Sitemap
 
 
 def news_view(request):
@@ -89,3 +90,14 @@ def news_detail(request, pk=None):
         'active': instance.charter.slug,
         'recent_post_qs': recent_post_qs,
     })
+
+
+class PostSitemap(Sitemap):
+    changefreq = "never"
+    priority = 0.5
+
+    def items(self):
+        return Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now())
+
+    def lastmod(self, obj):
+        return obj.date_post

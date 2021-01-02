@@ -5,11 +5,15 @@ from django.contrib.sitemaps.views import sitemap
 from django.contrib.auth import views
 from django.contrib import admin
 
-from newsapp.views import news_view, news_detail
+from newsapp.views import news_view, news_detail, PostSitemap
 from photoapp.views import photo_view, photo_edit
 from postapp.views import robots, post_edit, post_content, post_view, charter_view, charter_edit, tags_view, tags_edit
 from postapp.models import PostFeed, YandexRss, YandexDzenRss, YandexTurboRss
 
+
+sitemaps = {
+    'static': PostSitemap,
+}
 
 urlpatterns = [
     url(r'login/$', views.LoginView.as_view(), name='login'),
@@ -40,6 +44,7 @@ urlpatterns = [
 
     # url(r'^filter/$', post_filter, name='post_filter'),
     # url(r'^sitemap\.xml$', sitemap, {'sitemaps': {'blog': PostSitemap}}),
+    url('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^feed/$', PostFeed()),
     url(r'^rss/yandex/$', YandexRss.as_view(), name='rss'),
     url(r'^rss/zen/$', YandexDzenRss.as_view(), name='zen'),

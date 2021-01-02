@@ -126,20 +126,6 @@ class Site(models.Model):
         return self.value
 
 
-# class PostSitemap(Sitemap):
-#     changefreq = 'hourly'
-#     priority = 0.5
-#
-#     def items(self):
-#         return Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')
-#
-#     def lastmod(self, obj):
-#         return obj.date_post
-#
-#     def location(self, obj):
-#         return "/detail/%d" % obj.pk
-
-
 class PostFeed(Feed):
     title = "Компоблог"
     description = "Последние статьи сайта Компоблог"
