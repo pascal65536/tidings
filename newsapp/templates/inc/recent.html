@@ -1,12 +1,11 @@
-<ul class="list-unstyled">
 {% for post in recent_qs %}
   <li class="media">
     <img src="/media/{{ post.photo_picture }}"
-         class="mr-3 img-thumbnail img-fluid" style="width: 9rem;"
+         class="card-img-top mr-3 mb-2 img-fluid" style="width: 9rem;"
          alt="{{ post.title }}">
     <div class="media-body">
-        <h5 class="mt-0"><a href="{% url 'news_detail' post.id %}">{{ post.title }}</a></h5>
-        <small><a href="{% url 'news_view' %}?charter={{ post.charter_slug }}">{{ post.charter_title }}</a> / {{ post.date_post|date:"j F Y" }}</small>
+        <h6 class="mt-0"><a href="{% url 'news_detail' post.id %}">{{ post.title }}</a></h6>
+        {# <small><a href="{% url 'news_view' %}?charter={{ post.charter_slug }}">{{ post.charter_title }}</a> / {{ post.date_post|date:"j F Y" }}</small> #}
     </div>
   </li>
 {% endfor %}
