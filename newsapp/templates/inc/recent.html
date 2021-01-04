@@ -1,7 +1,7 @@
 {% for post in recent_qs %}
   <li class="media">
     <img src="/media/{{ post.photo_picture }}"
-         class="card-img-top mr-3 mb-2 img-fluid" style="width: 9rem;"
+         class="card-img-top mr-3 mb-2 img-fluid rounded-0" style="width: 9rem;"
          alt="{{ post.title }}">
     <div class="media-body">
         <h6 class="mt-0"><a href="{% url 'news_detail' post.id %}">{{ post.title }}</a></h6>

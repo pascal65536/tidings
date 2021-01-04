@@ -19,7 +19,7 @@
         {% for photo in photo_paged %}
         <div class="col mb-3 ">
             <div class="card h-100 border {% if photo.deleted %}border-danger{% endif %}">
-                <img class="card-img-top" src="/media/{{ photo.picture }}" alt="{{ photo.title }}" class="card-img-top" />
+                <img class="card-img-top rounded-0" src="/media/{{ photo.picture }}" alt="{{ photo.title }}" class="card-img-top" />
                 <div class="card-body">
                     <h5 class="card-title">{{ photo.title }}</h5>
                     {% if photo.description %}

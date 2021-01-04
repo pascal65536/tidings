@@ -1,34 +1,21 @@
-<footer class="container">
-
-    <div class="jumbotron">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
-                    <div class="card" >
-                        <div class="card-body">
-                            {% if not show_footer %}
-                                {% include 'inc/counter_kompoblog.html' %}
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
-                    <div class="card" >
-                        <div class="card-body">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
-                    <div class="card" >
-                        <div class="card-body">
-                            <p class="card-text">Всё, что вы хотели знать о компьютерах, но стеснялись спросить.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<footer class="container bg-light text-dark border">
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+            {% if not show_footer %}
+                {% include 'inc/counter_kompoblog.html' %}
+            {% endif %}
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+            <p class="text-right">Всё, что вы хотели знать о компьютерах, но стеснялись спросить.</p>
         </div>
     </div>
 
-    <p class="float-right"><a href="#">Наверх</a></p>
-    <p><a href="{% url 'news_view' %}">{{ site_name }}</a> © 2010 &mdash; {% now "Y" %}</p>
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+            <p class="text-left"><a href="{% url 'news_view' %}">{{ site_name }}</a> © 2010 &mdash; {% now "Y" %}</p>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+            <p class="text-right"><a href="#">Наверх</a></p>
+        </div>
+    </div>
 </footer>
