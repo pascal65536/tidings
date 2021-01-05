@@ -1,3 +1,5 @@
+import random
+
 from django import template
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -17,7 +19,8 @@ def get_advert(context, place='skyscraper'):
 	advert_qs = advert_qs.filter(position=place)
 	advert_obj = None
 	if len(advert_qs):
-		advert_obj = advert_qs[0]
+		random_number = random.randint(0, len(advert_qs)-1)
+		advert_obj = advert_qs[random_number]
 	orientation = 'portrait'
 	if place in ['content', 'top', 'bottom']:
 		orientation = 'landscape'
