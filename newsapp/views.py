@@ -13,7 +13,8 @@ from django.contrib.sitemaps import Sitemap
 
 def news_view(request):
     """
-    Галерея новостей
+    Галерея
+    новостей
     """
     message = None
     filter_dct = dict()
