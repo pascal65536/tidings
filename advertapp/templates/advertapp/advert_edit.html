@@ -1,0 +1,38 @@
+{% extends "base_admin.html" %}
+{% load bootstrap %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-10">
+                <div class="card border-primary mb-3" >
+                    <div class="card-header bg-transparent border-primary">
+                        {% if advert %}
+                            <h5 class="news_header">Редактировать рекламу</h5>
+                        {% else %}
+                            <h5 class="news_header">Создать рекламу</h5>
+                        {% endif %}
+                    </div>
+                    <form action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+                        <div class="card-body text-primary">
+                            {{ form|bootstrap }}
+                        </div>
+                        <div class="card-footer bg-transparent border-primary">
+                            {% if advert %}
+                                <a href="{% url 'tags_view' %}" class="btn btn-primary text-center"><i class="fas fa-undo"></i>&nbsp;Отменить</a>
+                            {% endif %}
+                            <button type="submit" class="btn btn-primary float-right mb-3"><i class="far fa-save"></i>&nbsp;Сохранить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-2">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

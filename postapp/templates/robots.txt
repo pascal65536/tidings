@@ -12,6 +12,6 @@ Disallow: /filter
 Disallow: /admin
 Disallow: /page
 
-Sitemap: http://krasnoarsk.ru/sitemap.xml
+Sitemap: http://kompoblog.ru/sitemap.xml
 
-Host: http://krasnoarsk.ru/
+Host: http://kompoblog.ru/

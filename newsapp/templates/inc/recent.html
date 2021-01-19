@@ -1,15 +1,12 @@
-<ul class="list-unstyled">
 {% for post in recent_qs %}
   <li class="media">
-    <img src="//krasnoarsk.ru/media/{{ post.photo_picture }}"
-         class="mr-3 img-thumbnail img-fluid" style="width: 9rem;"
+    <img src="/media/{{ post.photo_picture }}"
+         class="card-img-top mr-3 mb-2 img-fluid rounded-0" style="width: 9rem;"
          alt="{{ post.title }}">
     <div class="media-body">
-        <h5 class="mt-0"><a href="{% url 'news_detail' post.id %}">{{ post.title }}</a></h5>
-        <small><a href="{% url 'news_view' %}?charter={{ post.charter_slug }}">{{ post.charter_title }}</a> / {{ post.date_post|date:"j F Y" }}</small>
+        <h6 class="mt-0"><a href="{% url 'news_detail' post.id %}">{{ post.title }}</a></h6>
+        {# <small><a href="{% url 'news_view' %}?charter={{ post.charter_slug }}">{{ post.charter_title }}</a> / {{ post.date_post|date:"j F Y" }}</small> #}
     </div>
   </li>
 {% endfor %}
 </ul>
-
-{# <img src="http://krasnoarsk.ru/media/blog_picture/2020/10/12/hristofor_kolumb_4946.jpg" #}

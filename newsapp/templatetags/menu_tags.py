@@ -2,6 +2,7 @@ from django import template
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+from newsproject import settings
 from newsproject.defaults import RACK
 from postapp.models import Post
 
@@ -31,8 +32,11 @@ def get_footer(context):
 	"""
 	Выводит виджет футера
 	"""
+	show_footer = settings.DEBUG
+
 	return {
 		'site_name': RACK.get('site_name', None),
+		'show_footer': show_footer
 	}
 
 

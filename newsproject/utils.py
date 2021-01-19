@@ -155,7 +155,7 @@ def opengraph(instance):
         os.makedirs(directory)
     filename = '{}.{}'.format(uuid.uuid4(), 'png')
     image.save('{}/{}'.format(directory, filename))
-    return filename
+    return format('{}/{}/{}/{}'.format('opengraph', 'post', salt, filename))
 
 
 def save_file(obj):

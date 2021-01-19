@@ -1,5 +1,21 @@
-<footer class="container">
-    {# include 'inc/counter.html' #}
-    <p class="float-right"><a href="#">Наверх</a></p>
-    <p><a href="{% url 'news_view' %}">{{ site_name }}</a> © 2018 &mdash; {% now "Y" %}</p>
+<footer class="container bg-light text-dark border">
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+            {% if not show_footer %}
+                {% include 'inc/counter_kompoblog.html' %}
+            {% endif %}
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+            <p class="text-right">Всё, что вы хотели знать о компьютерах, но стеснялись спросить.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+            <p class="text-left"><a href="{% url 'news_view' %}">{{ site_name }}</a> © 2010 &mdash; {% now "Y" %}</p>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+            <p class="text-right"><a href="#">Наверх</a></p>
+        </div>
+    </div>
 </footer>

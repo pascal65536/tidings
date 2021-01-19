@@ -1,0 +1,27 @@
+{% if advert_obj %}
+    {% if orientation == 'landscape' %}
+    <div class="row bg-{{ advert_obj.color }}">
+        <div class="p-0 d-none d-lg-block mx-auto">
+            {% if advert_obj.image %}
+                {% if advert_obj.url %}<a href="{{ advert_obj.url }}">{% endif %}
+                    <img class="card-img rounded-0" src="/media/{{ advert_obj.image }}" alt="{{ advert_obj.title }}" />
+                {% if advert_obj.url %}</a>{% endif %}
+            {% elif advert_obj.html %}
+                {{ advert_obj.html|safe }}
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <div class="row bg-{{ advert_obj.color }}">
+        <div class="p-0 mx-auto" style="width: 25rem;">
+            {% if advert_obj.image %}
+                {% if advert_obj.url %}<a href="{{ advert_obj.url }}">{% endif %}
+                    <img class="card-img rounded-0" src="/media/{{ advert_obj.image }}" alt="{{ advert_obj.title }}" />
+                {% if advert_obj.url %}</a>{% endif %}
+            {% elif advert_obj.html %}
+                {{ advert_obj.html|safe }}
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+{% endif %}

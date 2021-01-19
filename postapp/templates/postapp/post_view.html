@@ -17,7 +17,7 @@
     {% for post in post_paged %}
     <div class="mb-4 media border {% if post.deleted %}border-danger{% endif %} rounded-0">
         {% if post.photo_picture %}
-        <img width="200px" src="//krasnoarsk.ru/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="align-self-start mr-3" />
+        <img width="200px" src="/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="align-self-start mr-3" />
         {% endif %}
         <div class="media-body">
             <h6>

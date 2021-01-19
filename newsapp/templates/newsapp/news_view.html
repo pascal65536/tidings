@@ -1,40 +1,42 @@
 {% extends "base_news.html" %}
 {% load menu_tags %}
+{% load advert_tags %}
 
 {% block content %}
 
 <div class="container">
+    {% get_advert 'top' %}
+
     <div class="row">
-        <div class="col-8">
-            <div class="container">
-                <div class="row row-cols-1 row-cols-md-2">
-                    {% for post in main_qs %}
-                    <div class="col mb-4">
-                        <div class="card h-100">
-                            <img src="//krasnoarsk.ru/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="card-img-top" />
-                            <div class="card-body">
-                                <p>
-                                    <small>
-                                        <a href="{% url 'news_view' %}?charter={{ post.charter_slug }}">
-                                            {{ post.charter_title }}</a> / {{ post.date_post }}
-                                    </small>
-                                </p>
-                                <h5 class="card-title">
-                                    <a href="{% url 'news_detail' post.id %}">
-                                        {{ post.title }}
-                                    </a>
-                                </h5>
-                                <p>{{ post.lead|truncatewords_html:20 }}</p>
-                            </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8">
+            <div class="row row-cols-1 row-cols-md-2">
+                {% for post in main_qs %}
+                <div class="col p-0">
+                    <div class="card h-100 rounded-0">
+                        <img src="/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="card-img-top rounded-0" />
+                        <div class="card-body">
+                            <p>
+                                <small>
+                                    <a href="{% url 'news_view' %}?charter={{ post.charter_slug }}">
+                                        {{ post.charter_title }}</a> / {{ post.date_post }}
+                                </small>
+                            </p>
+                            <h5 class="card-title">
+                                <a href="{% url 'news_detail' post.id %}">
+                                    {{ post.title }}
+                                </a>
+                            </h5>
+                            <p>{{ post.lead|truncatewords_html:20 }}</p>
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
+                {% endfor %}
             </div>
+            {% get_advert 'content' %}
         </div>
-        <div class="col-4">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-4 p-0">
             <div class="accordion" id="accordionExample">
-              <div class="card">
+              <div class="card rounded-0">
                 <div class="card-header" id="headingOne">
                   <h2 class="mb-0">
                     <button class="btn btn-link btn-block accordion_column" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -47,7 +49,7 @@
                 </div>
               </div>
               {% if request.user.is_authenticated %}
-              <div class="card">
+              <div class="card rounded-0">
                 <div class="card-header" id="headingTwo">
                   <h2 class="mb-0">
                     <button class="btn btn-link btn-block collapsed accordion_column" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -62,7 +64,7 @@
                 </div>
               </div>
               {% endif %}
-              <div class="card">
+              <div class="card rounded-0">
                 <div class="card-header" id="headingThree">
                   <h2 class="mb-0">
                     <button class="btn btn-link btn-block collapsed accordion_column" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -76,20 +78,19 @@
                   </div>
                 </div>
               </div>
+              <div class="card rounded-0">
+                {% get_advert 'skyscraper' %}
+              </div>
             </div>
         </div>
     </div>
-</div>
 
-<hr>
-
-<div class="container">
     {% pages recent_qs 12 'post_qs' %}
-    <div class="row row-cols-1 row-cols-md-4">
+    <div class="row row-cols-1 row-cols-md-4 p-0">
         {% for post in post_qs %}
         <div class="col mb-4">
             <div class="card h-100">
-                <img src="//krasnoarsk.ru/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="card-img-top" />
+                <img src="/media/{{ post.photo_picture }}" alt="{{ post.title }}" class="card-img-top rounded-0" />
                 <div class="card-body">
                     <p>
                         <small>
@@ -105,6 +106,8 @@
         {% endfor %}
     </div>
     {% pages recent_qs 12 'post_qs' %}
+
+    {% get_advert 'bottom' %}
 </div>
 
 {% endblock %}

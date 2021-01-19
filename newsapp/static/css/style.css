@@ -1,0 +1,17 @@
+/*!
+* accordion_column,
+* button.btn.btn-link.btn-block.accordion_column.collapsed,
+* button accordion_column {
+*     background-color: #ff0000;
+* }
+ */
+
+.accordion_column {
+    font-size: 0.8em;
+    font-weight: 600;
+    font-color: #000000;
+}
+
+p img {
+    width: 100%;
+}
