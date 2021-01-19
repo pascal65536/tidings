@@ -3,7 +3,6 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from taggit.models import Tag
-
 from newsproject.defaults import SEO
 from newsproject.utils import get_recent_for_tags, process_text
 from postapp.models import Charter, Post
@@ -11,7 +10,8 @@ from postapp.models import Charter, Post
 
 def news_view(request):
     """
-    Галерея новостей
+    Галерея 
+    новостей
     """
     message = None
     filter_dct = dict()
