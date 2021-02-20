@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:yandex="http://news.yandex.ru"
-     xmlns:media="http://search.yahoo.com/mrss/"
-     xmlns:turbo="http://turbo.yandex.ru"
-     version="2.0">
-    <channel>
-        {% for item in object_list %}
-            <item turbo="true">
-                <link>{{ host }}{{ item.get_absolute_url }}</link>
-                <turbo:content>
-                    <h1>{{ item.title }}</h1>
-                    <img src='/media/{{ item.picture }}' />
-                    {{ item.text }}
-                </turbo:content>
-                {% load i18n %}
-                {% language 'en' %}
-                    <pubDate>{{ item.date_post|date:'r' }}</pubDate>
-                {% endlanguage %}
-            </item>
-        {% endfor %}
-    </channel>
-</rss>
+    {% for post in object_list %}
+
+<item turbo="true">
+  <title>{{ sitename }} {{ description }}</title>
+  <link>{{ host }}</link>
+      <turbo:content>
+<![CDATA[
+            <header>
+                <h1>{{ post.title }}</h1>
+                <h2>{{ post.lead }}</h2>
+                <figure>
+                  <img src="{{ host }}{{ media }}blog_picture/2021/02/19/аgniya_barto_0101.jpeg"> {# {{ post.photo.picture }} #}
+                </figure>
+            </header>
+
+            {% autoescape off %}
+            {{ post.text }}
+            {% endautoescape %}
+
+            <div data-block="widget-feedback" data-stick="false">
+                <div data-block="chat" data-type="odnoklassniki" data-url="https://ok.ru/krsk24"></div>
+                <div data-block="chat" data-type="twitter" data-url="https://twitter.com/pascal65536"></div>
+                <div data-block="chat" data-type="vkontakte" data-url="https://vk.com/krasnoarsk_ru"></div>
+                <div data-block="chat" data-type="facebook" data-url="https://www.facebook.com/groups/1319107998294760"></div>
+            </div>
+]]>
+      </turbo:content>
+</item>
+
+    {% endfor %}

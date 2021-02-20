@@ -7,7 +7,6 @@ from taggit.managers import TaggableManager
 from newsproject.defaults import SEO, RACK
 from newsproject.utils import delete_tags, latin_filename, opengraph
 from django.conf import settings
-from django.contrib.sitemaps import Sitemap
 from django.utils import timezone
 from django.urls import reverse
 from django.views.generic import TemplateView
@@ -208,9 +207,10 @@ class YandexTurboRss(TemplateView):
         ctx['object_list'] = post_qs
         ctx['static'] = settings.STATIC_URL
         ctx['media'] = settings.MEDIA_URL
-        ctx['host'] = Site.objects.get(name='host')
-        ctx['sitename'] = Site.objects.get(name='sitename')
-        ctx['description'] = Site.objects.get(name='description')
+        # ctx['host'] = 'http://www.kompoblog.ru'
+        ctx['host'] = 'http://krasnoarsk.ru/'
+        ctx['sitename'] = SEO['title']
+        ctx['description'] = SEO['description']
         return ctx
 
     def render_to_response(self, context, **response_kwargs):
