@@ -2,11 +2,11 @@
 {% load i18n %}
 {% for post in object_list %}
 <item turbo="true">
-    <title>{{ post.name }}</title>
+    <title>{{ post.title }}</title>
     <link>{{ host }}{{ post.url }}</link>
-    <description>{{ post.short }}</description>
+    <description>{{ post.lead }}</description>
     {% language 'en' %}
-    <pubDate>{{ post.date|date:'r' }}</pubDate>
+    <pubDate>{{ post.date_post|date:'r' }}</pubDate>
     {% endlanguage %}
         <turbo:content>
             <header>

@@ -238,3 +238,9 @@ def process_text(text):
         img_new = re.sub(r'style=\"[A-Za-z0-9 =\/:._%;]*\"', 'class="card-img"', img)
         text = text.replace(img, img_new)
     return text
+
+
+def delete_tags(value):
+    value = re.sub(r'(\<(/?[^>]+)>)', '', value)
+    value = re.sub(r'&[a-z]*;', ' ', value)
+    return value
