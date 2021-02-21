@@ -145,9 +145,6 @@ class PostFeed(Feed):
 
 class YandexRss(TemplateView):
     template_name = 'rss/yandex.xml'
-    filter = {
-        'deleted': None
-    }
 
     def get_context_data(self, **kwargs):
         ctx = super(YandexRss, self).get_context_data(**kwargs)
@@ -171,9 +168,6 @@ class YandexRss(TemplateView):
 
 class YandexDzenRss(TemplateView):
     template_name = 'rss/zen.xml'
-    filter = {
-        'deleted': None,
-    }
 
     def get_context_data(self, **kwargs):
         ctx = super(YandexDzenRss, self).get_context_data(**kwargs)
@@ -197,9 +191,6 @@ class YandexDzenRss(TemplateView):
 
 class YandexTurboRss(TemplateView):
     template_name = 'rss/turbo.xml'
-    filter = {
-        'deleted': None,
-    }
 
     def get_context_data(self, **kwargs):
         ctx = super(YandexTurboRss, self).get_context_data(**kwargs)

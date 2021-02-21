@@ -17,7 +17,6 @@ sitemaps = {
 }
 
 
-
 urlpatterns = [
     url(r'login/$', views.LoginView.as_view(), name='login'),
     url(r'logout/$', views.LogoutView.as_view(next_page='/'), name='logout'),
@@ -49,8 +48,6 @@ urlpatterns = [
 
     url(r'^content/(?P<pk>\d+)/$', post_content, name='post_content'),
 
-    # url(r'^filter/$', post_filter, name='post_filter'),
-    # url(r'^sitemap\.xml$', sitemap, {'sitemaps': {'blog': PostSitemap}}),
     url('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^feed/$', PostFeed()),
     url(r'^rss/yandex/$', YandexRss.as_view(), name='rss'),
