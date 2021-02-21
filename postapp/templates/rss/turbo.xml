@@ -11,7 +11,7 @@
         <turbo:content>
             <header>
                 <figure>
-                    <img src="{{ host }}{{ media }}{{ post.photo.picture }}">
+                    <img src="{{ host }}{{ media }}{{ post.photo.picture }}" />
                 </figure>
             </header>
             {% autoescape off %}
