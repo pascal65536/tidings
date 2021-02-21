@@ -1,31 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    {% for post in object_list %}
-
+{% load i18n %}
+{% for post in object_list %}
 <item turbo="true">
-  <title>{{ sitename }} {{ description }}</title>
-  <link>{{ host }}</link>
-      <turbo:content>
-<![CDATA[
+    <title>{{ post.name }}</title>
+    <link>{{ host }}{{ post.url }}</link>
+    <description>{{ post.short }}</description>
+    {% language 'en' %}
+    <pubDate>{{ post.date|date:'r' }}</pubDate>
+    {% endlanguage %}
+        <turbo:content>
             <header>
-                <h1>{{ post.title }}</h1>
-                <h2>{{ post.lead }}</h2>
                 <figure>
-                  <img src="{{ host }}{{ media }}blog_picture/2021/02/19/аgniya_barto_0101.jpeg"> {# {{ post.photo.picture }} #}
+                    <img src="{{ host }}{{ media }}{{ post.photo.picture }}" />
                 </figure>
             </header>
-
             {% autoescape off %}
             {{ post.text }}
             {% endautoescape %}
-
-            <div data-block="widget-feedback" data-stick="false">
-                <div data-block="chat" data-type="odnoklassniki" data-url="https://ok.ru/krsk24"></div>
-                <div data-block="chat" data-type="twitter" data-url="https://twitter.com/pascal65536"></div>
-                <div data-block="chat" data-type="vkontakte" data-url="https://vk.com/krasnoarsk_ru"></div>
-                <div data-block="chat" data-type="facebook" data-url="https://www.facebook.com/groups/1319107998294760"></div>
-            </div>
-]]>
+            <button formaction="{{ host }}{{ post.url }}" data-background-color="#5B97B0" data-color="white" data-primary="true">Оригинал статьи</button>
       </turbo:content>
 </item>
-
-    {% endfor %}
+{% endfor %}

@@ -207,8 +207,7 @@ class YandexTurboRss(TemplateView):
         ctx['object_list'] = post_qs
         ctx['static'] = settings.STATIC_URL
         ctx['media'] = settings.MEDIA_URL
-        # ctx['host'] = 'http://www.kompoblog.ru'
-        ctx['host'] = 'http://krasnoarsk.ru/'
+        ctx['host'] = 'http://www.kompoblog.ru'
         ctx['sitename'] = SEO['title']
         ctx['description'] = SEO['description']
         return ctx
