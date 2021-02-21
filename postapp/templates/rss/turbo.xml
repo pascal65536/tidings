@@ -2,12 +2,12 @@
      xmlns:media="http://search.yahoo.com/mrss/"
      version="2.0">
 {% load i18n %}
-<channel>
-    <title>{{ sitename }}</title>
-    <link>{{ host }}</link>
-    <description>{{ description }}</description>
-    <language>ru</language>
-    <yandex:analystic id="" type="Yandex"/>
+    <channel>
+        <title>{{ sitename }}</title>
+        <link>{{ host }}</link>
+        <description>{{ description }}</description>
+        <language>ru</language>
+        <yandex:analystic id="" type="Yandex"/>
 
         {% for post in object_list %}
         <item turbo="true">
@@ -37,3 +37,4 @@
         </item>
         {% endfor %}
     </channel>
+</rss>    
