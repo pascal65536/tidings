@@ -4,8 +4,8 @@ from django.contrib.syndication.views import Feed
 from django.db import models
 from taggit.managers import TaggableManager
 
-from newsproject.defaults import SEO, RACK
-from newsproject.utils import delete_tags, latin_filename, opengraph
+from newsproject.defaults import SEO
+from newsproject.utils import delete_tags, latin_filename, opengraph, process_text
 from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse
@@ -17,7 +17,6 @@ from postapp.managers import PostManager
 class Charter(models.Model):
     title = models.CharField(verbose_name='Название', max_length=20)
     lead = models.TextField(verbose_name='Лидер-абзац')
-    # lead = RichTextField(config_name='awesome_ckeditor')
     order = models.IntegerField(verbose_name='Сортировка', default=1)
     slug = AutoSlugField(populate_from='title')
     picture = models.ImageField(verbose_name='Картинка раздела', upload_to=latin_filename, blank=True, null=True)
@@ -42,9 +41,7 @@ class Charter(models.Model):
 class Post(models.Model):
     title = models.CharField(verbose_name='Заголовок поста', max_length=255)
     lead = models.TextField(verbose_name='Лидер-абзац', blank=True, null=True)
-    # text = models.TextField(verbose_name='Текст поста', blank=True, null=True)
     text = RichTextField(verbose_name='Текст поста', blank=True, null=True)
-
     charter = models.ForeignKey(Charter, blank=True, null=True, verbose_name='Раздел', on_delete=models.SET_NULL)
     photo = models.ForeignKey(Photo, blank=True, null=True, verbose_name='Фото', on_delete=models.SET_NULL)
     date_post = models.DateTimeField(verbose_name='Дата публикации')
@@ -196,9 +193,9 @@ class YandexTurboRss(TemplateView):
         ctx = super(YandexTurboRss, self).get_context_data(**kwargs)
         post_qs = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('date_post')[0:3]
         for post in post_qs:
-            post.title = delete_tags(post.title)
-            post.lead = delete_tags(post.lead)
-            post.text = delete_tags(post.text)
+            post.title = process_text(post.title)
+            post.lead = process_text(post.lead)
+            post.text = process_text(post.text)
             post.url = post.get_absolute_url()
         ctx['object_list'] = post_qs
         ctx['static'] = settings.STATIC_URL

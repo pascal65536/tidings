@@ -26,12 +26,9 @@
                             <img src="{{ host }}{{ media }}{{ post.photo.picture }}" />
                         </figure>
                     </header>
-                    <body>
                     {% autoescape off %}
                     {{ post.text }}
                     {% endautoescape %}
-                    </body>
-                    <button formaction="{{ host }}{{ post.url }}" data-background-color="#5B97B0" data-color="white" data-primary="true">Оригинал статьи</button>
                     ]]>
               </turbo:content>
         </item>

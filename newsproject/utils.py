@@ -113,12 +113,6 @@ def cyr_lat(cyrillic):
     return cyrillic
 
 
-def delete_tags(value):
-    value = re.sub(r'(\<(/?[^>]+)>)', '', value)
-    value = re.sub(r'&[a-z]*;', ' ', value)
-    return value
-
-
 def latin_filename(instance, filename):
     date_post = timezone.now()
     f_folder = os.path.join('{:%Y/%m/%d}'.format(date_post))
@@ -229,7 +223,7 @@ def get_recent_for_tags(post, user):
     return recent_for_tags
 
 
-def process_text(text):
+def find_img(text):
     """
     Обработка текста. Будем искать картинку и вставлять класс.
     """
@@ -244,3 +238,22 @@ def delete_tags(value):
     value = re.sub(r'(\<(/?[^>]+)>)', '', value)
     value = re.sub(r'&[a-z]*;', ' ', value)
     return value
+
+
+def process_text(text):
+    text = re.sub(r'(role|dir|allowfullscreen|frameborder|name|style|align|height|original_image|thumb_option|title|width|filer_id)="[% \w:,-;]*"', '', text)
+    text = re.sub(r'&laquo;', '"', text)
+    text = re.sub(r'&ldquo;', '"', text)
+    text = re.sub(r'&raquo;', '"', text)
+    text = re.sub(r'&rdquo;', '"', text)
+    text = re.sub(r'&nbsp;', ' ', text)
+    text = re.sub(r'&mdash;', '-', text)
+    text = re.sub(r'&ndash;', '-', text)
+    text = re.sub(r'&hellip;', '...', text)
+    text = re.sub(r'&quot;', '"', text)
+    text = re.sub(r'&micro;', 'µ', text)
+    text = re.sub(r' >', '>', text)
+    text = re.sub(r'<[/]*span>', '', text)
+    text = re.sub(r'[ ]+', ' ', text)
+    return text
+
