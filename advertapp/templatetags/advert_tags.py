@@ -1,22 +1,49 @@
+import json
+import os
 import random
+import redis
 
-from django import template
-from django.contrib.auth.models import User
 from django.utils import timezone
+from django.conf import settings
+from django import template
+from django.core.cache import cache
 
 from advertapp.models import Advert
 from newsproject import settings
-from newsproject.defaults import RACK
-from postapp.models import Post
 
 register = template.Library()
+
+
+def zeroing_advert_counter(place):
+	r = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB)
+	r.set(r.get(place), 0)
+	return 0
+
+
+def inc_advert_counter(place, advert_obj=None, set_advert=True):
+	r = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB)
+	# r.flushall()
+	if set_advert:
+		if not advert_obj:
+			return 0
+		advert_key = f'advert:{int(advert_obj.id)}:id'
+		r.set(place, advert_key)
+	advert_key = r.get(place)
+	total_views = 0
+	if advert_key:
+		total_views = r.incr(advert_key)
+	return total_views
 
 
 @register.inclusion_tag('inc/advert_banner.html', takes_context=True)
 def get_advert(context, place='skyscraper'):
 
-	advert_qs = Advert.objects.for_show()
-	advert_qs = advert_qs.filter(position=place)
+	rez = cache.get(f'ads_{place}')
+	if rez:
+		inc_advert_counter(place, None, set_advert=False)
+		return rez
+
+	advert_qs = Advert.objects.for_show(place)
 	advert_obj = None
 	if len(advert_qs):
 		random_number = random.randint(0, len(advert_qs)-1)
@@ -25,7 +52,22 @@ def get_advert(context, place='skyscraper'):
 	if place in ['content', 'top', 'bottom']:
 		orientation = 'landscape'
 
-	return {
+	total_count = inc_advert_counter(place, advert_obj, set_advert=True)
+
+	if advert_obj:
+		if not os.path.isdir(settings.ADVERT_STATIC_FILES_PATH):
+			os.mkdir(settings.ADVERT_STATIC_FILES_PATH)
+		filename = os.path.join(settings.ADVERT_STATIC_FILES_PATH, f'advert.csv')
+		date_post = str(timezone.now().isoformat())
+		with open(filename, 'a+') as f:
+			f.write(f'{date_post},{advert_obj.id},{place},{total_count}\n')
+			zeroing_advert_counter(place)
+
+	rez = {
 		'advert_obj': advert_obj,
 		'orientation': orientation,
 	}
+
+	cache.set(f'ads_{place}', rez, 60 * 5)  # 5 min
+
+	return rez
