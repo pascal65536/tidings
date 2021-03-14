@@ -54,14 +54,7 @@ urlpatterns = [
     url(r'^rss/zen/$', YandexDzenRss.as_view(), name='zen'),
     url(r'^rss/turbo/$', YandexTurboRss.as_view(), name='turbo'),
     url(r'^robots\.txt$', robots),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-from django.urls import path, include
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns += [
-    path('__debug__/', include(debug_toolbar.urls)),
-    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

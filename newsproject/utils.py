@@ -113,12 +113,6 @@ def cyr_lat(cyrillic):
     return cyrillic
 
 
-def delete_tags(value):
-    value = re.sub(r'(\<(/?[^>]+)>)', '', value)
-    value = re.sub(r'&[a-z]*;', ' ', value)
-    return value
-
-
 def latin_filename(instance, filename):
     date_post = timezone.now()
     f_folder = os.path.join('{:%Y/%m/%d}'.format(date_post))
@@ -129,7 +123,7 @@ def latin_filename(instance, filename):
     return format('{}/{}/{}_{}.{}'.format('blog_picture', f_folder, f_name, salt, f_ext))
 
 
-def opengraph(instance):
+def old_opengraph(instance):
     font_size = 36
     height = 480
     width = 640
@@ -155,6 +149,91 @@ def opengraph(instance):
         os.makedirs(directory)
     filename = '{}.{}'.format(uuid.uuid4(), 'png')
     image.save('{}/{}'.format(directory, filename))
+    return format('{}/{}/{}/{}'.format('opengraph', 'post', salt, filename))
+
+
+def opengraph(post_obj):
+
+    # Возьмем картинку из БД
+    photo_obj = post_obj.photo
+
+    font_size = 36
+    pic_width = 1024
+    pic_height = 512
+    max_color = (255, 255, 255)
+
+    fill_image = Image.new("RGB", (pic_width, pic_height), max_color)
+    if photo_obj and os.path.exists(photo_obj.picture.path):
+        input_im = Image.open(str(photo_obj.picture.path))
+        if input_im.mode != 'RGBA':
+            input_im = input_im.convert('RGBA')
+
+        # Найдём цвет для градиента
+        unique_colors = dict()
+        for i in range(input_im.size[0]):
+            for j in range(input_im.size[1]):
+                pixel = input_im.getpixel((i, j))
+                unique_colors.setdefault(pixel, 0)
+                unique_colors[pixel] += 1
+        max_color = (0, 0, 0)
+        max_color_count = 0
+        for k, v in unique_colors.items():
+            if v > max_color_count and len(set(list(k)[0:3])) > 1:
+                max_color_count = v
+                max_color = k
+
+        # Это картинка для соцсетей
+        (w, h) = input_im.size
+        if w / h < pic_width / pic_height:
+            percent = pic_width / w
+        else:
+            percent = pic_height / h
+        width = int(w * percent)
+        height = int(h * percent)
+        input_im = input_im.resize((width, height), Image.ANTIALIAS)
+        yc = int((height - pic_height) / 2)
+        xc = 0
+        input_im = input_im.crop((xc, yc, xc + pic_width, yc + pic_height))
+
+        alpha_gradient = Image.new('L', (pic_width, 1), color=0)
+        for x in range(pic_width):
+            a = int((1 * 255.) * (1. - 0.7 * float(x) / pic_width))
+            if a > 0:
+                alpha_gradient.putpixel((x, 0), a)
+            else:
+                alpha_gradient.putpixel((x, 0), 0)
+
+        alpha = alpha_gradient.resize(input_im.size)
+
+        # create black image, apply gradient
+        black_im = Image.new('RGBA', (pic_width, pic_height), color=max_color)
+        black_im.putalpha(alpha)
+
+        # make composite with original image
+        fill_image = Image.alpha_composite(input_im, black_im)
+
+    if min(max_color) > 127:
+        font_color = (0, 0, 0)
+    else:
+        font_color = (255, 255, 255)
+
+    text = post_obj.title
+    unicode_text = "\n".join(textwrap.wrap(text, width=30))
+    draw = ImageDraw.Draw(fill_image)
+    unicode_font = ImageFont.truetype(os.path.join(settings.STATIC_ROOT, 'fonts', 'Oswald-Medium.ttf'), font_size)
+    text_width, text_height = draw.textsize(unicode_text, font=unicode_font)
+    text_top = (pic_height - text_height) // 2
+    text_left = (pic_width - text_width) // 2
+    draw.text((text_left, text_top), unicode_text, font=unicode_font, fill=font_color)
+
+    # Создадим путь и имя файла
+    date_post = timezone.now()
+    salt = '{:%Y/%m/%d}'.format(date_post)
+    directory = os.path.join(settings.MEDIA_ROOT, 'opengraph', 'post', salt)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    filename = '{}.{}'.format(uuid.uuid4(), 'png')
+    fill_image.save('{}/{}'.format(directory, filename), format='PNG', dpi=[72, 72])
     return format('{}/{}/{}/{}'.format('opengraph', 'post', salt, filename))
 
 
@@ -229,7 +308,7 @@ def get_recent_for_tags(post, user):
     return recent_for_tags
 
 
-def process_text(text):
+def find_img(text):
     """
     Обработка текста. Будем искать картинку и вставлять класс.
     """
@@ -244,3 +323,22 @@ def delete_tags(value):
     value = re.sub(r'(\<(/?[^>]+)>)', '', value)
     value = re.sub(r'&[a-z]*;', ' ', value)
     return value
+
+
+def process_text(text):
+    text = re.sub(r'(role|dir|allowfullscreen|frameborder|name|style|align|height|original_image|thumb_option|title|width|filer_id)="[% \w:,-;]*"', '', text)
+    text = re.sub(r'&laquo;', '"', text)
+    text = re.sub(r'&ldquo;', '"', text)
+    text = re.sub(r'&raquo;', '"', text)
+    text = re.sub(r'&rdquo;', '"', text)
+    text = re.sub(r'&nbsp;', ' ', text)
+    text = re.sub(r'&mdash;', '-', text)
+    text = re.sub(r'&ndash;', '-', text)
+    text = re.sub(r'&hellip;', '...', text)
+    text = re.sub(r'&quot;', '"', text)
+    text = re.sub(r'&micro;', 'µ', text)
+    text = re.sub(r' >', '>', text)
+    text = re.sub(r'<[/]*span>', '', text)
+    text = re.sub(r'[ ]+', ' ', text)
+    return text
+

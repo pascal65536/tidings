@@ -6,7 +6,7 @@ from taggit.models import Tag
 
 from newsproject import settings
 from newsproject.defaults import SEO
-from newsproject.utils import get_recent_for_tags, process_text
+from newsproject.utils import get_recent_for_tags, find_img
 from postapp.models import Charter, Post
 from django.contrib.sitemaps import Sitemap
 
@@ -82,7 +82,7 @@ def news_detail(request, pk=None):
         instance = instance_qs[0]
     except Charter.DoesNotExist:
         raise Http404
-    instance.text = process_text(instance.text)
+    instance.text = find_img(instance.text)
     recent_post_idx = get_recent_for_tags(instance, request.user)
     recent_post_qs = Post.objects.filter(id__in=recent_post_idx[0:12])
 

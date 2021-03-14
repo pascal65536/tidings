@@ -1,23 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:yandex="http://news.yandex.ru"
+     xmlns:media="http://search.yahoo.com/mrss/"
+     version="2.0">
 {% load i18n %}
-{% for post in object_list %}
-<item turbo="true">
-    <title>{{ post.title }}</title>
-    <link>{{ host }}{{ post.url }}</link>
-    <description>{{ post.lead }}</description>
-    {% language 'en' %}
-    <pubDate>{{ post.date_post|date:'r' }}</pubDate>
-    {% endlanguage %}
-        <turbo:content>
-            <header>
-                <figure>
-                    <img src="{{ host }}{{ media }}{{ post.photo.picture }}" />
-                </figure>
-            </header>
-            {% autoescape off %}
-            {{ post.text }}
-            {% endautoescape %}
-            <button formaction="{{ host }}{{ post.url }}" data-background-color="#5B97B0" data-color="white" data-primary="true">Оригинал статьи</button>
-      </turbo:content>
-</item>
-{% endfor %}
+    <channel>
+        <title>{{ sitename }}</title>
+        <link>{{ host }}</link>
+        <description>{{ description }}</description>
+        <language>ru</language>
+        <yandex:analystic id="" type="Yandex"/>
+
+        {% for post in object_list %}
+        <item turbo="true">
+            <yandex:genre>article</yandex:genre>
+            <category>news</category>
+            <title>{{ post.title }}</title>
+            <link>{{ host }}{{ post.url }}</link>
+            <description>{{ post.lead }}</description>
+            {% language 'en' %}
+            <pubDate>{{ post.date_post|date:'r' }}</pubDate>
+            {% endlanguage %}
+                <turbo:content>
+                    <![CDATA[
+                    <header>
+                        <figure>
+                            <img src="{{ host }}{{ media }}{{ post.photo.picture }}" />
+                        </figure>
+                    </header>
+                    {% autoescape off %}
+                    {{ post.text }}
+                    {% endautoescape %}
+                    ]]>
+              </turbo:content>
+        </item>
+        {% endfor %}
+    </channel>
+</rss>    
