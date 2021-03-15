@@ -7,6 +7,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q, Count
 from django.template import loader, Context
 
+from newsapp.views import news_detail
 from newsproject.utils import get_tags, cyr_lat
 from photoapp.models import Photo
 from postapp.form import SearchForm, PostForm, CharterForm, TagForm
@@ -283,7 +284,7 @@ def post_content(request, pk=None):
     result_dct = req.json()
     post.title = f"{post.title}|{result_dct.get('percent')}"
     post.save()
-    return redirect(post_detail, post.pk)
+    return redirect(news_detail, post.pk)
 
 
 @login_required(login_url='/login/')
