@@ -46,7 +46,8 @@ def get_advert(context, place='skyscraper'):
 		inc_advert_counter(place, None, set_advert=False)
 		return rez
 
-	advert_qs = Advert.objects.for_show(place)
+	advert_qs = Advert.objects.for_show()
+	advert_qs = advert_qs.filter(position=place)
 	advert_obj = None
 	if len(advert_qs):
 		random_number = random.randint(0, len(advert_qs)-1)
@@ -54,17 +55,6 @@ def get_advert(context, place='skyscraper'):
 	orientation = 'portrait'
 	if place in ['content', 'top', 'bottom']:
 		orientation = 'landscape'
-
-	total_count = inc_advert_counter(place, advert_obj, set_advert=True)
-
-	if advert_obj:
-		if not os.path.isdir(settings.ADVERT_STATIC_FILES_PATH):
-			os.mkdir(settings.ADVERT_STATIC_FILES_PATH)
-		filename = os.path.join(settings.ADVERT_STATIC_FILES_PATH, f'advert.csv')
-		date_post = str(timezone.now().isoformat())
-		with open(filename, 'a+') as f:
-			f.write(f'{date_post},{advert_obj.id},{place},{total_count}\n')
-			zeroing_advert_counter(place)
 
 	rez = {
 		'advert_obj': advert_obj,
