@@ -22,7 +22,10 @@ def zeroing_advert_counter(place):
 
 def inc_advert_counter(place, advert_obj=None, set_advert=True):
 	r = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB)
-	# r.flushall()
+	# yyyy_mm_dd|banner_name expire=30 days
+	# когда закончится месяц, то сохранять предыдущие ключи в файл
+	# пройти предыдущие 15 дней и сохранить в файл
+	# ADVERT_STATIC_FILES_PATH хранить в медиа
 	if set_advert:
 		if not advert_obj:
 			return 0
