@@ -111,9 +111,9 @@ class Post(models.Model):
 
 
 class PostFeed(Feed):
-    title = "Компоблог"
-    description = "Последние статьи сайта Компоблог"
-    link = "/"
+    title = settings.SEO['title']
+    description = settings.SEO['description']
+    link = '/'
 
     def items(self):
         return Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')[0:25]
