@@ -1,12 +1,8 @@
-import json
-
 from ckeditor.widgets import CKEditorWidget
 from django import forms
-from django.conf.urls.static import static
 from taggit.models import Tag
 from postapp.models import Post, Charter
-from django.forms import Textarea
-from django.utils.safestring import mark_safe
+
 
 
 class SearchForm(forms.Form):

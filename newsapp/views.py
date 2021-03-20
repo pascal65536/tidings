@@ -5,7 +5,6 @@ from django.utils import timezone
 from taggit.models import Tag
 
 from newsproject import settings
-from newsproject.defaults import SEO
 from newsproject.utils import get_recent_for_tags, find_img
 from postapp.models import Charter, Post
 from django.contrib.sitemaps import Sitemap
@@ -13,8 +12,7 @@ from django.contrib.sitemaps import Sitemap
 
 def news_view(request):
     """
-    Галерея
-    новостей
+    Галерея новостей
     """
     message = None
     filter_dct = dict()
@@ -66,7 +64,7 @@ def news_view(request):
         'main_qs': Post.update_qs(main_qs),
         'recent_qs': recent_qs,
         'message': message,
-        'seo': SEO,
+        'seo': settings.SEO,
     })
 
 
@@ -90,6 +88,7 @@ def news_detail(request, pk=None):
         'instance': instance,
         'active': instance.charter.slug,
         'recent_post_qs': recent_post_qs,
+        'seo': settings.SEO,
     })
 
 

@@ -4,7 +4,6 @@ from django.contrib.syndication.views import Feed
 from django.db import models
 from taggit.managers import TaggableManager
 
-from newsproject.defaults import SEO
 from newsproject.utils import delete_tags, latin_filename, opengraph, process_text
 from django.conf import settings
 from django.utils import timezone
@@ -45,7 +44,6 @@ class Post(models.Model):
     charter = models.ForeignKey(Charter, blank=True, null=True, verbose_name='Раздел', on_delete=models.SET_NULL)
     photo = models.ForeignKey(Photo, blank=True, null=True, verbose_name='Фото', on_delete=models.SET_NULL)
     date_post = models.DateTimeField(verbose_name='Дата публикации')
-    picture = models.ImageField(verbose_name='Картинка для привлечения внимания', upload_to=latin_filename, blank=True, null=True)
     og_picture = models.CharField(verbose_name='Картинка для соцсетей', max_length=255, blank=True)
     tags = TaggableManager(verbose_name='Список тегов', blank=True)
     created = models.DateTimeField(verbose_name='Создано', auto_now_add=True)
@@ -95,7 +93,7 @@ class Post(models.Model):
         meta_keywords = ', '.join(meta_keywords_lst)
 
         return {
-            'title': f'{self.meta_title or self.title} » {self.charter.title} « {SEO.get("title")}',
+            'title': f'{self.meta_title or self.title} » {self.charter.title} « {settings.SEO.get("title")}',
             'keywords': self.meta_keywords or meta_keywords,
             'description': self.meta_description or self.lead,
         }
@@ -107,19 +105,6 @@ class Post(models.Model):
         verbose_name = 'Запись в блог'
         verbose_name_plural = 'Записи в блог'
         ordering = ['-date_post']
-
-
-class Site(models.Model):
-    name = models.CharField(verbose_name='Название поля', max_length=200)
-    value = models.TextField(verbose_name='Значение поля', blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'Настройки сайта'
-        verbose_name_plural = 'Настройки сайта'
-        ordering = ['-value']
-
-    def __str__(self):
-        return self.value
 
 
 class PostFeed(Feed):
@@ -153,9 +138,9 @@ class YandexRss(TemplateView):
         ctx['object_list'] = post_qs
         ctx['static'] = settings.STATIC_URL
         ctx['media'] = settings.MEDIA_URL
-        ctx['host'] = Site.objects.get(name='host')
-        ctx['sitename'] = Site.objects.get(name='sitename')
-        ctx['description'] = Site.objects.get(name='description')
+        ctx['host'] = settings.SEO['domain']
+        ctx['sitename'] = settings.SEO['title']
+        ctx['description'] = settings.SEO['description']
         return ctx
 
     def render_to_response(self, context, **response_kwargs):
@@ -176,9 +161,9 @@ class YandexDzenRss(TemplateView):
         ctx['object_list'] = post_qs
         ctx['static'] = settings.STATIC_URL
         ctx['media'] = settings.MEDIA_URL
-        ctx['host'] = Site.objects.get(name='host')
-        ctx['sitename'] = Site.objects.get(name='sitename')
-        ctx['description'] = Site.objects.get(name='description')
+        ctx['host'] = settings.SEO['domain']
+        ctx['sitename'] = settings.SEO['title']
+        ctx['description'] = settings.SEO['description']
         return ctx
 
     def render_to_response(self, context, **response_kwargs):
@@ -200,9 +185,9 @@ class YandexTurboRss(TemplateView):
         ctx['object_list'] = post_qs
         ctx['static'] = settings.STATIC_URL
         ctx['media'] = settings.MEDIA_URL
-        ctx['host'] = 'http://www.krasnoarsk.ru'
-        ctx['sitename'] = SEO['title']
-        ctx['description'] = SEO['description']
+        ctx['host'] = settings.SEO['domain']
+        ctx['sitename'] = settings.SEO['title']
+        ctx['description'] = settings.SEO['description']
         return ctx
 
     def render_to_response(self, context, **response_kwargs):

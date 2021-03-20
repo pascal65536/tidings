@@ -1,10 +1,12 @@
 import os
 import re
-import textwrap
-from django.conf import settings
-from PIL import Image, ImageDraw, ImageFont
-from django.utils import timezone
 import uuid
+import textwrap
+from PIL import Image, ImageDraw, ImageFont
+
+from django.utils import timezone
+from django.conf import settings
+
 from postapp.management.commands.feed import get_clean_text
 
 
@@ -154,8 +156,13 @@ def old_opengraph(instance):
 
 def opengraph(post_obj):
 
-    # Возьмем картинку из БД
-    photo_obj = post_obj.photo
+    from postapp.models import Charter
+    if isinstance(post_obj, (Charter)):
+        photo_obj = post_obj.picture
+        photo_obj_path = photo_obj.path
+    else:
+        photo_obj = post_obj.photo
+        photo_obj_path = photo_obj.picture.path
 
     font_size = 36
     pic_width = 1024
@@ -163,8 +170,8 @@ def opengraph(post_obj):
     max_color = (255, 255, 255)
 
     fill_image = Image.new("RGB", (pic_width, pic_height), max_color)
-    if photo_obj and os.path.exists(photo_obj.picture.path):
-        input_im = Image.open(str(photo_obj.picture.path))
+    if photo_obj and os.path.exists(photo_obj_path):
+        input_im = Image.open(str(photo_obj_path))
         if input_im.mode != 'RGBA':
             input_im = input_im.convert('RGBA')
 

@@ -1,0 +1,19 @@
+<footer class="container bg-light text-dark border">
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">{{ SEO.folder }}
+                {% include inc_counter_name %}
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+            <p class="text-right">{{ SEO.label }}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+            <p class="text-left"><a href="{% url 'news_view' %}">{{ SEO.site_name }}</a> © 2010 &mdash; {% now "Y" %}</p>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+            <p class="text-right"><a href="#">Наверх</a></p>
+        </div>
+    </div>
+</footer>
