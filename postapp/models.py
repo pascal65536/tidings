@@ -2,13 +2,15 @@ from autoslug import AutoSlugField
 from ckeditor.fields import RichTextField
 from django.contrib.syndication.views import Feed
 from django.db import models
-from taggit.managers import TaggableManager
-
-from newsproject.utils import delete_tags, latin_filename, opengraph, process_text
 from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse
 from django.views.generic import TemplateView
+from django.shortcuts import render, get_object_or_404, redirect
+
+from taggit.managers import TaggableManager
+from taggit.models import Tag
+from newsproject.utils import delete_tags, latin_filename, opengraph, process_text
 from photoapp.models import Photo
 from postapp.managers import PostManager
 
@@ -52,6 +54,7 @@ class Post(models.Model):
     meta_title = models.CharField(max_length=255, verbose_name='Title', null=True, blank=True)
     meta_keywords = models.CharField(max_length=255, verbose_name='Keywords', null=True, blank=True)
     meta_description = models.TextField(max_length=255, verbose_name='Description', null=True, blank=True)
+    turbo = models.BooleanField(verbose_name=u'Яндекс Турбо', default=True)
 
     objects = PostManager()
 
@@ -175,8 +178,28 @@ class YandexTurboRss(TemplateView):
     template_name = 'rss/turbo.xml'
 
     def get_context_data(self, **kwargs):
+
         ctx = super(YandexTurboRss, self).get_context_data(**kwargs)
-        post_qs = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('date_post')[0:3]
+        slug_charter = ctx['view'].request.GET.get('charter')
+        slug_tag = ctx['view'].request.GET.get('tag')
+
+        filter_dct = {
+            'deleted__isnull': True,
+            'date_post__lte': timezone.now(),
+        }
+        if slug_tag:
+            filter_dct.update(
+                {'tags__slug': slug_tag}
+            )
+            get_object_or_404(Tag, slug=slug_tag)
+
+        if slug_charter:
+            filter_dct.update(
+                {'charter__slug': slug_charter}
+            )
+            get_object_or_404(Charter, slug=slug_charter)
+
+        post_qs = Post.objects.filter(**filter_dct).order_by('-date_post')[0:100]
         for post in post_qs:
             post.title = process_text(post.title)
             post.lead = process_text(post.lead)
