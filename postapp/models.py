@@ -199,7 +199,7 @@ class YandexTurboRss(TemplateView):
             )
             get_object_or_404(Charter, slug=slug_charter)
 
-        post_qs = Post.objects.filter(**filter_dct).order_by('-date_post')[0:100]
+        post_qs = Post.objects.filter(**filter_dct).order_by('-date_post')[0:50]
         for post in post_qs:
             post.title = process_text(post.title)
             post.lead = process_text(post.lead)

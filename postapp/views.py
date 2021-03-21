@@ -60,6 +60,7 @@ def post_edit(request, pk=None):
         'form': form,
         'instance': instance,
         'active': 'post',
+        'seo': settings.SEO,
     })
 
 
@@ -109,6 +110,7 @@ def post_view(request):
         'post_qs': post_qs.order_by('deleted', '-changed'),
         'active': 'post',
         'message': message,
+        'seo': settings.SEO,
     })
 
 
@@ -167,6 +169,7 @@ def charter_view(request):
         'charter_qs': charter_qs,
         'active': 'charter',
         'message': message,
+        'seo': settings.SEO,
     })
 
 
@@ -188,6 +191,7 @@ def charter_edit(request, pk=None):
         'form': form,
         'instance': instance,
         'active': 'charter',
+        'seo': settings.SEO,
     })
 
 
@@ -217,6 +221,7 @@ def tags_view(request):
         'tags_qs': tags_qs.order_by('name'),
         'active': 'tags',
         'message': message,
+        'seo': settings.SEO,
     })
 
 
@@ -239,4 +244,5 @@ def tags_edit(request, pk=None):
         'form': form,
         'tag': tag,
         'active': 'tags',
+        'seo': settings.SEO,
     })
