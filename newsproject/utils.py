@@ -8,7 +8,6 @@ from django.utils import timezone
 from django.conf import settings
 
 from postapp.management.commands.feed import get_clean_text
-from postapp.models import Post
 
 
 def get_filename(filename, request):
@@ -159,7 +158,7 @@ def opengraph(post_obj):
     """
     Создадим opengraph для Рубрики и Статьи
     """
-
+    from postapp.models import Post
     from postapp.models import Charter
     photo_obj = None
     photo_obj_path = None
