@@ -170,7 +170,7 @@ def opengraph(post_obj):
     if isinstance(post_obj, Post):
         if post_obj.photo:
             photo_obj = post_obj.photo
-            photo_obj_path = photo_obj.picture.path
+            photo_obj_path = photo_obj.photo.path
 
     font_size = 36
     pic_width = 1024
