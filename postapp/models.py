@@ -30,13 +30,13 @@ class Charter(models.Model):
         self.og_picture = opengraph(self)
         super(Charter, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return self.title
+
     class Meta:
         verbose_name = 'Название раздела'
         verbose_name_plural = 'Названия разделов'
         ordering = ['-order']
-
-    def __str__(self):
-        return self.title
 
 
 class Post(models.Model):
