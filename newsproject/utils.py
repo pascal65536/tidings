@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.conf import settings
 
 from postapp.management.commands.feed import get_clean_text
+from postapp.models import Post
 
 
 def get_filename(filename, request):
@@ -162,12 +163,13 @@ def opengraph(post_obj):
     from postapp.models import Charter
     photo_obj = None
     photo_obj_path = None
-    if isinstance(post_obj, (Charter)):
+    if isinstance(post_obj, Charter):
         if post_obj:
             photo_obj = post_obj.picture
             photo_obj_path = photo_obj.path
-    else:
-        if photo_obj:
+
+    if isinstance(post_obj, Post):
+        if post_obj:
             photo_obj = post_obj.photo
             photo_obj_path = photo_obj.picture.path
 
