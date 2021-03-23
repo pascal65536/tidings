@@ -163,12 +163,12 @@ def opengraph(post_obj):
     photo_obj = None
     photo_obj_path = None
     if isinstance(post_obj, (Charter)):
-        if post_obj.picture:
+        if post_obj:
             photo_obj = post_obj.picture
             photo_obj_path = photo_obj.path
     else:
-        photo_obj = post_obj.photo
-        if photo_obj.picture:
+        if photo_obj:
+            photo_obj = post_obj.photo
             photo_obj_path = photo_obj.picture.path
 
     font_size = 36
