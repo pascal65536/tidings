@@ -4,23 +4,23 @@ from postapp.models import Post, Charter
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'lead', 'date_post', 'deleted')
-    list_filter = ('charter', 'tags')
+    list_display = ('title', 'lead', 'date_post', 'deleted', )
+    list_filter = ('charter', 'tags', )
     fieldsets = (
         (None, {
-            'fields': ('title', 'lead', 'text')
+            'fields': ('title', 'lead', 'text', )
         }),
         ('Фильтрация', {
-            'fields': ('charter', 'tags')
+            'fields': ('charter', 'tags', )
         }),
         ('Изображения', {
-            'fields': ('picture', 'photo')
+            'fields': ('photo', )
         }),
         ('Даты', {
-            'fields': ('date_post', 'deleted')
+            'fields': ('date_post', 'deleted', )
         }),
         ('SEO', {
-            'fields': ('og_picture', 'meta_title', 'meta_keywords', 'meta_description')
+            'fields': ('og_picture', 'meta_title', 'meta_keywords', 'meta_description', )
         }),
     )
 

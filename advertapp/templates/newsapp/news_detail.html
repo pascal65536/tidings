@@ -34,6 +34,13 @@
                             <li class="list-group-item"><h1 class="card-title">{{ instance.title }}</h1></li>
                             <!--noindex-->
                             <li class="list-group-item text-muted">{{ instance.lead }}</li>
+                            <li class="list-group-item">
+                                <a href="{% url 'news_view' %}">
+                                    Главная</a> »
+                                <a href="{% url 'news_view' %}?charter={{ instance.charter.slug }}">
+                                    {{ instance.charter.title }}</a>
+                            </li>
+                            <li class="list-group-item text-muted">{{ instance.date_post }}</li>
                             <!--/noindex-->
                         </ul>
                     </div>
@@ -41,16 +48,15 @@
                         {{ instance.text|safe }}
                     </div>
                     <div class="card-body">
-                        <!--noindex-->
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-muted">{{ instance.date_post }}</li>
+                            <!--noindex-->
                             <li class="list-group-item">
                                 {% for tag in instance.tags.all %}
                                     <a href="{% url 'news_view' %}?tag={{ tag.slug }}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
                                 {% endfor %}
                             </li>
+                            <!--/noindex-->
                         </ul>
-                        <!--/noindex-->
                     </div>
                     <div class="card-footer pl-3 pr-3 pb-0 pt-0">
                         {% get_advert 'content' %}

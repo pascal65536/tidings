@@ -53,7 +53,7 @@ def post_edit(request, pk=None):
         for tags in cd.get('tags'):
             post.tags.add(tags)
 
-        return redirect(post_view)
+        return redirect(post_edit, post.pk)
 
     return render(request, "postapp/post_edit.html", {
         'form': form,
