@@ -155,14 +155,19 @@ def old_opengraph(instance):
 
 
 def opengraph(post_obj):
+    """
+    Создадим opengraph для Рубрики и Статьи
+    """
 
     from postapp.models import Charter
+    photo_obj_path = None
     if isinstance(post_obj, (Charter)):
         photo_obj = post_obj.picture
         photo_obj_path = photo_obj.path
     else:
         photo_obj = post_obj.photo
-        photo_obj_path = photo_obj.picture.path
+        if photo_obj.picture:
+            photo_obj_path = photo_obj.picture.path
 
     font_size = 36
     pic_width = 1024
@@ -170,7 +175,7 @@ def opengraph(post_obj):
     max_color = (255, 255, 255)
 
     fill_image = Image.new("RGB", (pic_width, pic_height), max_color)
-    if photo_obj and os.path.exists(photo_obj_path):
+    if photo_obj and photo_obj_path and os.path.exists(photo_obj_path):
         input_im = Image.open(str(photo_obj_path))
         if input_im.mode != 'RGBA':
             input_im = input_im.convert('RGBA')
