@@ -47,7 +47,6 @@ def post_edit(request, pk=None):
     if request.method == 'POST' and form.is_valid():
         cd = form.cleaned_data
         post = form.save(commit=False)
-        post.picture = None
         post.save()
         # Нельзя добавить теги к несуществующему объекту.
         post.tags.clear()
