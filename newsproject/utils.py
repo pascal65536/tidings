@@ -160,10 +160,12 @@ def opengraph(post_obj):
     """
 
     from postapp.models import Charter
+    photo_obj = None
     photo_obj_path = None
     if isinstance(post_obj, (Charter)):
-        photo_obj = post_obj.picture
-        photo_obj_path = photo_obj.path
+        if post_obj.picture:
+            photo_obj = post_obj.picture
+            photo_obj_path = photo_obj.path
     else:
         photo_obj = post_obj.photo
         if photo_obj.picture:
