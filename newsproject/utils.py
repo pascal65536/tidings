@@ -4,6 +4,7 @@ import uuid
 import textwrap
 from PIL import Image, ImageDraw, ImageFont
 
+from django.db.models.fields.files import ImageFieldFile, FileField
 from django.utils import timezone
 from django.conf import settings
 
@@ -158,19 +159,21 @@ def opengraph(post_obj):
     """
     Создадим opengraph для Рубрики и Статьи
     """
-    from postapp.models import Post
+    from postapp.models import Post, Photo
     from postapp.models import Charter
     photo_obj = None
     photo_obj_path = None
+
     if isinstance(post_obj, Charter):
-        if post_obj.picture:
+        if isinstance(post_obj.picture, ImageFieldFile):
             photo_obj = post_obj.picture
-            photo_obj_path = photo_obj.path
+            photo_obj_path = post_obj.picture.name
 
     if isinstance(post_obj, Post):
-        if post_obj.photo:
-            photo_obj = post_obj.photo
-            photo_obj_path = photo_obj.picture.name
+        if isinstance(post_obj.photo, Photo):
+            if isinstance(post_obj.photo.picture, ImageFieldFile):
+                photo_obj = post_obj.photo.picture
+                photo_obj_path = post_obj.photo.picture.name
 
     font_size = 36
     pic_width = 1024
