@@ -31,9 +31,10 @@ REDIS_DB = 0
 SEO = {
     'domain': 'http://xxx/',
     'folder': 'slug_xxx',
-    'site_name': 'xxx_rus',
-    'title': 'xxx_rus',
-    'label': 'xxx_word',
+    'site': 'xxx.ru',
+    'site_name': 'name site',
+    'title': 'title site',
+    'label': 'label site',
     'main_menu': [
         ('xxx_rus', 'slug_xxx',),
     ],
