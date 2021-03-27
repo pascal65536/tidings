@@ -167,13 +167,13 @@ def opengraph(post_obj):
     if isinstance(post_obj, Charter):
         if isinstance(post_obj.picture, ImageFieldFile):
             photo_obj = post_obj.picture
-            photo_obj_path = post_obj.picture.name
+            photo_obj_path = os.path.join(settings.MEDIA_ROOT, post_obj.picture.name)
 
     if isinstance(post_obj, Post):
         if isinstance(post_obj.photo, Photo):
             if isinstance(post_obj.photo.picture, ImageFieldFile):
                 photo_obj = post_obj.photo.picture
-                photo_obj_path = post_obj.photo.picture.name
+                photo_obj_path = os.path.join(settings.MEDIA_ROOT, post_obj.photo.picture.name)
 
     font_size = 36
     pic_width = 1024
@@ -359,4 +359,3 @@ def process_text(text):
     text = re.sub(r'<[/]*span>', '', text)
     text = re.sub(r'[ ]+', ' ', text)
     return text
-

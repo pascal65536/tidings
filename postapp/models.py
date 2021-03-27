@@ -184,7 +184,7 @@ class YandexTurboRss(TemplateView):
         slug_tag = ctx['view'].request.GET.get('tag')
 
         filter_dct = {
-            'deleted__isnull': True,
+            # 'deleted__isnull': True,
             'date_post__lte': timezone.now(),
         }
         if slug_tag:
@@ -201,6 +201,7 @@ class YandexTurboRss(TemplateView):
 
         post_qs = Post.objects.filter(**filter_dct).order_by('-date_post')[0:50]
         for post in post_qs:
+            post.turbo_new = post.turbo and not bool(post.deleted)
             post.title = process_text(post.title)
             post.lead = process_text(post.lead)
             post.text = process_text(post.text)
