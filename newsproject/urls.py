@@ -46,6 +46,7 @@ urlpatterns = [
 
     url(r'^detail/(?P<pk>\d+)/$', news_detail, name='news_detail'),
 
+    # Проверка на плагиат
     url(r'^content/(?P<pk>\d+)/$', post_content, name='post_content'),
 
     url('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),

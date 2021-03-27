@@ -10,157 +10,10 @@ from django.template import loader, Context
 from newsapp.views import news_detail
 from newsproject.utils import get_tags, cyr_lat
 from photoapp.models import Photo
-from postapp.form import SearchForm, PostForm, CharterForm, TagForm
-from postapp.models import Post, Charter, Site
+from postapp.form import PostForm, CharterForm, TagForm
+from postapp.models import Post, Charter
 from taggit.models import Tag
 from django.conf import settings
-from django.utils import timezone
-
-
-def get_seo(type=None, post=None):
-    """
-    SEO штуки и настройки для каждой страницы
-    :param type: Тип страницы
-    :param post: instance поста
-    :return: Словарь с настройками
-    """
-    seo_dict = {
-        'sitename': Site.objects.get(name='sitename'),
-        'meta_title': Site.objects.get(name='sitename'),
-        'keywords': Site.objects.get(name='keywords').value,
-        'description': Site.objects.get(name='description').value,
-        'name_recent_post': Site.objects.get(name='name_recent_post').value,
-        'name_read_more': Site.objects.get(name='name_read_more').value,
-        'footer_text': Site.objects.get(name='footer_text').value,
-        'footer_icons': Site.objects.get(name='footer_icons').value,
-        'footer_contacts': Site.objects.get(name='footer_contacts').value,
-        'footer_center': Site.objects.get(name='footer_center').value,
-        'footer_head': Site.objects.get(name='footer_head').value,
-        'footer_right': Site.objects.get(name='footer_right').value,
-        'footer_counter': Site.objects.get(name='footer_counter').value,
-    }
-    if type == 'index':
-        return seo_dict
-
-    if type == 'list':
-        if post:
-            sitename = Site.objects.get(name='sitename')
-            seo_dict['meta_title'] = post.charter.meta_title or '%s | %s' % (post.charter.title, sitename)
-            seo_dict['keywords'] = post.charter.meta_keywords or post.meta_keywords or ', '.join(post.tags.names())
-            seo_dict['description'] = post.charter.meta_description or post.meta_description or post.lead
-        return seo_dict
-
-    if type == 'detail':
-        sitename = Site.objects.get(name='sitename')
-        meta_title = '%s | %s | %s' % (post.title, post.charter.title, sitename)
-        if post.meta_title:
-            meta_title = post.meta_title
-        seo_dict['meta_title'] = meta_title
-
-        keywords = ', '.join(post.tags.names())
-        if post.meta_keywords:
-            keywords = post.meta_keywords
-        seo_dict['keywords'] = keywords
-
-        description = post.lead
-        if post.meta_description:
-            description = post.meta_description
-        seo_dict['description'] = description
-
-        return seo_dict
-
-    if type == 'filter':
-        seo_dict['keywords'] = ', '.join(post.tags.names())
-        seo_dict['description'] = post.meta_description or post.lead
-        seo_dict['meta_title'] = post.meta_title or post.title
-
-    return seo_dict
-
-
-def get_recent_post(exclude_post_idx, post_id=None, user=None):
-    len_recent_post = int(Site.objects.get(name='len_recent_post').value)
-    recent_post = Post.objects.filter(
-        deleted__isnull=True, date_post__lte=timezone.now())
-
-    if post_id:
-        recent_post = recent_post.exclude(
-            id__in=[post_id]).order_by('-date_post')[0:len_recent_post]
-        if user and user.is_staff:
-            post_view = Post.objects.get(id=post_id)
-            post_dct = dict()
-            for tag in post_view.tags.all():
-                post_idx = Post.objects.filter(tags__in=[tag]).values_list('id', flat=True)
-                for pst in post_idx:
-                    post_dct.setdefault(pst, 0)
-                    post_dct[pst] += 1
-
-            idx_lst = list()
-            for k, v in post_dct.items():
-                if not k == post_id and v in sorted(post_dct.values())[-3:]:
-                    idx_lst.append(k)
-
-            recent_post = Post.objects.filter(id__in=idx_lst)
-            return recent_post
-
-        return recent_post
-
-    recent_post = recent_post.exclude(
-        id__in=exclude_post_idx).order_by('-date_post')[0:len_recent_post]
-    return recent_post
-
-
-def post_index(request):
-    main_post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).order_by('-date_post')[0:4]
-    main_post_idx = set(main_post_queryset.values_list('id', flat=True))
-    post_queryset = Post.objects.filter(deleted__isnull=True, date_post__lte=timezone.now()).exclude(id__in=main_post_idx).order_by('-date_post')[0:12]
-    exclude_post_idx = set(post_queryset.values_list('id', flat=True)) | main_post_idx
-    charter = Charter.objects.filter(order__gt=0).order_by('order')
-
-    return render(
-        request, 'postapp/post_index.html',
-        {
-            'main_post_queryset': Post.update_qs(main_post_queryset),
-            'post_queryset': Post.update_qs(post_queryset),  # Все выводимые записи
-            'recent_post': Post.update_qs(get_recent_post(exclude_post_idx)),
-            'charter': charter,  # Пункты меню
-            'setting': get_seo(type='index'),  # SEO штуки и настройки для сайта
-        }
-    )
-
-
-def post_detail(request, pk=None):
-    try:
-        fields = {'pk': pk}
-        if not request.user.is_staff:
-            fields.update({'deleted__isnull': True, 'date_post__lte': timezone.now()})
-        post = Post.objects.get(**fields)
-    except Post.DoesNotExist:
-        raise Http404
-
-    charter = Charter.objects.filter(order__gt=0).order_by('order')
-
-    # Для opengrapf
-    sitename = Site.objects.get(name='sitename')
-    meta_title = '%s | %s | %s' % (post.title, post.charter.title, sitename)
-    if post.meta_title:
-        meta_title = post.meta_title
-    og = {
-        'title': meta_title,
-        'description': post.lead,
-        'image': post.og_picture,
-        'type': 'website',
-    }
-
-    return render(
-        request, 'postapp/post_detail.html',
-        {
-            'post': post,  # Единственная запись
-            'recent_post': Post.update_qs(get_recent_post(set(), post_id=post.id, user=request.user)),
-            'charter': charter,  # Пункты меню
-            'og': og,  # Open Graph
-            'setting': get_seo(type='detail', post=post),  # SEO штуки и настройки для сайта
-        }
-    )
 
 
 @login_required(login_url='/login/')
@@ -194,19 +47,19 @@ def post_edit(request, pk=None):
     if request.method == 'POST' and form.is_valid():
         cd = form.cleaned_data
         post = form.save(commit=False)
-        post.picture = None
         post.save()
         # Нельзя добавить теги к несуществующему объекту.
         post.tags.clear()
         for tags in cd.get('tags'):
             post.tags.add(tags)
 
-        return redirect(post_view)
+        return redirect(post_edit, post.pk)
 
     return render(request, "postapp/post_edit.html", {
         'form': form,
         'instance': instance,
         'active': 'post',
+        'seo': settings.SEO,
     })
 
 
@@ -256,6 +109,7 @@ def post_view(request):
         'post_qs': post_qs.order_by('deleted', '-changed'),
         'active': 'post',
         'message': message,
+        'seo': settings.SEO,
     })
 
 
@@ -293,7 +147,6 @@ def charter_view(request):
     """
     Галерея категорий
     """
-    user = None
     message = None
     filter_dct = dict()
     charter_qs = Charter.objects.filter(**filter_dct)
@@ -315,6 +168,7 @@ def charter_view(request):
         'charter_qs': charter_qs,
         'active': 'charter',
         'message': message,
+        'seo': settings.SEO,
     })
 
 
@@ -336,6 +190,7 @@ def charter_edit(request, pk=None):
         'form': form,
         'instance': instance,
         'active': 'charter',
+        'seo': settings.SEO,
     })
 
 
@@ -365,6 +220,7 @@ def tags_view(request):
         'tags_qs': tags_qs.order_by('name'),
         'active': 'tags',
         'message': message,
+        'seo': settings.SEO,
     })
 
 
@@ -387,4 +243,5 @@ def tags_edit(request, pk=None):
         'form': form,
         'tag': tag,
         'active': 'tags',
+        'seo': settings.SEO,
     })

@@ -1,9 +1,7 @@
 from django import template
 from django.contrib.auth.models import User
-from django.utils import timezone
 
 from newsproject import settings
-from newsproject.defaults import RACK
 from postapp.models import Post
 
 register = template.Library()
@@ -22,8 +20,8 @@ def get_main_menu(context):
 	return {
 		'user': context.request.user,
 		'active': active,
-		'main_menu': RACK.get('main_menu', None),
-		'site_name': RACK.get('site_name', None),
+		'main_menu': settings.SEO.get('main_menu', None),
+		'site_name': settings.SEO.get('site_name', None),
 	}
 
 
@@ -32,11 +30,9 @@ def get_footer(context):
 	"""
 	Выводит виджет футера
 	"""
-	show_footer = settings.DEBUG
-
 	return {
-		'site_name': RACK.get('site_name', None),
-		'show_footer': show_footer
+		'SEO': settings.SEO,
+		'inc_counter_name': f'inc/counter.html' if settings.DEBUG else f'inc/counter_{ settings.SEO["folder"] }.html'
 	}
 
 

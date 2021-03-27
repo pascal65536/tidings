@@ -11,6 +11,7 @@ __init__.py
 my.cnf
 db.sqlite3
 *.pyc
+_cache/
 
 Pipfile
 Pipfile.lock

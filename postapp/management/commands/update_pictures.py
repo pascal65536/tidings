@@ -1,6 +1,3 @@
-import datetime
-import os
-import uuid
 from django.core.management import BaseCommand
 
 from photoapp.models import Photo

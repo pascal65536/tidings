@@ -1,4 +1,3 @@
-import datetime
 import os
 import uuid
 from django.core.management import BaseCommand

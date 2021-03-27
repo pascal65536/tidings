@@ -1,0 +1,45 @@
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'read_default_file': 'xxx',
+        },
+    }
+}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'xxx',
+        'USER': 'xxx',
+        'PASSWORD': 'xxx',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }
+}
+
+ALLOWED_HOSTS = ['*']
+
+API_KEY = 'xxx'
+TRANSLATE_KEY = 'xxx'
+ADVERT_STATIC_FILES_PATH = 'advert_static/'
+
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = 6379
+REDIS_DB = 0
+
+SEO = {
+    'domain': 'http://xxx/',
+    'folder': 'slug_xxx',
+    'site': 'xxx.ru',
+    'site_name': 'name site',
+    'title': 'title site',
+    'label': 'label site',
+    'main_menu': [
+        ('xxx_rus', 'slug_xxx',),
+    ],
+    'keywords': 'xxx_word',
+    'description': 'xxx_word',
+}
+
+

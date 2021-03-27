@@ -10,9 +10,9 @@
         <yandex:analystic id="" type="Yandex"/>
 
         {% for post in object_list %}
-        <item turbo="true">
+        <item turbo="{{ post.turbo }}">
             <yandex:genre>article</yandex:genre>
-            <category>news</category>
+            <category>{{ post.charter }}</category>
             <title>{{ post.title }}</title>
             <link>{{ host }}{{ post.url }}</link>
             <description>{{ post.lead }}</description>

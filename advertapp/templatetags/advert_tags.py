@@ -1,13 +1,8 @@
 import random
 
 from django import template
-from django.contrib.auth.models import User
-from django.utils import timezone
 
 from advertapp.models import Advert
-from newsproject import settings
-from newsproject.defaults import RACK
-from postapp.models import Post
 
 register = template.Library()
 

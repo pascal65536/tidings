@@ -4,12 +4,33 @@
 
 {% block opengraph %}
     {% if instance %}
-    <meta property="og:url" content="{{ instance.get_absolute_url }}" />
+
+    <meta name="twitter:domain" content="{{ seo.site }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@titshappy1"/>
+    <meta name="twitter:creator" content="@titshappy1"/>
+    <meta name="twitter:title" content="{{ instance.meta.title }}" />
+    <meta name="twitter:twitter:image:src" content="{{ seo.domain }}/media/{{ instance.og_picture }}" />
+    <meta name="twitter:url" content="{{ seo.domain }}{{ instance.get_absolute_url }}" />
+
+    <meta name="robots" content="max-image-preview:large"/>
+    <meta property="vk:image" content="{{ seo.domain }}/media/{{ instance.og_picture }}" />
+
+    <meta property="og:url" content="{{ seo.domain }}{{ instance.get_absolute_url }}" />
     <meta property="og:title" content="{{ instance.meta.title }}" />
     <meta property="og:locale" content="ru-RU" />
     <meta property="og:description" content="{{ instance.meta.description }}" />
-    <meta property="og:image" content="http://kompoblog.ru/media/{{ instance.og_picture }}" />
+    <meta property="og:image" content="{{ seo.domain }}/media/{{ instance.og_picture }}" />
     <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="{{ seo.site }}" />
+
+    <meta data-rh="true" property="article:published_time" content="{{ instance.date_post|date:'c' }}" />
+    <meta data-rh="true" property="article:modified_time" content="{{ instance.changed|date:'c' }}" />
+    <meta data-rh="true" property="article:section" content="{{ instance.charter }}" />
+    <meta data-rh="true" property="og:image:width" content="1024" />
+    <meta data-rh="true" property="og:image:height" content="512" />
+
     {% endif %}
 {% endblock %}
 
@@ -32,17 +53,31 @@
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><h1 class="card-title">{{ instance.title }}</h1></li>
+                            <!--noindex-->
                             <li class="list-group-item text-muted">{{ instance.lead }}</li>
+                            <li class="list-group-item">
+                                <a href="{% url 'news_view' %}">
+                                    Главная</a> »
+                                <a href="{% url 'news_view' %}?charter={{ instance.charter.slug }}">
+                                    {{ instance.charter.title }}</a>
+                            </li>
                             <li class="list-group-item text-muted">{{ instance.date_post }}</li>
+                            <!--/noindex-->
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        {{ instance.text|safe }}
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <!--noindex-->
                             <li class="list-group-item">
                                 {% for tag in instance.tags.all %}
                                     <a href="{% url 'news_view' %}?tag={{ tag.slug }}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
                                 {% endfor %}
                             </li>
+                            <!--/noindex-->
                         </ul>
-                    </div>
-                    <div class="card-body">
-                        {{ instance.text|safe }}
                     </div>
                     <div class="card-footer pl-3 pr-3 pb-0 pt-0">
                         {% get_advert 'content' %}

@@ -1,10 +1,13 @@
 import os
 import re
-import textwrap
-from django.conf import settings
-from PIL import Image, ImageDraw, ImageFont
-from django.utils import timezone
 import uuid
+import textwrap
+from PIL import Image, ImageDraw, ImageFont
+
+from django.db.models.fields.files import ImageFieldFile, FileField
+from django.utils import timezone
+from django.conf import settings
+
 from postapp.management.commands.feed import get_clean_text
 
 
@@ -153,9 +156,24 @@ def old_opengraph(instance):
 
 
 def opengraph(post_obj):
+    """
+    Создадим opengraph для Рубрики и Статьи
+    """
+    from postapp.models import Post, Photo
+    from postapp.models import Charter
+    photo_obj = None
+    photo_obj_path = None
 
-    # Возьмем картинку из БД
-    photo_obj = post_obj.photo
+    if isinstance(post_obj, Charter):
+        if isinstance(post_obj.picture, ImageFieldFile):
+            photo_obj = post_obj.picture
+            photo_obj_path = post_obj.picture.name
+
+    if isinstance(post_obj, Post):
+        if isinstance(post_obj.photo, Photo):
+            if isinstance(post_obj.photo.picture, ImageFieldFile):
+                photo_obj = post_obj.photo.picture
+                photo_obj_path = post_obj.photo.picture.name
 
     font_size = 36
     pic_width = 1024
@@ -163,8 +181,8 @@ def opengraph(post_obj):
     max_color = (255, 255, 255)
 
     fill_image = Image.new("RGB", (pic_width, pic_height), max_color)
-    if photo_obj and os.path.exists(photo_obj.picture.path):
-        input_im = Image.open(str(photo_obj.picture.path))
+    if photo_obj and photo_obj_path and os.path.exists(photo_obj_path):
+        input_im = Image.open(str(photo_obj_path))
         if input_im.mode != 'RGBA':
             input_im = input_im.convert('RGBA')
 
