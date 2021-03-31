@@ -17,7 +17,7 @@ html2text==2020.1.16
 humanize==3.2.0
 idna==2.10
 importlib-metadata==3.7.2
-lxml==4.6.2
+lxml==4.6.3
 Markdown==3.3.4
 maya==0.6.1
 pendulum==2.1.2
