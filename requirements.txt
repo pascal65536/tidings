@@ -37,5 +37,5 @@ toml==0.10.2
 typing-extensions==3.7.4.3
 tzlocal==2.1
 uni-paginator @ git+https://github.com/mrvol/uni_paginator@3d6e1e39ec7403ec4923ad188d5f43417b340c7c
-urllib3==1.26.3
+urllib3==1.26.4
 zipp==3.4.1
