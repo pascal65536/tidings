@@ -4,33 +4,31 @@
 
 {% block opengraph %}
     {% if instance %}
+    <meta data-rh="true" name="twitter:domain" content="{{ seo.site }}" />
+    <meta data-rh="true" name="twitter:card" content="summary_large_image" />
+    <meta data-rh="true" name="twitter:site" content="@titshappy1"/>
+    <meta data-rh="true" name="twitter:creator" content="@titshappy1"/>
+    <meta data-rh="true" name="twitter:title" content="{{ instance.meta.title }}" />
+    <meta data-rh="true" name="twitter:twitter:image:src" content="{{ seo.domain }}/media/{{ instance.og_picture }}" />
+    <meta data-rh="true" name="twitter:url" content="{{ seo.domain }}{{ instance.get_absolute_url }}" />
 
-    <meta name="twitter:domain" content="{{ seo.site }}" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@titshappy1"/>
-    <meta name="twitter:creator" content="@titshappy1"/>
-    <meta name="twitter:title" content="{{ instance.meta.title }}" />
-    <meta name="twitter:twitter:image:src" content="{{ seo.domain }}/media/{{ instance.og_picture }}" />
-    <meta name="twitter:url" content="{{ seo.domain }}{{ instance.get_absolute_url }}" />
+    <meta data-rh="true" name="robots" content="max-image-preview:large"/>
+    <meta data-rh="true" property="vk:image" content="{{ seo.domain }}/media/{{ instance.og_picture }}" />
 
-    <meta name="robots" content="max-image-preview:large"/>
-    <meta property="vk:image" content="{{ seo.domain }}/media/{{ instance.og_picture }}" />
-
-    <meta property="og:url" content="{{ seo.domain }}{{ instance.get_absolute_url }}" />
-    <meta property="og:title" content="{{ instance.meta.title }}" />
-    <meta property="og:locale" content="ru-RU" />
-    <meta property="og:description" content="{{ instance.meta.description }}" />
-    <meta property="og:image" content="{{ seo.domain }}/media/{{ instance.og_picture }}" />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:type" content="article" />
-    <meta property="og:site_name" content="{{ seo.site }}" />
+    <meta data-rh="true" property="og:url" content="{{ seo.domain }}{{ instance.get_absolute_url }}" />
+    <meta data-rh="true" property="og:title" content="{{ instance.meta.title }}" />
+    <meta data-rh="true" property="og:locale" content="ru-RU" />
+    <meta data-rh="true" property="og:description" content="{{ instance.meta.description }}" />
+    <meta data-rh="true" property="og:image" content="{{ seo.domain }}/media/{{ instance.og_picture }}" />
+    <meta data-rh="true" property="og:image:type" content="image/jpeg" />
+    <meta data-rh="true" property="og:type" content="article" />
+    <meta data-rh="true" property="og:site_name" content="{{ seo.site }}" />
 
     <meta data-rh="true" property="article:published_time" content="{{ instance.date_post|date:'c' }}" />
     <meta data-rh="true" property="article:modified_time" content="{{ instance.changed|date:'c' }}" />
     <meta data-rh="true" property="article:section" content="{{ instance.charter }}" />
     <meta data-rh="true" property="og:image:width" content="1024" />
     <meta data-rh="true" property="og:image:height" content="512" />
-
     {% endif %}
 {% endblock %}
 
